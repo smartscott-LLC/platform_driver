@@ -1,7 +1,7 @@
-set_property SRC_FILE_INFO {cfile:/home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc id:1 order:EARLY scoped_inst:design_1_i/axi_noc_0/inst} [current_design]
-set_property SRC_FILE_INFO {cfile:/home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc id:2 order:EARLY scoped_inst:design_1_i/clk_wiz/inst} [current_design]
-set_property SRC_FILE_INFO {cfile:/home/smartscott/NEW/tb3d/tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc rfile:../../../tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc id:3} [current_design]
-set_property SRC_FILE_INFO {cfile:/home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc id:4 order:LATE scoped_inst:design_1_i/mdm_1/U0} [current_design]
+set_property SRC_FILE_INFO {cfile:tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc id:1 order:EARLY scoped_inst:design_1_i/axi_noc_0/inst} [current_design]
+set_property SRC_FILE_INFO {cfile:tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc id:2 order:EARLY scoped_inst:design_1_i/clk_wiz/inst} [current_design]
+set_property SRC_FILE_INFO {cfile:tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc rfile:../../../tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc id:3} [current_design]
+set_property SRC_FILE_INFO {cfile:tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc rfile:../../../tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc id:4 order:LATE scoped_inst:design_1_i/mdm_1/U0} [current_design]
 current_instance design_1_i/axi_noc_0/inst
 set_property src_info {type:SCOPED_XDC file:1 line:4 export:INPUT save:INPUT read:READ} [current_design]
 set_property LOC NOC_NMU128_X0Y2 [get_cells S05_AXI_nmu/*/*_INST]

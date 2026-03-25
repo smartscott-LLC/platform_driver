@@ -22,7 +22,7 @@ export GCC_VER_XSIM=9.3.0
 set -Eeuo pipefail
 
 # resolve compiled library path in xsim.ini
-export RDI_DATADIR="/home/smartscott/AMD/${SIM_VER_XSIM}/data"
+export RDI_DATADIR="${XILINX_VIVADO}/data"
 # compile Verilog/System Verilog design sources
 echo "xvlog --incr --relax -L noc_nps_v1_0_2 -L axi_vip_v1_1_22 -L smartconnect_v1_0 -L versal_cips_ps_vip_v1_0_14 -L clk_gen_sim_v1_0_6 -L cpm5_v1_0_20 -L cpm4_v1_0_20 -L noc_hbm_nmu_sim_v1_0_0 -L noc_nmu_sim_v1_0_0 -L emb_mem_gen_v1_0_11 -L xilinx_vip -prj tb3d_transcoder_vlog.prj"
 xvlog --incr --relax -L noc_nps_v1_0_2 -L axi_vip_v1_1_22 -L smartconnect_v1_0 -L versal_cips_ps_vip_v1_0_14 -L clk_gen_sim_v1_0_6 -L cpm5_v1_0_20 -L cpm4_v1_0_20 -L noc_hbm_nmu_sim_v1_0_0 -L noc_nmu_sim_v1_0_0 -L emb_mem_gen_v1_0_11 -L xilinx_vip -prj tb3d_transcoder_vlog.prj 2>&1 | tee compile.log

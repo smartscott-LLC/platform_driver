@@ -15,46 +15,46 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_tb
 # IP: bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_axi_noc_0_0 || ORIG_REF_NAME==design_1_axi_noc_0_0} -quiet] -quiet
 
-# Block Designs: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/bd_8be5.bd
+# Block Designs: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/bd_8be5.bd
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5 || ORIG_REF_NAME==bd_8be5} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_0/bd_8be5_S05_AXI_nmu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_0/bd_8be5_S05_AXI_nmu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S05_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S05_AXI_nmu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_1/bd_8be5_const_0_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_1/bd_8be5_const_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_const_0_0 || ORIG_REF_NAME==bd_8be5_const_0_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_2/bd_8be5_S03_AXI_nmu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_2/bd_8be5_S03_AXI_nmu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S03_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S03_AXI_nmu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_3/bd_8be5_S04_AXI_rpu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_3/bd_8be5_S04_AXI_rpu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S04_AXI_rpu_0 || ORIG_REF_NAME==bd_8be5_S04_AXI_rpu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_4/bd_8be5_S02_AXI_nmu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_4/bd_8be5_S02_AXI_nmu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S02_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S02_AXI_nmu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_5/bd_8be5_S01_AXI_nmu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_5/bd_8be5_S01_AXI_nmu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S01_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S01_AXI_nmu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_6/bd_8be5_S00_AXI_nmu_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_6/bd_8be5_S00_AXI_nmu_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_S00_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S00_AXI_nmu_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/bd_8be5_MC0_ddrc_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/bd_8be5_MC0_ddrc_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_MC0_ddrc_0 || ORIG_REF_NAME==bd_8be5_MC0_ddrc_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/ip_0/bd_8be5_MC0_ddrc_0_phy.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/ip_0/bd_8be5_MC0_ddrc_0_phy.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_8be5_MC0_ddrc_0_phy || ORIG_REF_NAME==bd_8be5_MC0_ddrc_0_phy} -quiet] -quiet
 
 # IP: bd/design_1/ip/design_1_versal_cips_0_0/design_1_versal_cips_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_versal_cips_0_0 || ORIG_REF_NAME==design_1_versal_cips_0_0} -quiet] -quiet
 
-# Block Designs: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/bd_70da.bd
+# Block Designs: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/bd_70da.bd
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_70da || ORIG_REF_NAME==bd_70da} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/bd_70da_pspmc_0_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/bd_70da_pspmc_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==bd_70da_pspmc_0_0 || ORIG_REF_NAME==bd_70da_pspmc_0_0} -quiet] -quiet
 
-# IP: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/ip_0/versal_cips_ps_vip_0.xci
+# IP: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/ip_0/versal_cips_ps_vip_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==versal_cips_ps_vip_0 || ORIG_REF_NAME==versal_cips_ps_vip_0} -quiet] -quiet
 
 # IP: bd/design_1/ip/design_1_dlmb_v10_0/design_1_dlmb_v10_0.xci
@@ -87,70 +87,70 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_no
 # IP: bd/design_1/ip/design_1_rst_clk_wiz_100M_1/design_1_rst_clk_wiz_100M_1.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_rst_clk_wiz_100M_1 || ORIG_REF_NAME==design_1_rst_clk_wiz_100M_1} -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0/design_1_microblaze_0_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0/design_1_microblaze_0_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_microblaze_0_0 || ORIG_REF_NAME==design_1_microblaze_0_0} -quiet] {/U0 } ]/U0 ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0/design_1_microblaze_0_0_ooc_debug.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0/design_1_microblaze_0_0_ooc_debug.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_0/xdc/bd_8be5_S05_AXI_nmu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_0/xdc/bd_8be5_S05_AXI_nmu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S05_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S05_AXI_nmu_0} -quiet] {/bd_8be5_S05_AXI_nmu_0_top_INST } ]/bd_8be5_S05_AXI_nmu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_2/xdc/bd_8be5_S03_AXI_nmu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_2/xdc/bd_8be5_S03_AXI_nmu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S03_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S03_AXI_nmu_0} -quiet] {/bd_8be5_S03_AXI_nmu_0_top_INST } ]/bd_8be5_S03_AXI_nmu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_3/xdc/bd_8be5_S04_AXI_rpu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_3/xdc/bd_8be5_S04_AXI_rpu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S04_AXI_rpu_0 || ORIG_REF_NAME==bd_8be5_S04_AXI_rpu_0} -quiet] {/bd_8be5_S04_AXI_rpu_0_top_INST } ]/bd_8be5_S04_AXI_rpu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_4/xdc/bd_8be5_S02_AXI_nmu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_4/xdc/bd_8be5_S02_AXI_nmu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S02_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S02_AXI_nmu_0} -quiet] {/bd_8be5_S02_AXI_nmu_0_top_INST } ]/bd_8be5_S02_AXI_nmu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_5/xdc/bd_8be5_S01_AXI_nmu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_5/xdc/bd_8be5_S01_AXI_nmu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S01_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S01_AXI_nmu_0} -quiet] {/bd_8be5_S01_AXI_nmu_0_top_INST } ]/bd_8be5_S01_AXI_nmu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_6/xdc/bd_8be5_S00_AXI_nmu_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_6/xdc/bd_8be5_S00_AXI_nmu_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_S00_AXI_nmu_0 || ORIG_REF_NAME==bd_8be5_S00_AXI_nmu_0} -quiet] {/bd_8be5_S00_AXI_nmu_0_top_INST } ]/bd_8be5_S00_AXI_nmu_0_top_INST ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/hdl/par/bd_8be5_MC0_ddrc_0_ip.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/bd_0/ip/ip_7/hdl/par/bd_8be5_MC0_ddrc_0_ip.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_8be5_MC0_ddrc_0 || ORIG_REF_NAME==bd_8be5_MC0_ddrc_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0_ooc.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0_ooc.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0_board.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0_board.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_axi_noc_0_0 || ORIG_REF_NAME==design_1_axi_noc_0_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_axi_noc_0_0/design_1_axi_noc_0_0.xdc
 #dup# set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_axi_noc_0_0 || ORIG_REF_NAME==design_1_axi_noc_0_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/bd_70da_pspmc_0_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/bd_70da_pspmc_0_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_70da_pspmc_0_0 || ORIG_REF_NAME==bd_70da_pspmc_0_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/pspmc_v1_4/constraints/usr_constraints.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/ip/ip_0/pspmc_v1_4/constraints/usr_constraints.xdc
 #dup# set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==bd_70da_pspmc_0_0 || ORIG_REF_NAME==bd_70da_pspmc_0_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/bd_70da_ooc.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_versal_cips_0_0/bd_0/bd_70da_ooc.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_0/design_1_lmb_bram_0_waivers.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_0/design_1_lmb_bram_0_waivers.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_lmb_bram_0 || ORIG_REF_NAME==design_1_lmb_bram_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_0/design_1_lmb_bram_0_ooc.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_0/design_1_lmb_bram_0_ooc.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_mdm_1_0 || ORIG_REF_NAME==design_1_mdm_1_0} -quiet] {/U0 } ]/U0 ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0_ooc_trace.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_mdm_1_0/design_1_mdm_1_0_ooc_trace.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_rst_noc_clk_gen_300M_0/design_1_rst_noc_clk_gen_300M_0_board.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_rst_noc_clk_gen_300M_0/design_1_rst_noc_clk_gen_300M_0_board.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_rst_noc_clk_gen_300M_0 || ORIG_REF_NAME==design_1_rst_noc_clk_gen_300M_0} -quiet] {/U0 } ]/U0 ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0_board.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0_board.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_clk_wiz_0 || ORIG_REF_NAME==design_1_clk_wiz_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0.xdc
 #dup# set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_clk_wiz_0 || ORIG_REF_NAME==design_1_clk_wiz_0} -quiet] {/inst } ]/inst ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0_ooc.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0/design_1_clk_wiz_0_ooc.xdc
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_rst_clk_wiz_100M_1/design_1_rst_clk_wiz_100M_1_board.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/ip/design_1_rst_clk_wiz_100M_1/design_1_rst_clk_wiz_100M_1_board.xdc
 set_property KEEP_HIERARCHY SOFT [get_cells [split [join [get_cells -hier -filter {REF_NAME==design_1_rst_clk_wiz_100M_1 || ORIG_REF_NAME==design_1_rst_clk_wiz_100M_1} -quiet] {/U0 } ]/U0 ] -quiet] -quiet
 
-# XDC: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/design_1_ooc.xdc
+# XDC: $PPRDIR/tb3d.gen/sources_1/bd/design_1/design_1_ooc.xdc

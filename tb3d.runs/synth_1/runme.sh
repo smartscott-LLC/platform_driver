@@ -8,9 +8,9 @@
 # 
 
 if [ -z "$PATH" ]; then
-  PATH=/home/smartscott/AMD/2025.2/Vitis/bin:/home/smartscott/AMD/2025.2/Vivado/ids_lite/ISE/bin/lin64:/home/smartscott/AMD/2025.2/Vivado/bin
+  PATH=${XILINX_VITIS}/bin:${XILINX_VIVADO}/ids_lite/ISE/bin/lin64:${XILINX_VIVADO}/bin
 else
-  PATH=/home/smartscott/AMD/2025.2/Vitis/bin:/home/smartscott/AMD/2025.2/Vivado/ids_lite/ISE/bin/lin64:/home/smartscott/AMD/2025.2/Vivado/bin:$PATH
+  PATH=${XILINX_VITIS}/bin:${XILINX_VIVADO}/ids_lite/ISE/bin/lin64:${XILINX_VIVADO}/bin:$PATH
 fi
 export PATH
 
@@ -21,7 +21,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='/home/smartscott/NEW/tb3d/tb3d.runs/synth_1'
+HD_PWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$HD_PWD"
 
 HD_LOG=runme.log

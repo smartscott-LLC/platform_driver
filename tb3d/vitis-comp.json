@@ -3,7 +3,7 @@
   "type": "PLATFORM",
   "configuration": {
     "description": "",
-    "xsa": "/home/smartscott/NEW/tb3d/tb3d_driver.xsa",
+    "xsa": "tb3d_driver.xsa",
     "xsaPathInPlatform": "tb3d/hw/tb3d_driver.xsa",
     "emulationXsa": "",
     "emulationXsaPathInPlatform": "",
