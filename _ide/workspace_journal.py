@@ -13,3 +13,5 @@ status = client.rescan_embedded_sw_repo()
 
 status = client.set_embedded_sw_repo(level="LOCAL", path=["/home/smartscott/NEW"])
 
+vitis.dispose()
+

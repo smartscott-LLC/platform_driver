@@ -56,7 +56,6 @@ if {$::dispatch::connected} {
 }
 
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param bd.open.in_stealth_mode 1
 set_param general.usePosixSpawnForFork 1
 set_param chipscope.flow 0
 set_msg_config  -id {[BD 41-1306]}  -suppress 
@@ -128,9 +127,14 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc /home/smartscott/NEW/tb3d/tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc
+set_property used_in_implementation false [get_files /home/smartscott/NEW/tb3d/tb3d.srcs/constrs_1/imports/constraints/usr_constraints.xdc]
+
 read_xdc dont_touch.xdc
 set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
+
+read_checkpoint -auto_incremental -incremental /home/smartscott/NEW/tb3d/tb3d.srcs/utils_1/imports/synth_1/design_1_wrapper.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }

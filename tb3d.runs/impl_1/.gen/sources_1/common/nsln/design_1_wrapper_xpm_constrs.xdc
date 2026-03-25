@@ -1,5 +1,0 @@
-set_property LOC NOC_NMU128_X0Y9 [get_cells design_1_i/axi_noc_0/inst/S03_AXI_nmu/*/*_INST]
-set_property LOC NOC_NMU128_X0Y3 [get_cells design_1_i/axi_noc_0/inst/S04_AXI_rpu/*/*_INST]
-set_property LOC NOC_NMU128_X0Y8 [get_cells design_1_i/axi_noc_0/inst/S02_AXI_nmu/*/*_INST]
-set_property LOC NOC_NMU128_X0Y7 [get_cells design_1_i/axi_noc_0/inst/S01_AXI_nmu/*/*_INST]
-set_property LOC NOC_NMU128_X0Y6 [get_cells design_1_i/axi_noc_0/inst/S00_AXI_nmu/*/*_INST]
