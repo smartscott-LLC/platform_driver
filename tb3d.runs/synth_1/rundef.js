@@ -13,9 +13,9 @@ var WshShell = new ActiveXObject( "WScript.Shell" );
 var ProcEnv = WshShell.Environment( "Process" );
 var PathVal = ProcEnv("PATH");
 if ( PathVal.length == 0 ) {
-  PathVal = "/home/smartscott/AMD/2025.2/Vitis/bin:/home/smartscott/AMD/2025.2/Vivado/ids_lite/ISE/bin/lin64;/home/smartscott/AMD/2025.2/Vivado/bin;";
+  PathVal = "%XILINX_VITIS%\\bin;%XILINX_VIVADO%\\ids_lite\\ISE\\bin\\nt64;%XILINX_VIVADO%\\bin;";
 } else {
-  PathVal = "/home/smartscott/AMD/2025.2/Vitis/bin:/home/smartscott/AMD/2025.2/Vivado/ids_lite/ISE/bin/lin64;/home/smartscott/AMD/2025.2/Vivado/bin;" + PathVal;
+  PathVal = "%XILINX_VITIS%\\bin;%XILINX_VIVADO%\\ids_lite\\ISE\\bin\\nt64;%XILINX_VIVADO%\\bin;" + PathVal;
 }
 
 ProcEnv("PATH") = PathVal;

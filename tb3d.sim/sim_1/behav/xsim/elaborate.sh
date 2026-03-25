@@ -22,7 +22,7 @@ export GCC_VER_XSIM=9.3.0
 set -Eeuo pipefail
 
 # resolve compiled library path in xsim.ini
-export RDI_DATADIR="/home/smartscott/AMD/${SIM_VER_XSIM}/data"
+export RDI_DATADIR="${XILINX_VIVADO}/data"
 # elaborate design
 echo "xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L xilinx_vip -L unisims_ver -L unimacro_ver -L unisims_ver -L secureip -L hnicx -L cpm5n -L xpm --snapshot tb3d_transcoder_behav xil_defaultlib.tb3d_transcoder xil_defaultlib.glbl -log elaborate.log"
 xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L xilinx_vip -L unisims_ver -L unimacro_ver -L unisims_ver -L secureip -L hnicx -L cpm5n -L xpm --snapshot tb3d_transcoder_behav xil_defaultlib.tb3d_transcoder xil_defaultlib.glbl -log elaborate.log
