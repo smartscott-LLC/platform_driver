@@ -1,0 +1,4 @@
+create libxil.a
+addlib /home/smartscott/NEW/tb3d/tb3d/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/bram/src/libbram.a
+save
+end

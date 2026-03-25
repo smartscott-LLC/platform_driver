@@ -6,3 +6,10 @@ client.set_workspace(path="tb3d")
 
 platform = client.create_platform_component(name = "tb3d",hw_design = "$COMPONENT_LOCATION/../tb3d_driver.xsa",os = "standalone",cpu = "microblaze_0",domain_name = "standalone_microblaze_0",compiler = "gcc")
 
+platform = client.get_component(name="tb3d")
+status = platform.build()
+
+status = client.rescan_embedded_sw_repo()
+
+status = client.set_embedded_sw_repo(level="LOCAL", path=["/home/smartscott/NEW"])
+

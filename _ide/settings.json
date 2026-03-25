@@ -1,3 +1,6 @@
 {
-    "clangd.fallbackFlags": []
+  "clangd.fallbackFlags": [],
+  "vitis.software.repositories": [
+    "/home/smartscott/NEW"
+  ]
 }

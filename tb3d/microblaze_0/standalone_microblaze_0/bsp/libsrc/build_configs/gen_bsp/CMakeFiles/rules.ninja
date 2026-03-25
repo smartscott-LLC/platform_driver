@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__xiltimer_
+rule C_COMPILER__bram_
   depfile = $DEP_FILE
   deps = gcc
   command = /home/smartscott/AMD/2025.2/Vitis/gnu/microblaze/lin/bin/mb-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -32,7 +32,7 @@ rule C_COMPILER__xiltimer_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__xiltimer_
+rule C_STATIC_LIBRARY_LINKER__bram_
   command = $PRE_LINK && /home/smartscott/AMD/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /home/smartscott/AMD/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -62,6 +62,25 @@ rule C_COMPILER__xilstandalone_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__xilstandalone_
+  command = $PRE_LINK && /home/smartscott/AMD/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /home/smartscott/AMD/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling C files.
+
+rule C_COMPILER__xiltimer_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /home/smartscott/AMD/2025.2/Vitis/gnu/microblaze/lin/bin/mb-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER__xiltimer_
   command = $PRE_LINK && /home/smartscott/AMD/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /home/smartscott/AMD/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
