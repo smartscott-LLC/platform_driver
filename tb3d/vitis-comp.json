@@ -1,0 +1,72 @@
+{
+  "name": "tb3d",
+  "type": "PLATFORM",
+  "configuration": {
+    "description": "",
+    "xsa": "/home/smartscott/NEW/tb3d/tb3d_driver.xsa",
+    "xsaPathInPlatform": "tb3d/hw/tb3d_driver.xsa",
+    "emulationXsa": "",
+    "emulationXsaPathInPlatform": "",
+    "isCustomFSBL": false,
+    "fsblPath": "",
+    "pmufwElf": "",
+    "flow": "EMBEDDED",
+    "processorsMap": {
+      "microblaze_0": "microblaze",
+      "psv_cortexa72_0": "psv_cortexa72",
+      "psv_cortexa72_1": "psv_cortexa72",
+      "psv_cortexr5_0": "psv_cortexr5",
+      "psv_cortexr5_1": "psv_cortexr5",
+      "psv_pmc_0": "psv_pmc",
+      "psv_psm_0": "psv_psm"
+    },
+    "supportedOS": [
+      "standalone",
+      "freertos",
+      "linux"
+    ],
+    "supportedFamily": "versal",
+    "stdGenHookList": [
+      {
+        "key": "VITIS_SDT_REPO",
+        "value": ""
+      },
+      {
+        "key": "VITIS_SDT_BOARD_DTS",
+        "value": ""
+      },
+      {
+        "key": "VITIS_SDT_INCLUDE_DTS",
+        "value": ""
+      },
+      {
+        "key": "-dt_overlay",
+        "value": "0"
+      },
+      {
+        "key": "custom_dtsi",
+        "value": ""
+      }
+    ],
+    "componentType": "PLATFORM",
+    "domains": [
+      {
+        "name": "standalone_microblaze_0",
+        "displayName": "standalone_microblaze_0",
+        "processor": "microblaze_0",
+        "cpuType": "microblaze",
+        "cpuInstance": "microblaze_0",
+        "os": "standalone",
+        "appTemplate": "empty_application",
+        "isBootDomain": false,
+        "qemuData": "resources/standalone_microblaze_0/qemu",
+        "qemuArgsFile": "resources/standalone_microblaze_0/qemu/qemu_args.txt",
+        "pmcQemuArgsFile": "resources/standalone_microblaze_0/qemu/pmc_args.txt",
+        "isBSPGenReq": false
+      }
+    ],
+    "emptyToolchainConfiguration": []
+  },
+  "useSysrootToolchain": false,
+  "templateFlow": "VITIS"
+}

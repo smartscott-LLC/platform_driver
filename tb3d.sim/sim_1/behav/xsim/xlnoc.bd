@@ -1,0 +1,1831 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x3F4BDDF72D11192A",
+      "design_src": "IPI",
+      "device": "xcvp1802-lsvc4072-2MP-e-S",
+      "gen_directory": "../../../../tb3d.gen/sim_1/bd/xlnoc",
+      "name": "xlnoc",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "None",
+      "tool_version": "2025.2",
+      "validated": "true"
+    },
+    "design_tree": {
+      "nps_0": "",
+      "nps_1": "",
+      "nps_2": "",
+      "nps_3": "",
+      "nps_4": "",
+      "nps_5": ""
+    },
+    "interface_ports": {
+      "nps_2_SNPP_N": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_2_SNPP_N",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_2_SNPP_N_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_2_SNPP_N_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_2_SNPP_N_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_2_SNPP_N_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_2_MNPP_S": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_2_MNPP_S",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_2_MNPP_S_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_2_MNPP_S_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_2_MNPP_S_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_2_MNPP_S_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_2_SNPP_S": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_2_SNPP_S",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_2_SNPP_S_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_2_SNPP_S_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_2_SNPP_S_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_2_SNPP_S_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_2_MNPP_N": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_2_MNPP_N",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_2_MNPP_N_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_2_MNPP_N_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_2_MNPP_N_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_2_MNPP_N_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_4_SNPP_N": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_4_SNPP_N",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_4_SNPP_N_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_4_SNPP_N_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_4_SNPP_N_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_4_SNPP_N_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_4_MNPP_S": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_4_MNPP_S",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_4_MNPP_S_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_4_MNPP_S_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_4_MNPP_S_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_4_MNPP_S_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_4_SNPP_S": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_4_SNPP_S",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_4_SNPP_S_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_4_SNPP_S_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_4_SNPP_S_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_4_SNPP_S_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_4_MNPP_N": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_4_MNPP_N",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_4_MNPP_N_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_4_MNPP_N_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_4_MNPP_N_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_4_MNPP_N_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_3_SNPP_S": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_3_SNPP_S",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_3_SNPP_S_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_3_SNPP_S_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_3_SNPP_S_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_3_SNPP_S_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_3_MNPP_N": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_3_MNPP_N",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_3_MNPP_N_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_3_MNPP_N_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_3_MNPP_N_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_3_MNPP_N_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_3_SNPP_N": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_3_SNPP_N",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_3_SNPP_N_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_3_SNPP_N_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_3_SNPP_N_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_3_SNPP_N_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_3_MNPP_S": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_3_MNPP_S",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_3_MNPP_S_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_3_MNPP_S_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_3_MNPP_S_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_3_MNPP_S_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_0_SNPP_S": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_0_SNPP_S",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_0_SNPP_S_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_0_SNPP_S_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_0_SNPP_S_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_0_SNPP_S_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_0_MNPP_N": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_0_MNPP_N",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_0_MNPP_N_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_0_MNPP_N_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_0_MNPP_N_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_0_MNPP_N_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_0_SNPP_N": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_0_SNPP_N",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_0_SNPP_N_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_0_SNPP_N_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_0_SNPP_N_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_0_SNPP_N_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_0_MNPP_S": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_0_MNPP_S",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_0_MNPP_S_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_0_MNPP_S_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_0_MNPP_S_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_0_MNPP_S_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_5_MNPP_N": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_5_MNPP_N",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_5_MNPP_N_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_5_MNPP_N_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_5_MNPP_N_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_5_MNPP_N_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_5_SNPP_N": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_5_SNPP_N",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_5_SNPP_N_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_5_SNPP_N_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_5_SNPP_N_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_5_SNPP_N_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_1_MNPP_W": {
+        "mode": "Master",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "NOC_ID": {
+            "value": "-1",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          }
+        },
+        "memory_map_ref": "nps_1_MNPP_W",
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_1_MNPP_W_valid",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_1_MNPP_W_flit",
+            "direction": "O",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_1_MNPP_W_credit_return",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_1_MNPP_W_credit_rdy",
+            "direction": "O",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      },
+      "nps_1_SNPP_W": {
+        "mode": "Slave",
+        "vlnv_bus_definition": "xilinx.com:interface:npp:1.0",
+        "vlnv": "xilinx.com:interface:npp_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "R_LATENCY": {
+            "value": "300",
+            "value_src": "default"
+          },
+          "R_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "R_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "R_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          },
+          "WRITE_BUFFER_SIZE": {
+            "value": "80",
+            "value_src": "default"
+          },
+          "W_MAX_BURST_LENGTH": {
+            "value": "256",
+            "value_src": "default"
+          },
+          "W_RATE_LIMITER": {
+            "value": "10",
+            "value_src": "default"
+          },
+          "W_TRAFFIC_CLASS": {
+            "value": "BEST_EFFORT",
+            "value_src": "default"
+          }
+        },
+        "address_space_ref": "nps_1_SNPP_W",
+        "base_address": {
+          "minimum": "0x00000000",
+          "maximum": "0xFFFFFFFF",
+          "width": "32"
+        },
+        "bd_attributes": {
+          "TYPE": {
+            "value": "END_POINT",
+            "value_src": "auto"
+          }
+        },
+        "hdl_attributes": {
+          "LOCKED": {
+            "value": "FALSE",
+            "value_src": "default"
+          }
+        },
+        "port_maps": {
+          "VALID": {
+            "physical_name": "nps_1_SNPP_W_valid",
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "FLIT": {
+            "physical_name": "nps_1_SNPP_W_flit",
+            "direction": "I",
+            "left": "181",
+            "right": "0"
+          },
+          "CREDIT_RETURN": {
+            "physical_name": "nps_1_SNPP_W_credit_return",
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "CREDIT_RDY": {
+            "physical_name": "nps_1_SNPP_W_credit_rdy",
+            "direction": "I",
+            "left": "0",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "components": {
+      "nps_0": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_0_0",
+        "xci_path": "ip/xlnoc_nps_0_0/xlnoc_nps_0_0.xci",
+        "inst_hier_path": "nps_0",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_MWEST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SWEST_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      },
+      "nps_1": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_1_0",
+        "xci_path": "ip/xlnoc_nps_1_0/xlnoc_nps_1_0.xci",
+        "inst_hier_path": "nps_1",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MNORTH_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_MSOUTH_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SNORTH_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SSOUTH_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      },
+      "nps_2": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_2_0",
+        "xci_path": "ip/xlnoc_nps_2_0/xlnoc_nps_2_0.xci",
+        "inst_hier_path": "nps_2",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SEAST_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      },
+      "nps_3": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_3_0",
+        "xci_path": "ip/xlnoc_nps_3_0/xlnoc_nps_3_0.xci",
+        "inst_hier_path": "nps_3",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_MWEST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SWEST_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      },
+      "nps_4": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_4_0",
+        "xci_path": "ip/xlnoc_nps_4_0/xlnoc_nps_4_0.xci",
+        "inst_hier_path": "nps_4",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MEAST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SEAST_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      },
+      "nps_5": {
+        "vlnv": "xilinx.com:ip:noc_nps:1.0",
+        "ip_revision": "2",
+        "xci_name": "xlnoc_nps_5_0",
+        "xci_path": "ip/xlnoc_nps_5_0/xlnoc_nps_5_0.xci",
+        "inst_hier_path": "nps_5",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "USER_MSOUTH_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_MWEST_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SSOUTH_PORT_EN": {
+            "value": "FALSE"
+          },
+          "USER_SWEST_PORT_EN": {
+            "value": "FALSE"
+          }
+        }
+      }
+    },
+    "interface_nets": {
+      "nps_0_MNPP_N1": {
+        "interface_ports": [
+          "nps_0_MNPP_N",
+          "nps_0/MNPP_N"
+        ]
+      },
+      "nps_0_MNPP_S1": {
+        "interface_ports": [
+          "nps_0_MNPP_S",
+          "nps_0/MNPP_S"
+        ]
+      },
+      "nps_0_SNPP_N_1": {
+        "interface_ports": [
+          "nps_0_SNPP_N",
+          "nps_0/SNPP_N"
+        ]
+      },
+      "nps_0_SNPP_S_1": {
+        "interface_ports": [
+          "nps_0_SNPP_S",
+          "nps_0/SNPP_S"
+        ]
+      },
+      "nps_1_MNPP_E": {
+        "interface_ports": [
+          "nps_1/MNPP_E",
+          "nps_4/SNPP_W"
+        ]
+      },
+      "nps_1_MNPP_W1": {
+        "interface_ports": [
+          "nps_1_MNPP_W",
+          "nps_1/MNPP_W"
+        ]
+      },
+      "nps_1_SNPP_W_1": {
+        "interface_ports": [
+          "nps_1_SNPP_W",
+          "nps_1/SNPP_W"
+        ]
+      },
+      "nps_2_MNPP_N1": {
+        "interface_ports": [
+          "nps_2_MNPP_N",
+          "nps_2/MNPP_N"
+        ]
+      },
+      "nps_2_MNPP_S1": {
+        "interface_ports": [
+          "nps_2_MNPP_S",
+          "nps_2/MNPP_S"
+        ]
+      },
+      "nps_2_MNPP_W": {
+        "interface_ports": [
+          "nps_2/MNPP_W",
+          "nps_5/SNPP_E"
+        ]
+      },
+      "nps_2_SNPP_N_1": {
+        "interface_ports": [
+          "nps_2_SNPP_N",
+          "nps_2/SNPP_N"
+        ]
+      },
+      "nps_2_SNPP_S_1": {
+        "interface_ports": [
+          "nps_2_SNPP_S",
+          "nps_2/SNPP_S"
+        ]
+      },
+      "nps_3_MNPP_N1": {
+        "interface_ports": [
+          "nps_3_MNPP_N",
+          "nps_3/MNPP_N"
+        ]
+      },
+      "nps_3_MNPP_S1": {
+        "interface_ports": [
+          "nps_3_MNPP_S",
+          "nps_3/MNPP_S"
+        ]
+      },
+      "nps_3_SNPP_N_1": {
+        "interface_ports": [
+          "nps_3_SNPP_N",
+          "nps_3/SNPP_N"
+        ]
+      },
+      "nps_3_SNPP_S_1": {
+        "interface_ports": [
+          "nps_3_SNPP_S",
+          "nps_3/SNPP_S"
+        ]
+      },
+      "nps_4_MNPP_N1": {
+        "interface_ports": [
+          "nps_4_MNPP_N",
+          "nps_4/MNPP_N"
+        ]
+      },
+      "nps_4_MNPP_S1": {
+        "interface_ports": [
+          "nps_4_MNPP_S",
+          "nps_4/MNPP_S"
+        ]
+      },
+      "nps_4_MNPP_W": {
+        "interface_ports": [
+          "nps_4/MNPP_W",
+          "nps_1/SNPP_E"
+        ]
+      },
+      "nps_4_SNPP_N_1": {
+        "interface_ports": [
+          "nps_4_SNPP_N",
+          "nps_4/SNPP_N"
+        ]
+      },
+      "nps_4_SNPP_S_1": {
+        "interface_ports": [
+          "nps_4_SNPP_S",
+          "nps_4/SNPP_S"
+        ]
+      },
+      "nps_5_MNPP_E": {
+        "interface_ports": [
+          "nps_5/MNPP_E",
+          "nps_2/SNPP_W"
+        ]
+      },
+      "nps_5_MNPP_N1": {
+        "interface_ports": [
+          "nps_5_MNPP_N",
+          "nps_5/MNPP_N"
+        ]
+      },
+      "nps_5_SNPP_N_1": {
+        "interface_ports": [
+          "nps_5_SNPP_N",
+          "nps_5/SNPP_N"
+        ]
+      }
+    },
+    "addressing": {
+      "/": {
+        "address_spaces": {
+          "nps_0_SNPP_N": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_0_SNPP_S": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_1_SNPP_W": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_2_SNPP_N": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_2_SNPP_S": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_3_SNPP_N": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_3_SNPP_S": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_4_SNPP_N": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_4_SNPP_S": {
+            "range": "4G",
+            "width": "32"
+          },
+          "nps_5_SNPP_N": {
+            "range": "4G",
+            "width": "32"
+          }
+        },
+        "memory_maps": {
+          "nps_0_MNPP_N": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_0_MNPP_S": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_1_MNPP_W": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_2_MNPP_N": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_2_MNPP_S": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_3_MNPP_N": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_3_MNPP_S": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_4_MNPP_N": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_4_MNPP_S": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          },
+          "nps_5_MNPP_N": {
+            "address_blocks": {
+              "Reg": {
+                "base_address": "0",
+                "range": "64K",
+                "width": "16",
+                "usage": "register"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

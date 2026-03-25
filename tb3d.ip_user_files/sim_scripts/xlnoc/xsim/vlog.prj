@@ -1,0 +1,21 @@
+sv xil_defaultlib -i "../../../../../../AMD/2025.2/data/rsb/busdef" --include "/home/smartscott/AMD/2025.2/data/xilinx_vip/include" --include "../../../../tb3d.gen/sim_1/bd/xlnoc/ipshared/d993/hdl/bfm" \
+"../../../bd/xlnoc/ip/xlnoc_nps_0_0/hdl/bfm/xlnoc_nps_0_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_0_0/hdl/bfm/xlnoc_nps_0_0.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_1_0/hdl/bfm/xlnoc_nps_1_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_1_0/hdl/bfm/xlnoc_nps_1_0.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_2_0/hdl/bfm/xlnoc_nps_2_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_2_0/hdl/bfm/xlnoc_nps_2_0.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_3_0/hdl/bfm/xlnoc_nps_3_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_3_0/hdl/bfm/xlnoc_nps_3_0.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_4_0/hdl/bfm/xlnoc_nps_4_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_4_0/hdl/bfm/xlnoc_nps_4_0.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_5_0/hdl/bfm/xlnoc_nps_5_0_top.sv" \
+"../../../bd/xlnoc/ip/xlnoc_nps_5_0/hdl/bfm/xlnoc_nps_5_0.sv" \
+
+verilog xil_defaultlib -i "../../../../../../AMD/2025.2/data/rsb/busdef" --include "/home/smartscott/AMD/2025.2/data/xilinx_vip/include" --include "../../../../tb3d.gen/sim_1/bd/xlnoc/ipshared/d993/hdl/bfm" \
+"../../../bd/xlnoc/sim/xlnoc.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

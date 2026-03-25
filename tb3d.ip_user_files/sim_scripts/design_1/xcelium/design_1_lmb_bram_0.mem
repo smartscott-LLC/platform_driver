@@ -1,0 +1,21 @@
+// 
+// Mem file initialization records. 
+// 
+// Data File: /home/smartscott/NEW/tb3d/tb3d.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0/data/mb_bootloop_le.elf
+// Data File: The input elf file is: 32 address width.
+// 
+// 
+// Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+// Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+// SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+// Vivado v2025.2 (64-bit)
+// 
+// Address Space Name: 'microblaze_0_local_memory/dlmb_bram_if_cntlr'
+//           Data Bus: [31:0].
+//      Address Range: [8192:0] [0X0000000000002000:0X0000000000000000]
+//      Address Depth: [8191:0].
+// 
+// Bus width = 32 bits, number of bus blocks = 1. 
+
+@00000000
+  B8000000 

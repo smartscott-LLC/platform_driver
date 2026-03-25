@@ -1,0 +1,2836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:component xmlns:xilinx="http://www.xilinx.com" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>xilinx.com</spirit:vendor>
+  <spirit:library>customized_ip</spirit:library>
+  <spirit:name>xlnoc_nps_2_0</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:busInterfaces>
+    <spirit:busInterface>
+      <spirit:name>SNPP_E</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN2_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN2_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN2_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN2_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.SNPP_E.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.SNPP_E.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.SNPP_E" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_SEAST_PORT_EN&apos;)) = &quot;TRUE&quot; )">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>SNPP_W</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN0_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN0_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN0_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN0_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.SNPP_W.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.SNPP_W.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.SNPP_W" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_SWEST_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>SNPP_N</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN1_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN1_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN1_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN1_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.SNPP_N.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.SNPP_N.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.SNPP_N" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_SNORTH_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>SNPP_S</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN3_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN3_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN3_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_IN3_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.SNPP_S.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.SNPP_S.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.SNPP_S" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_SSOUTH_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>MNPP_E</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT2_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT2_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT2_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT2_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.MNPP_E.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.MNPP_E.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.MNPP_E" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_MEAST_PORT_EN&apos;)) = &quot;TRUE&quot; )">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>MNPP_W</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT0_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT0_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT0_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT0_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.MNPP_W.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.MNPP_W.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.MNPP_W" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_MWEST_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>MNPP_N</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT1_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT1_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT1_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT1_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.MNPP_N.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.MNPP_N.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.MNPP_N" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_MNORTH_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>MNPP_S</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="npp_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RDY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT3_NOC_CREDIT_RDY</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CREDIT_RETURN</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT3_NOC_CREDIT_RETURN</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>FLIT</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT3_NOC_FLIT</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>IF_NOC_NPP_OUT3_NOC_VALID</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.MNPP_S.IN_SYNTHESIS_HDL">NO</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CAN_DEBUG</spirit:name>
+          <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.MNPP_S.CAN_DEBUG">false</spirit:value>
+          <spirit:vendorExtensions>
+            <xilinx:parameterInfo>
+              <xilinx:parameterUsage>none</xilinx:parameterUsage>
+            </xilinx:parameterInfo>
+          </spirit:vendorExtensions>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.MNPP_S" xilinx:dependency="( spirit:decode(id(&apos;PARAM_VALUE.USER_MSOUTH_PORT_EN&apos;)) = &quot;TRUE&quot; )">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+  </spirit:busInterfaces>
+  <spirit:model>
+    <spirit:views>
+      <spirit:view>
+        <spirit:name>xilinx_blockmodel</spirit:name>
+        <spirit:displayName>Block Model files</spirit:displayName>
+        <spirit:envIdentifier>:vivado.xilinx.com:block_model</spirit:envIdentifier>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>9:afa244a5</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_verilogbehavioralsimulation</spirit:name>
+        <spirit:displayName>Verilog Simulation</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:simulation</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:modelName>noc_nps_v1_0_2</spirit:modelName>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_verilogbehavioralsimulation_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Tue Mar 24 22:22:12 UTC 2026</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>9:f747633b</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_verilogsimulationwrapper</spirit:name>
+        <spirit:displayName>Verilog Simulation Wrapper</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:simulation.wrapper</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:modelName>xlnoc_nps_2_0</spirit:modelName>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_verilogsimulationwrapper_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Tue Mar 24 22:22:12 UTC 2026</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>9:f747633b</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+    </spirit:views>
+    <spirit:ports>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN0_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN1_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN2_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_IN2_NOC_CREDIT_RETURN">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN3_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT0_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT0_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT0_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT1_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT1_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT1_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT2_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_OUT2_NOC_CREDIT_RDY">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT2_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_OUT2_NOC_FLIT">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT2_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_OUT2_NOC_VALID">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT3_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT3_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT3_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN0_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN0_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN0_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN1_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN1_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN1_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN2_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_IN2_NOC_CREDIT_RDY">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN2_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_IN2_NOC_FLIT">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN2_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_IN2_NOC_VALID">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN3_NOC_CREDIT_RDY</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN3_NOC_FLIT</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">181</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_IN3_NOC_VALID</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT0_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT1_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT2_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.IF_NOC_NPP_OUT2_NOC_CREDIT_RETURN">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>IF_NOC_NPP_OUT3_NOC_CREDIT_RETURN</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">7</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+    </spirit:ports>
+    <spirit:modelParameters>
+      <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID0_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID0_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID0_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID0_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID10_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID10_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID10_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID10_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID11_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID11_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID11_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID11_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID12_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID12_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID12_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID12_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID13_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID13_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID13_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID13_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID14_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID14_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID14_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID14_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID15_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID15_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID15_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID15_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID16_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID16_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID16_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID16_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID17_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID17_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID17_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID17_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID18_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID18_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID18_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID18_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID19_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID19_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID19_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID19_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID1_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID1_P01" spirit:bitStringLength="32">0x05550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID1_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID1_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID20_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID20_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID20_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID20_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID21_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID21_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID21_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID21_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID22_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID22_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID22_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID22_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID23_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID23_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID23_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID23_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID24_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID24_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID24_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID24_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID25_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID25_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID25_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID25_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID26_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID26_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID26_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID26_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID27_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID27_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID27_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID27_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID28_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID28_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID28_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID28_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID29_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID29_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID29_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID29_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID2_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID2_P01" spirit:bitStringLength="32">0xf5550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID2_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID2_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID30_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID30_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID30_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID30_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID31_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID31_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID31_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID31_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID32_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID32_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID32_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID32_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID33_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID33_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID33_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID33_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID34_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID34_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID34_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID34_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID35_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID35_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID35_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID35_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID36_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID36_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID36_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID36_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID37_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID37_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID37_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID37_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID38_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID38_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID38_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID38_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID39_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID39_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID39_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID39_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID3_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID3_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID3_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID3_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID40_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID40_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID40_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID40_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID41_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID41_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID41_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID41_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID42_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID42_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID42_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID42_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID43_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID43_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID43_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID43_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID44_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID44_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID44_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID44_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID45_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID45_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID45_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID45_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID46_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID46_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID46_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID46_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID47_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID47_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID47_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID47_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID48_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID48_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID48_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID48_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID49_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID49_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID49_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID49_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID4_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID4_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID4_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID4_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID50_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID50_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID50_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID50_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID51_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID51_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID51_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID51_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID52_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID52_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID52_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID52_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID53_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID53_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID53_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID53_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID54_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID54_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID54_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID54_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID55_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID55_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID55_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID55_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID56_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID56_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID56_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID56_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID57_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID57_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID57_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID57_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID58_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID58_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID58_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID58_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID59_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID59_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID59_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID59_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID5_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID5_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID5_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID5_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID60_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID60_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID60_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID60_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID61_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID61_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID61_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID61_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID62_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID62_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID62_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID62_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID63_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID63_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID63_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID63_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID6_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID6_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID6_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID6_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID7_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID7_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID7_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID7_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID8_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID8_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID8_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID8_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID9_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID9_P01" spirit:bitStringLength="32">0x55550500</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_HIGH_ID9_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_HIGH_ID9_P23" spirit:bitStringLength="32">0xf5ffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_ID</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_ID" spirit:bitStringLength="10">0x000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID0_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID0_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID0_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID0_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID10_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID10_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID10_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID10_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID11_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID11_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID11_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID11_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID12_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID12_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID12_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID12_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID13_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID13_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID13_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID13_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID14_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID14_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID14_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID14_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID15_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID15_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID15_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID15_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID1_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID1_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID1_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID1_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID2_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID2_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID2_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID2_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID3_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID3_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID3_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID3_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID4_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID4_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID4_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID4_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID5_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID5_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID5_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID5_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID6_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID6_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID6_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID6_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID7_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID7_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID7_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID7_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID8_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID8_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID8_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID8_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID9_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID9_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_LOW_ID9_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_LOW_ID9_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID0_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID0_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID0_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID0_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID1_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID1_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID1_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID1_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID2_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID2_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID2_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID2_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID3_P01</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID3_P01" spirit:bitStringLength="32">0x55550000</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_MID_ID3_P23</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_MID_ID3_P23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_NOC_CTL</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_NOC_CTL" spirit:bitStringLength="16">0xFF00</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P00_P1_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P00_P1_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P00_P1_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P00_P1_1_VCA_TOKEN" spirit:bitStringLength="32">0x40ff1010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P01_P2_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P01_P2_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P01_P2_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P01_P2_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P02_P3_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P02_P3_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P02_P3_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P02_P3_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P10_P2_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P10_P2_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P10_P2_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P10_P2_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P11_P3_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P11_P3_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P11_P3_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P11_P3_1_VCA_TOKEN" spirit:bitStringLength="32">0x1010ff33</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P12_P0_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P12_P0_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P12_P0_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P12_P0_1_VCA_TOKEN" spirit:bitStringLength="32">0x1010ff33</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P20_P3_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P20_P3_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P20_P3_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P20_P3_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P21_P0_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P21_P0_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P21_P0_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P21_P0_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P22_P1_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P22_P1_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P22_P1_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P22_P1_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P30_P0_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P30_P0_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P30_P0_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P30_P0_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P31_P1_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P31_P1_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P31_P1_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P31_P1_1_VCA_TOKEN" spirit:bitStringLength="32">0x40ff1010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P32_P2_0_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P32_P2_0_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_P32_P2_1_VCA_TOKEN</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_P32_P2_1_VCA_TOKEN" spirit:bitStringLength="32">0x10101010</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>REG_CLOCK_MUX</spirit:name>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.REG_CLOCK_MUX" spirit:bitStringLength="32">0x00000003</spirit:value>
+      </spirit:modelParameter>
+    </spirit:modelParameters>
+  </spirit:model>
+  <spirit:choices>
+    <spirit:choice>
+      <spirit:name>choice_list_c26c605f</spirit:name>
+      <spirit:enumeration>5555</spirit:enumeration>
+      <spirit:enumeration>7575</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_d10f4555</spirit:name>
+      <spirit:enumeration>FALSE</spirit:enumeration>
+      <spirit:enumeration>TRUE</spirit:enumeration>
+    </spirit:choice>
+  </spirit:choices>
+  <spirit:fileSets>
+    <spirit:fileSet>
+      <spirit:name>xilinx_verilogbehavioralsimulation_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/noc_nps_v1_0_vl_rfs.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_load_parameters.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_ipa.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_ivca.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_class_new.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_macros.svh</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_noc_define.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>../../ipshared/d993/hdl/bfm/nps_routing_table.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+        <spirit:isIncludeFile>true</spirit:isIncludeFile>
+        <spirit:logicalName>noc_nps_v1_0_2</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/bfm/xlnoc_nps_2_0_top.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>NETLIST_SIMULATION</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_verilogsimulationwrapper_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>hdl/bfm/xlnoc_nps_2_0.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+    </spirit:fileSet>
+  </spirit:fileSets>
+  <spirit:description>NoC Packet Switch Unit for Versal</spirit:description>
+  <spirit:parameters>
+    <spirit:parameter>
+      <spirit:name>USER_NOC_NPS_BUFFER_DEPTH</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_NOC_NPS_BUFFER_DEPTH" spirit:choiceRef="choice_list_c26c605f" spirit:order="2">5555</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_SEAST_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_SEAST_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="3">FALSE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_MEAST_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_MEAST_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="4">FALSE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_SWEST_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_SWEST_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="5">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_MWEST_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_MWEST_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="6">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_SNORTH_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_SNORTH_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="7">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_MNORTH_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_MNORTH_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="8">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_SSOUTH_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_SSOUTH_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="9">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_MSOUTH_PORT_EN</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USER_MSOUTH_PORT_EN" spirit:choiceRef="choice_list_d10f4555" spirit:order="10">TRUE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>IN_SYNTHESIS_HDL</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.IN_SYNTHESIS_HDL" spirit:order="11">NO</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID0_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID0_P01" spirit:order="12" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID0_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID0_P23" spirit:order="13" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID10_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID10_P01" spirit:order="14" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID10_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID10_P23" spirit:order="15" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID11_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID11_P01" spirit:order="16" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID11_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID11_P23" spirit:order="17" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID12_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID12_P01" spirit:order="18" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID12_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID12_P23" spirit:order="19" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID13_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID13_P01" spirit:order="20" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID13_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID13_P23" spirit:order="21" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID14_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID14_P01" spirit:order="22" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID14_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID14_P23" spirit:order="23" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID15_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID15_P01" spirit:order="24" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID15_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID15_P23" spirit:order="25" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID16_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID16_P01" spirit:order="26" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID16_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID16_P23" spirit:order="27" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID17_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID17_P01" spirit:order="28" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID17_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID17_P23" spirit:order="29" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID18_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID18_P01" spirit:order="30" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID18_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID18_P23" spirit:order="31" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID19_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID19_P01" spirit:order="32" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID19_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID19_P23" spirit:order="33" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID1_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID1_P01" spirit:order="34" spirit:bitStringLength="32">0x05550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID1_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID1_P23" spirit:order="35" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID20_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID20_P01" spirit:order="36" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID20_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID20_P23" spirit:order="37" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID21_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID21_P01" spirit:order="38" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID21_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID21_P23" spirit:order="39" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID22_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID22_P01" spirit:order="40" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID22_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID22_P23" spirit:order="41" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID23_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID23_P01" spirit:order="42" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID23_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID23_P23" spirit:order="43" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID24_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID24_P01" spirit:order="44" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID24_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID24_P23" spirit:order="45" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID25_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID25_P01" spirit:order="46" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID25_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID25_P23" spirit:order="47" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID26_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID26_P01" spirit:order="48" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID26_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID26_P23" spirit:order="49" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID27_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID27_P01" spirit:order="50" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID27_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID27_P23" spirit:order="51" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID28_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID28_P01" spirit:order="52" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID28_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID28_P23" spirit:order="53" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID29_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID29_P01" spirit:order="54" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID29_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID29_P23" spirit:order="55" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID2_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID2_P01" spirit:order="56" spirit:bitStringLength="32">0xf5550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID2_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID2_P23" spirit:order="57" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID30_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID30_P01" spirit:order="58" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID30_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID30_P23" spirit:order="59" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID31_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID31_P01" spirit:order="60" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID31_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID31_P23" spirit:order="61" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID32_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID32_P01" spirit:order="62" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID32_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID32_P23" spirit:order="63" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID33_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID33_P01" spirit:order="64" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID33_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID33_P23" spirit:order="65" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID34_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID34_P01" spirit:order="66" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID34_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID34_P23" spirit:order="67" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID35_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID35_P01" spirit:order="68" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID35_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID35_P23" spirit:order="69" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID36_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID36_P01" spirit:order="70" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID36_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID36_P23" spirit:order="71" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID37_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID37_P01" spirit:order="72" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID37_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID37_P23" spirit:order="73" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID38_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID38_P01" spirit:order="74" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID38_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID38_P23" spirit:order="75" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID39_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID39_P01" spirit:order="76" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID39_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID39_P23" spirit:order="77" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID3_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID3_P01" spirit:order="78" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID3_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID3_P23" spirit:order="79" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID40_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID40_P01" spirit:order="80" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID40_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID40_P23" spirit:order="81" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID41_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID41_P01" spirit:order="82" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID41_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID41_P23" spirit:order="83" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID42_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID42_P01" spirit:order="84" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID42_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID42_P23" spirit:order="85" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID43_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID43_P01" spirit:order="86" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID43_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID43_P23" spirit:order="87" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID44_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID44_P01" spirit:order="88" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID44_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID44_P23" spirit:order="89" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID45_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID45_P01" spirit:order="90" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID45_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID45_P23" spirit:order="91" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID46_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID46_P01" spirit:order="92" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID46_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID46_P23" spirit:order="93" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID47_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID47_P01" spirit:order="94" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID47_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID47_P23" spirit:order="95" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID48_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID48_P01" spirit:order="96" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID48_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID48_P23" spirit:order="97" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID49_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID49_P01" spirit:order="98" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID49_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID49_P23" spirit:order="99" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID4_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID4_P01" spirit:order="100" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID4_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID4_P23" spirit:order="101" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID50_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID50_P01" spirit:order="102" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID50_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID50_P23" spirit:order="103" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID51_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID51_P01" spirit:order="104" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID51_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID51_P23" spirit:order="105" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID52_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID52_P01" spirit:order="106" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID52_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID52_P23" spirit:order="107" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID53_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID53_P01" spirit:order="108" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID53_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID53_P23" spirit:order="109" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID54_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID54_P01" spirit:order="110" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID54_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID54_P23" spirit:order="111" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID55_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID55_P01" spirit:order="112" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID55_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID55_P23" spirit:order="113" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID56_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID56_P01" spirit:order="114" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID56_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID56_P23" spirit:order="115" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID57_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID57_P01" spirit:order="116" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID57_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID57_P23" spirit:order="117" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID58_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID58_P01" spirit:order="118" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID58_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID58_P23" spirit:order="119" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID59_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID59_P01" spirit:order="120" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID59_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID59_P23" spirit:order="121" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID5_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID5_P01" spirit:order="122" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID5_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID5_P23" spirit:order="123" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID60_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID60_P01" spirit:order="124" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID60_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID60_P23" spirit:order="125" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID61_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID61_P01" spirit:order="126" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID61_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID61_P23" spirit:order="127" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID62_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID62_P01" spirit:order="128" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID62_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID62_P23" spirit:order="129" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID63_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID63_P01" spirit:order="130" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID63_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID63_P23" spirit:order="131" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID6_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID6_P01" spirit:order="132" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID6_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID6_P23" spirit:order="133" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID7_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID7_P01" spirit:order="134" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID7_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID7_P23" spirit:order="135" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID8_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID8_P01" spirit:order="136" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID8_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID8_P23" spirit:order="137" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID9_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID9_P01" spirit:order="138" spirit:bitStringLength="32">0x55550500</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_HIGH_ID9_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_HIGH_ID9_P23" spirit:order="139" spirit:bitStringLength="32">0xf5ffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_ID</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_ID" spirit:order="140" spirit:bitStringLength="10">0x000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID0_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID0_P01" spirit:order="141" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID0_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID0_P23" spirit:order="142" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID10_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID10_P01" spirit:order="143" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID10_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID10_P23" spirit:order="144" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID11_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID11_P01" spirit:order="145" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID11_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID11_P23" spirit:order="146" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID12_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID12_P01" spirit:order="147" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID12_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID12_P23" spirit:order="148" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID13_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID13_P01" spirit:order="149" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID13_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID13_P23" spirit:order="150" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID14_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID14_P01" spirit:order="151" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID14_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID14_P23" spirit:order="152" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID15_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID15_P01" spirit:order="153" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID15_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID15_P23" spirit:order="154" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID1_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID1_P01" spirit:order="155" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID1_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID1_P23" spirit:order="156" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID2_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID2_P01" spirit:order="157" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID2_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID2_P23" spirit:order="158" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID3_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID3_P01" spirit:order="159" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID3_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID3_P23" spirit:order="160" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID4_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID4_P01" spirit:order="161" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID4_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID4_P23" spirit:order="162" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID5_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID5_P01" spirit:order="163" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID5_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID5_P23" spirit:order="164" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID6_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID6_P01" spirit:order="165" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID6_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID6_P23" spirit:order="166" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID7_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID7_P01" spirit:order="167" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID7_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID7_P23" spirit:order="168" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID8_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID8_P01" spirit:order="169" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID8_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID8_P23" spirit:order="170" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID9_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID9_P01" spirit:order="171" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_LOW_ID9_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_LOW_ID9_P23" spirit:order="172" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID0_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID0_P01" spirit:order="173" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID0_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID0_P23" spirit:order="174" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID1_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID1_P01" spirit:order="175" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID1_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID1_P23" spirit:order="176" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID2_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID2_P01" spirit:order="177" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID2_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID2_P23" spirit:order="178" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID3_P01</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID3_P01" spirit:order="179" spirit:bitStringLength="32">0x55550000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_MID_ID3_P23</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_MID_ID3_P23" spirit:order="180" spirit:bitStringLength="32">0xffffaaaa</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_NOC_CTL</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_NOC_CTL" spirit:order="181" spirit:bitStringLength="16">0xFF00</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P00_P1_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P00_P1_0_VCA_TOKEN" spirit:order="182" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P00_P1_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P00_P1_1_VCA_TOKEN" spirit:order="183" spirit:bitStringLength="32">0x40ff1010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P01_P2_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P01_P2_0_VCA_TOKEN" spirit:order="184" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P01_P2_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P01_P2_1_VCA_TOKEN" spirit:order="185" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P02_P3_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P02_P3_0_VCA_TOKEN" spirit:order="186" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P02_P3_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P02_P3_1_VCA_TOKEN" spirit:order="187" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P10_P2_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P10_P2_0_VCA_TOKEN" spirit:order="188" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P10_P2_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P10_P2_1_VCA_TOKEN" spirit:order="189" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P11_P3_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P11_P3_0_VCA_TOKEN" spirit:order="190" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P11_P3_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P11_P3_1_VCA_TOKEN" spirit:order="191" spirit:bitStringLength="32">0x1010ff33</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P12_P0_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P12_P0_0_VCA_TOKEN" spirit:order="192" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P12_P0_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P12_P0_1_VCA_TOKEN" spirit:order="193" spirit:bitStringLength="32">0x1010ff33</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P20_P3_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P20_P3_0_VCA_TOKEN" spirit:order="194" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P20_P3_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P20_P3_1_VCA_TOKEN" spirit:order="195" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P21_P0_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P21_P0_0_VCA_TOKEN" spirit:order="196" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P21_P0_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P21_P0_1_VCA_TOKEN" spirit:order="197" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P22_P1_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P22_P1_0_VCA_TOKEN" spirit:order="198" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P22_P1_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P22_P1_1_VCA_TOKEN" spirit:order="199" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P30_P0_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P30_P0_0_VCA_TOKEN" spirit:order="200" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P30_P0_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P30_P0_1_VCA_TOKEN" spirit:order="201" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P31_P1_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P31_P1_0_VCA_TOKEN" spirit:order="202" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P31_P1_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P31_P1_1_VCA_TOKEN" spirit:order="203" spirit:bitStringLength="32">0x40ff1010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P32_P2_0_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P32_P2_0_VCA_TOKEN" spirit:order="204" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_P32_P2_1_VCA_TOKEN</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_P32_P2_1_VCA_TOKEN" spirit:order="205" spirit:bitStringLength="32">0x10101010</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USER_REG_CLOCK_MUX</spirit:name>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.USER_REG_CLOCK_MUX" spirit:order="206" spirit:bitStringLength="32">0x00000003</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>NOC_FREQ</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.NOC_FREQ" spirit:order="207">1000</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>Component_Name</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Component_Name" spirit:order="1">xlnoc_nps_2_0</spirit:value>
+    </spirit:parameter>
+  </spirit:parameters>
+  <spirit:vendorExtensions>
+    <xilinx:coreExtensions>
+      <xilinx:displayName>NoC Packet Switch</xilinx:displayName>
+      <xilinx:coreRevision>2</xilinx:coreRevision>
+      <xilinx:configElementInfos>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_E.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_E.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_N.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_N.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_S.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_S.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_W.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MNPP_W.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_E.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_E.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_N.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_N.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_S.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_S.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_W.CAN_DEBUG" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SNPP_W.IN_SYNTHESIS_HDL" xilinx:valuePermission="bd_and_user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.USER_MEAST_PORT_EN" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.USER_SEAST_PORT_EN" xilinx:valueSource="user"/>
+      </xilinx:configElementInfos>
+    </xilinx:coreExtensions>
+    <xilinx:packagingInfo>
+      <xilinx:xilinxVersion>2025.2</xilinx:xilinxVersion>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="16ec5b98"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a59e713a"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="53ea072a"/>
+      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="d94d894e"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="2ab28fcf"/>
+    </xilinx:packagingInfo>
+  </spirit:vendorExtensions>
+</spirit:component>

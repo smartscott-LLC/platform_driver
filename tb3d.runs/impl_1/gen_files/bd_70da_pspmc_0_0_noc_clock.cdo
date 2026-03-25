@@ -1,0 +1,28 @@
+version 2.0
+marker 0x64 "NPLL_CDO"
+marker 0 "NOCPLL INIT"
+marker 0 "Helper data. Values are to be looked up in a table from Data Sheet"
+mask_write 0xf1260054 0xfe7fedef 0x7e4b0cac
+marker 0 "BY PASS PLL"
+marker 0 "PLL Basic Control"
+mask_write 0xf1260050 0x8 0x8
+marker 0 "UPDATE FB_DIV"
+marker 0 "PLL Basic Control"
+mask_write 0xf1260050 0x73ff00 0x27800
+marker 0 "ASSERT RESET"
+marker 0 "PLL Basic Control"
+mask_write 0xf1260050 0x1 0x1
+marker 0 "CLEAR ERROR STATUS AFTER RESET"
+marker 0 "PMC Error Status Register. If any of the bits in this register is 1, it could generate any of the following events: (1) ERROR_OUT pin assertion, (2) POR, (3) IRQ to PPU1 MB, (4) SRST. Writing a 1 to any bit will clear the request. The register is only reset by the External Power-on Reset and maintains its state through a System Reset or Internal Power-on Reset."
+write 0xf1130004 0x800000
+marker 0 "DEASSERT RESET"
+marker 0 "PLL Basic Control"
+mask_write 0xf1260050 0x1 0
+marker 0 "CHECK PLL STATUS"
+mask_poll 0xf1260060 0x2 0x2 0x1000 0 0x28
+marker 0 "REMOVE PLL BY PASS"
+marker 0 "PLL Basic Control"
+mask_write 0xf1260050 0x8 0
+marker 0 "Control for a clock that will be generated in the PMC, but used in the LPD/FPD as a clock source for the peripheral clock muxes."
+mask_write 0xf1260104 0x3ff00 0x400
+marker 0x65 "NPLL_CDO"

@@ -1,0 +1,145 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Tue Mar 24 17:43:20 2026
+| Host         : smarTech running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_methodology -file route_report_methodology_0.rpt -pb route_report_methodology_0.pb -rpx route_report_methodology_0.rpx
+| Design       : design_1_wrapper
+| Device       : xcvp1802-lsvc4072-2MP-e-S
+| Speed File   : -2MP
+| Design State : Fully Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max checks: <unlimited>
+             Checks found: 21
++-----------+----------+-------------------------------------------------------------------------------------------------------+--------+
+| Rule      | Severity | Description                                                                                           | Checks |
++-----------+----------+-------------------------------------------------------------------------------------------------------+--------+
+| AVAL-344  | Warning  | Design_needs_USER_RAM_AVERAGE_ACTIVITY_set                                                            | 1      |
+| HPDR-1    | Warning  | Port pin direction inconsistency                                                                      | 2      |
+| LUTAR-1   | Warning  | LUT drives async reset alert                                                                          | 1      |
+| TIMING-9  | Warning  | Unknown CDC Logic                                                                                     | 1      |
+| TIMING-10 | Warning  | Missing property on synchronizer                                                                      | 1      |
+| TIMING-47 | Warning  | False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks | 15     |
++-----------+----------+-------------------------------------------------------------------------------------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+AVAL-344#1 Warning
+Design_needs_USER_RAM_AVERAGE_ACTIVITY_set  
+The design property USER_RAM_AVERAGE_ACTIVITY on the top-level current_design object is unset (or set to -1).  The estimated RAM_AVERAGE_ACTIVITY used for the design is 0 and assumes a worst-case switching scenario for the URAM and BRAM.  RAM activity directly impacts clock uncertainty and the RAM_AVERAGE_ACTIVITY property may not be accurate for designs that are not final.  It is recommended that the USER_RAM_AVERAGE_ACTIVITY property be specified.  Please refer to the Versal ACAP Clocking Resources Architecture Manual and the Versal ACAP Hardware, IP, and Platform Development Methodology User Guide for more information on specifying the USER_RAM_AVERAGE_ACTIVITY.
+Related violations: <none>
+
+HPDR-1#1 Warning
+Port pin direction inconsistency  
+Hierarchical port(pin) design_1_i/mdm_1/bscan_ext_tdo direction INPUT is not consistent with the directions of the cell pins/ports found at that level of the netlist hierarchy. Please review the design and consider changing the port(pin) direction. No other driver was expected for the net (design_1_i/mdm_1/bscan_ext_tdo_mdm_1) connected to this port, but at least one was found.
+Related violations: <none>
+
+HPDR-1#2 Warning
+Port pin direction inconsistency  
+Hierarchical port(pin) design_1_i/versal_cips_0/bscan_user2_usr_tdo_mdm_1 direction INPUT is not consistent with the directions of the cell pins/ports found at that level of the netlist hierarchy. Please review the design and consider changing the port(pin) direction. A driver was expected for the net (design_1_i/bscan_user2_usr_tdo_mdm_1) connected to this hierarchical pin, but none was found.
+Related violations: <none>
+
+LUTAR-1#1 Warning
+LUT drives async reset alert  
+LUT cell design_1_i/mdm_1/U0/MDM_Core_I1/JTAG_CONTROL_I/sel_n_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) design_1_i/mdm_1/U0/MDM_Core_I1/JTAG_CONTROL_I/sel_n_reg/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+TIMING-9#1 Warning
+Unknown CDC Logic  
+One or more asynchronous Clock Domain Crossing has been detected between 2 clock domains through a set_false_path or a set_clock_groups or set_max_delay -datapath_only constraint but no double-registers logic synchronizer has been found on the side of the capture clock. It is recommended to run report_cdc for a complete and detailed CDC coverage. Please consider using XPM_CDC to avoid Critical severities
+Related violations: <none>
+
+TIMING-10#1 Warning
+Missing property on synchronizer  
+One or more logic synchronizer has been detected between 2 clock domains but the synchronizer does not have the property ASYNC_REG defined on one or both registers. It is recommended to run report_cdc for a complete and detailed CDC coverage
+Related violations: <none>
+
+TIMING-47#1 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A Clock Group timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] (see constraint position 33 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#2 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A Clock Group timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 33 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#3 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRDRCK[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRDRCK[1] (see constraint position 12 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#4 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRDRCK[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRDRCK[1] (see constraint position 13 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#5 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 10 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#6 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 11 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#7 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 25 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#8 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 26 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#9 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 27 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#10 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] (see constraint position 22 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#11 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] (see constraint position 23 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#12 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] (see constraint position 24 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#13 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 19 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#14 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 20 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+TIMING-47#15 Warning
+False path, asynchronous clock group or max delay datapath only constraint between synchronous clocks  
+A False Path timing constraint is set between synchronous clocks design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRUPDATE[1] and design_1_i/versal_cips_0/inst/pspmc_0/inst/PS9_inst/USRTCKINT[1] (see constraint position 21 in the Timing Constraint window in Vivado IDE). Masking entire synchronous clock domains via  set_false_path, set_clock_groups or set_max_delay -datapath_only may result in failure in hardware.
+Related violations: <none>
+
+
