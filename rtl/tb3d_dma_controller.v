@@ -5,8 +5,8 @@
 //
 // Purpose : AXI4 master DMA engine.
 //
-//           Executes linear block transfers between host system memory
-//           (accessed via the PCIe endpoint's outbound AXI4 port) and the
+//           Executes linear block transfers between system memory (accessed
+//           via the NoC NMU → LPDDR4/DDR4 memory controller) and the
 //           Dragonfly Cache.  Two transfer modes are supported:
 //
 //   MODE 0 — Encode (host → cache):

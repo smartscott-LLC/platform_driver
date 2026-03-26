@@ -6,14 +6,15 @@
 // Purpose : AXI4-Lite slave providing the Control/Status Register (CSR)
 //           interface for the TB3-D engine.
 //
-//           Host software (BIOS, OS driver, firmware) reads and writes these
-//           registers through BAR0 of the PCIe endpoint.  The slave decodes
-//           32-bit word-aligned addresses and routes them to the appropriate
-//           engine sub-module control signals.
+//           Host software (MicroBlaze firmware, CIPS driver) reads and writes
+//           these registers via the AXI4-Lite master port routed through the
+//           AXI SmartConnect / NoC to this slave.  The slave decodes 32-bit
+//           word-aligned addresses and routes them to the appropriate engine
+//           sub-module control signals.
 //
 // AXI4-Lite interface:
 //   Data width  : 32 bits
-//   Address width: 16 bits (64 KB BAR)
+//   Address width: 16 bits (64 KB region)
 //   Byte strobes: supported on write
 //   Outstanding transactions: 1 (no out-of-order)
 //
@@ -173,7 +174,7 @@ module tb3d_axi_lite_slave (
     input  wire         dma_error,
 
     // Interrupt interface
-    output reg          intr_req     // level-sensitive interrupt to PCIe
+    output reg          intr_req     // level-sensitive interrupt to CIPS pl_ps_irq
 );
 
     // =========================================================================

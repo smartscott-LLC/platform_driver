@@ -3,7 +3,7 @@
 // Project : TB3-D  Ternary Binary 3-Dimensional Logic Engine
 // File    : rtl/tb3d_engine_top.v
 //
-// Purpose : Engine integration layer.
+// Purpose : Engine integration layer — Versal VP1802 target.
 //           Instantiates and interconnects all TB3-D sub-modules:
 //             - tb3d_encode         (combinational encoder)
 //             - tb3d_decode         (combinational decoder)
@@ -17,7 +17,15 @@
 //
 //           The AXI4-Lite CSR interface provides the register interface for all
 //           control and status operations.  The AXI4 DMA master interface is
-//           exported to the top-level for connection to the PCIe bridge.
+//           exported to the top-level for connection to the AXI NoC.
+//
+//           The 512-bit AXI4-Stream slave (S_AXIS) receives raw binary from the
+//           AXI DMA MM2S channel and feeds the 64-element vector engine.
+//           The 512-bit AXI4-Stream master (M_AXIS) returns the TB3-D encoded
+//           (or decoded) result to the AXI DMA S2MM channel for write-back to
+//           system memory.  The X_INTERFACE_INFO attributes on all four stream
+//           ports enable direct interface-level connection in the Vivado block
+//           design without any bridging IP.
 //
 // Parameters:
 //   CACHE_DEPTH   — Dragonfly Cache depth in TB3-D bytes (default 512)
@@ -38,7 +46,7 @@ module tb3d_engine_top #(
     input  wire         rst_n,
 
     // =========================================================================
-    // AXI4-Lite Slave — CSR interface (connects to PCIe bridge BAR0)
+    // AXI4-Lite Slave — CSR interface (MicroBlaze/CIPS via AXI SmartConnect/NoC)
     // =========================================================================
     input  wire [15:0]  s_axi_awaddr,
     input  wire         s_axi_awvalid,
@@ -63,7 +71,7 @@ module tb3d_engine_top #(
     input  wire         s_axi_rready,
 
     // =========================================================================
-    // AXI4 Master — DMA engine outbound (connects to PCIe bridge or DRAM ctrl)
+    // AXI4 Master — DMA engine outbound (connects to NoC NMU → LPDDR4/DDR4)
     // =========================================================================
     output wire [63:0]  m_axi_araddr,
     output wire [7:0]   m_axi_arlen,
@@ -105,12 +113,44 @@ module tb3d_engine_top #(
     output wire         intr_req,
 
     // =========================================================================
-    // Vector engine I/O (512-bit data buses — for direct fabric connections)
+    // AXI4-Stream Slave — input data from AXI DMA MM2S channel
+    //
+    // Raw binary arrives here from system memory via the AXI DMA engine.
+    // In encode mode (vec_mode=0) the data is treated as 64 packed
+    // {color[3:0],physical[3:0]} nibble pairs and TB3-D encoded.
+    // In decode mode (vec_mode=1) the data is treated as 64 TB3-D bytes
+    // and decoded back to nibble pairs.
+    //
+    // TREADY is permanently asserted — the pipeline accepts one 512-bit
+    // beat every clock cycle (fully pipelined, zero stall).
     // =========================================================================
-    input  wire [511:0] vec_nibble_pairs_i,
-    output wire [511:0] vec_nibble_pairs_o,
-    input  wire [511:0] vec_tb3d_bytes_i,
-    output wire [511:0] vec_tb3d_bytes_o
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 S_AXIS TDATA" *)
+    (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME S_AXIS, TDATA_NUM_BYTES 64, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 300000000, PHASE 0.0, CLK_DOMAIN full_blown_noc_clk_gen_0_axi_clk_0, LAYERED_METADATA undef, INSERT_VIP 0" *)
+    input  wire [511:0]  s_axis_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 S_AXIS TVALID" *)
+    input  wire          s_axis_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 S_AXIS TREADY" *)
+    output wire          s_axis_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 S_AXIS TLAST" *)
+    input  wire          s_axis_tlast,
+
+    // =========================================================================
+    // AXI4-Stream Master — output data to AXI DMA S2MM channel
+    //
+    // TB3-D encoded or decoded result streams from the vector engine back to
+    // system memory via the AXI DMA engine.  In encode mode tb3d_bytes_o
+    // carries the result; in decode mode nibble_pairs_o carries it.
+    // The output is held (TVALID asserted) until the DMA asserts TREADY.
+    // =========================================================================
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS TDATA" *)
+    (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME M_AXIS, TDATA_NUM_BYTES 64, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 300000000, PHASE 0.0, CLK_DOMAIN full_blown_noc_clk_gen_0_axi_clk_0, LAYERED_METADATA undef, INSERT_VIP 0" *)
+    output wire [511:0]  m_axis_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS TVALID" *)
+    output wire          m_axis_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS TREADY" *)
+    input  wire          m_axis_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS TLAST" *)
+    output wire          m_axis_tlast
 );
 
     // =========================================================================
@@ -186,9 +226,27 @@ module tb3d_engine_top #(
     wire [SBUF_ADDR_W:0] sbuf_count;
 
     // Vector engine
-    wire        vec_start;
-    wire        vec_mode;
+    wire        vec_start;       // CSR-initiated start
+    wire        vec_mode;        // 0 = encode, 1 = decode (CSR-controlled)
     wire        vec_done;
+
+    // AXI4-Stream → vector engine input fan-out
+    // s_axis_tdata drives both engine inputs; vec_mode selects which path is
+    // meaningful (encode uses nibble_pairs_i, decode uses tb3d_bytes_i).
+    wire [511:0] vec_nibble_pairs_i;
+    wire [511:0] vec_tb3d_bytes_i;
+    assign vec_nibble_pairs_i = s_axis_tdata;
+    assign vec_tb3d_bytes_i   = s_axis_tdata;
+
+    // S_AXIS is always ready — the pipeline accepts one beat per clock.
+    assign s_axis_tready = 1'b1;
+
+    // AXI-Stream beat triggers the vector engine (OR'd with CSR-initiated start)
+    wire axis_vec_start = s_axis_tvalid;   // tready is always 1
+
+    // Vector engine raw outputs
+    wire [511:0] vec_nibble_pairs_o;   // decode result (valid when done_o)
+    wire [511:0] vec_tb3d_bytes_o;     // encode result (valid when done_o)
 
     // DMA controller
     wire [63:0] dma_src;
@@ -354,7 +412,7 @@ module tb3d_engine_top #(
     tb3d_vector_engine u_vec (
         .clk              (clk),
         .rst_n            (sys_rst_n),
-        .start_i          (vec_start),
+        .start_i          (vec_start | axis_vec_start),
         .mode_i           (vec_mode),
         .nibble_pairs_i   (vec_nibble_pairs_i),
         .nibble_pairs_o   (vec_nibble_pairs_o),
@@ -362,6 +420,40 @@ module tb3d_engine_top #(
         .tb3d_bytes_o     (vec_tb3d_bytes_o),
         .done_o           (vec_done)
     );
+
+    // =========================================================================
+    // AXI4-Stream Master output register
+    //
+    // Captures the vector engine result when done_o fires and holds it until
+    // the AXI DMA S2MM channel is ready (TREADY asserted).  This prevents
+    // result loss when the DMA applies back-pressure.
+    // In encode mode (vec_mode=0) tb3d_bytes_o carries the TB3-D output.
+    // In decode mode (vec_mode=1) nibble_pairs_o carries the decoded output.
+    // =========================================================================
+    reg [511:0] m_axis_tdata_r;
+    reg         m_axis_tvalid_r;
+    reg         m_axis_tlast_r;
+
+    always @(posedge clk) begin
+        if (!sys_rst_n) begin
+            m_axis_tdata_r  <= 512'b0;
+            m_axis_tvalid_r <= 1'b0;
+            m_axis_tlast_r  <= 1'b0;
+        end else if (vec_done) begin
+            // Latch result; vec_mode is stable for the transaction duration
+            m_axis_tdata_r  <= vec_mode ? vec_nibble_pairs_o : vec_tb3d_bytes_o;
+            m_axis_tvalid_r <= 1'b1;
+            m_axis_tlast_r  <= 1'b1;
+        end else if (m_axis_tready && m_axis_tvalid_r) begin
+            // DMA accepted the beat — de-assert valid/last
+            m_axis_tvalid_r <= 1'b0;
+            m_axis_tlast_r  <= 1'b0;
+        end
+    end
+
+    assign m_axis_tdata  = m_axis_tdata_r;
+    assign m_axis_tvalid = m_axis_tvalid_r;
+    assign m_axis_tlast  = m_axis_tlast_r;
 
     // =========================================================================
     // AXI4-Lite CSR Slave
