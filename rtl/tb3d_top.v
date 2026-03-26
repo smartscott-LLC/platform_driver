@@ -144,7 +144,19 @@ module tb3d_top (
     output wire         pl_irq,
 
     // =========================================================================
+    // DMA error — level output to CIPS pl_ps_irq1 or MicroBlaze interrupt.
+    // Asserted when the internal DMA controller receives a SLVERR/DECERR
+    // response from the NoC.  MicroBlaze firmware should read the CSR status
+    // register (offset 0x020) to confirm and clear the error condition.
+    // =========================================================================
+    output wire         dma_error_o,
+
+    // =========================================================================
     // Board I/O — VPK180 LVCMOS18 LEDs (DS17 / DS18 / DS19 / DS20)
+    //   led[0] = engine ready (always 1 after reset)
+    //   led[1] = interrupt / DMA active
+    //   led[2] = heartbeat blink (~4.5 Hz at 300 MHz)
+    //   led[3] = DMA error indicator (latches until reset)
     // =========================================================================
     output reg  [3:0]   led
 );

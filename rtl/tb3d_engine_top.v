@@ -113,6 +113,13 @@ module tb3d_engine_top #(
     output wire         intr_req,
 
     // =========================================================================
+    // DMA error output — asserted when the internal DMA controller receives a
+    // SLVERR or DECERR response from the NoC.  Connect to platform_top
+    // eng_error for watchdog visibility and to led[3] in tb3d_top.
+    // =========================================================================
+    output wire         dma_error_o,
+
+    // =========================================================================
     // AXI4-Stream Slave — input data from AXI DMA MM2S channel
     //
     // Raw binary arrives here from system memory via the AXI DMA engine.
@@ -205,7 +212,8 @@ module tb3d_engine_top #(
     wire [7:0]  cache_dma_pair_csr;
     wire        cache_dma_valid_dma;
     wire [7:0]  cache_dma_pair_dma;
-    wire        cache_dma_ready;
+    wire        cache_dma_ready;    // DMA-path back-pressure from cache (= !full)
+    wire        cache_push_ready;   // Push-path back-pressure from cache (= !full)
     wire        cache_dma_valid;
     wire [7:0]  cache_dma_pair;
     wire        cache_peek_valid;
@@ -224,6 +232,8 @@ module tb3d_engine_top #(
     wire        sbuf_full;
     wire        sbuf_empty;
     wire [SBUF_ADDR_W:0] sbuf_count;
+    wire        sbuf_push_ready;    // Push back-pressure from state buffer (= !full)
+    wire        sbuf_fill_ready;    // Fill back-pressure from state buffer (= !full)
 
     // Vector engine
     wire        vec_start;       // CSR-initiated start
@@ -365,7 +375,7 @@ module tb3d_engine_top #(
         .rst_n          (sys_rst_n),
         .push_valid     (cache_push),
         .push_data      (cache_wdata),
-        .push_ready     (cache_dma_ready),
+        .push_ready     (cache_push_ready),
         .pop_req        (cache_pop_req),
         .pop_data       (cache_rdata),
         .pop_data_valid (cache_rdata_valid),
@@ -373,7 +383,7 @@ module tb3d_engine_top #(
         .peek_valid     (cache_peek_valid),
         .dma_valid      (cache_dma_valid),
         .dma_pair       (cache_dma_pair),
-        .dma_ready      (),
+        .dma_ready      (cache_dma_ready),
         .full           (cache_full),
         .empty          (cache_empty),
         .count          (cache_count)
@@ -394,10 +404,10 @@ module tb3d_engine_top #(
         .rst_n      (sys_rst_n),
         .push_valid (sbuf_push),
         .push_color (sbuf_color),
-        .push_ready (),
+        .push_ready (sbuf_push_ready),
         .fill_valid (sbuf_fill),
         .fill_byte  (cache_rdata),    // auto-fill from cache pop data
-        .fill_ready (),
+        .fill_ready (sbuf_fill_ready),
         .rd_index   (sbuf_ridx),
         .rd_color_o (sbuf_rdata),
         .rd_valid_o (sbuf_rvalid),
@@ -603,5 +613,10 @@ module tb3d_engine_top #(
         .cache_empty      (cache_empty),
         .cache_full       (cache_full)
     );
+
+    // =========================================================================
+    // Export DMA error to top level for watchdog and status monitoring
+    // =========================================================================
+    assign dma_error_o = dma_error;
 
 endmodule
