@@ -2,6 +2,8 @@
 // Module  : tb3d_versal_dma_bridge
 // Project : TB3-D  Ternary Binary 3-Dimensional Logic Engine
 // File    : rtl/tb3d_pcie_bridge.v
+//           (filename kept for Vivado project compatibility; the module
+//            instantiated within is tb3d_versal_dma_bridge)
 //
 // Purpose : Versal AXI4-Stream DMA width converter.
 //
