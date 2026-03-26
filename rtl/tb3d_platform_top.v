@@ -19,8 +19,8 @@
 //   │  └─────────────────────────────────────────────┘                   │
 //   │                                                                     │
 //   │  ┌─────────────────────────────────────────────┐                   │
-//   │  │         tb3d_gtyp_xcvr                      │                   │
-//   │  │  (GTYP transceiver TB3-D codec)             │                   │
+//   │  │  tb3d_gtyp_xcvr (512-bit S/M_AXIS, 8-beat  │                   │
+//   │  │  TX serialiser, 8-beat RX accumulator, CDC) │                   │
 //   │  └─────────────────────────────────────────────┘                   │
 //   │                                                                     │
 //   │  ┌─────────────────────────────────────────────┐                   │
@@ -370,16 +370,23 @@ module tb3d_platform_top #(
 
     // Internal engine status wires (used by MicroBlaze watchdog and LEDs)
     wire         eng_intr_req;
-    // TODO: tb3d_engine_top does not currently expose busy/done/error on its
-    //       external port.  When those signals are added to the engine, connect
-    //       them here instead of the placeholder assignments below.
-    //       Until then the watchdog timer is dormant (wdt_irq will not fire).
-    wire         eng_busy;
-    wire         eng_done;
-    wire         eng_error;
-    assign eng_busy  = 1'b0;           // placeholder — engine does not yet export
-    assign eng_done  = eng_intr_req;   // use IRQ as a proxy for completion
-    assign eng_error = 1'b0;           // placeholder — engine does not yet export
+
+    // eng_busy: asserted whenever data is moving through the engine.
+    //   - eng_s_axis_tvalid: DMA is pushing data into the engine
+    //   - eng_m_axis_tvalid: engine has a result waiting to be consumed
+    // Both signals are native to the pl_clk domain; no CDC needed.
+    wire         eng_busy  = eng_s_axis_tvalid | eng_m_axis_tvalid;
+
+    // eng_done: the engine raises intr_req for one cycle when a DMA transfer
+    // or a vector-engine operation completes.  This is the correct signal to
+    // use as a "done" indicator for the MicroBlaze watchdog.
+    wire         eng_done  = eng_intr_req;
+
+    // eng_error: tb3d_engine_top surfaces its internal dma_error through the
+    // CSR status register (readable by MicroBlaze via S_AXI_CTRL).  The signal
+    // is not exported as a dedicated top-level pin; MicroBlaze firmware polls
+    // the STATUS register on each intr_req to distinguish done from error.
+    wire         eng_error = 1'b0;
 
     // =========================================================================
     // DMA Width Converter (tb3d_versal_dma_bridge)
@@ -494,44 +501,54 @@ module tb3d_platform_top #(
 
     // =========================================================================
     // GTYP Transceiver TB3-D Codec
+    //
+    // TX path (pl_clk → gt_txusrclk2 → GT):
+    //   The xcvr observes the engine M_AXIS bus.  When the DMA bridge accepts
+    //   a beat (tvalid && tready), the xcvr captures the full 512-bit encoded
+    //   word and serialises it as 8 consecutive 64-bit GT TX beats.  Because
+    //   s_axis_tready on the xcvr is always 1 (the GT serialiser is free to
+    //   accept as long as the prior word has been serialised), we gate the
+    //   valid with the actual DMA-bridge handshake so only confirmed transfers
+    //   are replicated to the SerDes.
+    //
+    // RX path (GT → gt_rxusrclk2 → pl_clk → M_AXIS):
+    //   The xcvr accumulates 8 GT RX beats into a 512-bit word, applies 64×
+    //   tb3d_decode, and presents the result on xcvr_m_axis.  Connect
+    //   xcvr_m_axis to a separate AXI DMA S2MM channel or the engine S_AXIS
+    //   as appropriate for the target system.  Here it is consumed internally
+    //   (tready = 1'b1) — wire it to an external port if RX data is needed.
     // =========================================================================
-    // Internal AXIS wires connecting the GT codec to the engine AXIS (optional)
-    // In the default connection the GTYP codec operates independently on its
-    // own 64-bit AXI4-Stream path; connect s_axis_xcvr / m_axis_xcvr to an
-    // independent AXI DMA or fabric producer/consumer as required.
-    // For simplicity these are exposed as module-internal signals here and the
-    // GTYP path is self-contained.
-    wire [63:0] xcvr_m_axis_tdata;
-    wire        xcvr_m_axis_tvalid;
-    wire        xcvr_m_axis_tready;
-    wire        xcvr_m_axis_tlast;
 
-    // TX: engine M_AXIS 512-bit → 64-bit GT TX data slice.
-    // IMPORTANT: This takes only the lowest 64 bits of the 512-bit engine output
-    // as a representative lane for the GTYP serialiser.  In a full production
-    // system, insert a dedicated AXI4-Stream width converter (e.g. Xilinx
-    // axis_dwidth_converter) between the engine M_AXIS and the GT TX input, or
-    // route a separate 64-bit AXI4-Stream producer directly to the GT Wizard
-    // TX parallel-data port.  The remaining 448 bits are not serialised here.
-    // synthesis translate_off
-    // pragma synthesis_off
-    // TODO: Replace lower-64-bit slice with a proper width converter before tapeout.
-    // synthesis translate_on
-    wire [63:0] xcvr_s_axis_tdata  = eng_m_axis_tdata[63:0];
-    wire        xcvr_s_axis_tvalid = eng_m_axis_tvalid;
-    wire        xcvr_s_axis_tlast  = eng_m_axis_tlast;
-    wire        xcvr_s_axis_tready;   // not used (GT always accepts)
+    // 512-bit xcvr TX wires
+    wire [511:0] xcvr_s_axis_tdata;
+    wire         xcvr_s_axis_tvalid;
+    wire         xcvr_s_axis_tready;   // driven by xcvr; not fed back to engine
+    wire         xcvr_s_axis_tlast;
+
+    // Monitor the engine M_AXIS: capture beats as the DMA bridge accepts them
+    assign xcvr_s_axis_tdata  = eng_m_axis_tdata;
+    assign xcvr_s_axis_tvalid = eng_m_axis_tvalid && eng_m_axis_tready;
+    assign xcvr_s_axis_tlast  = eng_m_axis_tlast;
+
+    // 512-bit xcvr RX wires
+    wire [511:0] xcvr_m_axis_tdata;
+    wire         xcvr_m_axis_tvalid;
+    wire         xcvr_m_axis_tready;
+    wire         xcvr_m_axis_tlast;
 
     tb3d_gtyp_xcvr u_xcvr (
+        .pl_clk          (pl_clk),
         .gt_txusrclk2    (gt_txusrclk2),
         .gt_rxusrclk2    (gt_rxusrclk2),
         .rst_n           (pl_resetn),
 
+        // S_AXIS: full 512-bit engine M_AXIS feed (observational tap)
         .s_axis_tdata    (xcvr_s_axis_tdata),
         .s_axis_tvalid   (xcvr_s_axis_tvalid),
         .s_axis_tready   (xcvr_s_axis_tready),
         .s_axis_tlast    (xcvr_s_axis_tlast),
 
+        // M_AXIS: 512-bit decoded RX output
         .m_axis_tdata    (xcvr_m_axis_tdata),
         .m_axis_tvalid   (xcvr_m_axis_tvalid),
         .m_axis_tready   (xcvr_m_axis_tready),
@@ -545,7 +562,9 @@ module tb3d_platform_top #(
         .bypass          (bypass_xcvr)
     );
 
-    // M_AXIS from GTYP codec is accepted; tie TREADY high (always consume)
+    // RX output is consumed by the platform (tready always asserted).
+    // To route decoded GTYP RX data to the engine or a DMA channel, replace
+    // this tie-off and connect xcvr_m_axis_* to the desired AXI4-Stream slave.
     assign xcvr_m_axis_tready = 1'b1;
 
     // =========================================================================
