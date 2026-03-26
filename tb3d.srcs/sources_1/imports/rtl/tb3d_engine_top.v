@@ -46,7 +46,7 @@ module tb3d_engine_top #(
     input  wire         rst_n,
 
     // =========================================================================
-    // AXI4-Lite Slave — CSR interface (connects to PCIe bridge BAR0)
+    // AXI4-Lite Slave — CSR interface (MicroBlaze/CIPS via AXI SmartConnect/NoC)
     // =========================================================================
     input  wire [15:0]  s_axi_awaddr,
     input  wire         s_axi_awvalid,
@@ -71,7 +71,7 @@ module tb3d_engine_top #(
     input  wire         s_axi_rready,
 
     // =========================================================================
-    // AXI4 Master — DMA engine outbound (connects to PCIe bridge or DRAM ctrl)
+    // AXI4 Master — DMA engine outbound (connects to NoC NMU → LPDDR4/DDR4)
     // =========================================================================
     output wire [63:0]  m_axi_araddr,
     output wire [7:0]   m_axi_arlen,
