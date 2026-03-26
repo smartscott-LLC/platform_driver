@@ -1,0 +1,295 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Wed Mar 25 17:40:39 2026
+# Process ID         : 836932
+# Current directory  : /home/smartscott/platform_driver
+# Command line       : vivado
+# Log file           : /home/smartscott/platform_driver/vivado.log
+# Journal file       : /home/smartscott/platform_driver/vivado.jou
+# Running On         : smarTech
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
+# CPU Frequency      : 2590.875 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 15658 MB
+# Swap memory        : 12124 MB
+# Total Virtual      : 27782 MB
+# Available Virtual  : 22416 MB
+#-----------------------------------------------------------
+start_gui
+open_project /home/smartscott/platform_driver/tb3d.xpr
+update_compile_order -fileset sources_1
+open_bd_design {/home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd}
+open_bd_design {/home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd}
+create_bd_cell -type module -reference tb3d_engine_top tb3d_engine_top_0
+create_bd_cell -type module -reference tb3d_pcie_bridge tb3d_pcie_bridge_0
+set_property location {5 1429 435} [get_bd_cells tb3d_pcie_bridge_0]
+set_property location {5 1484 259} [get_bd_cells tb3d_engine_top_0]
+disconnect_bd_net /microblaze_0_Clk [get_bd_pins tb3d_transcoder_0/tb3d_in]
+undo
+connect_bd_net [get_bd_pins tb3d_engine_top_0/vec_tb3d_bytes_i] [get_bd_pins noc_clk_gen/axi_clk_0]
+disconnect_bd_net /versal_cips_0_pmc_axi_noc_axi0_clk [get_bd_pins axi_noc_0/aclk5]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/vec_nibble_pairs_i] [get_bd_pins axi_noc_0/aclk5]
+delete_bd_objs [get_bd_nets versal_cips_0_pmc_axi_noc_axi0_clk]
+connect_bd_net [get_bd_pins versal_cips_0/pmc_axi_noc_axi0_clk] [get_bd_pins axi_noc_0/aclk5]
+validate_bd_design
+delete_bd_objs [get_bd_nets tb3d_transcoder_0_tb3d_out]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/vec_tb3d_bytes_o] [get_bd_pins axi_noc_0/aclk6]
+disconnect_bd_net /tb3d_transcoder_0_legacy_out [get_bd_pins tb3d_transcoder_0/legacy_out]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/vec_nibble_pairs_o] [get_bd_pins axi_noc_0/aclk8]
+disconnect_bd_net /microblaze_0_Clk [get_bd_pins tb3d_transcoder_0/tb3d_in]
+connect_bd_intf_net [get_bd_intf_pins tb3d_engine_top_0/s_axi] [get_bd_intf_pins tb3d_pcie_bridge_0/m_csr]
+apply_bd_automation -rule xilinx.com:bd_rule:axi4_s2mm -config {Dest_Intf "/tb3d_pcie_bridge_0/s_axis_tx" Bridge_IP "New AXI-Stream FIFO (Medium/Low frequency transfer)" Conn_m_axis_rx "1" Clk_Stream "Auto" Clk_MM "Auto" }  [get_bd_intf_pins tb3d_engine_top_0/m_axi]
+startgroup
+set_property -dict [list \
+  CONFIG.C_D_AXI {1} \
+  CONFIG.C_I_AXI {1} \
+] [get_bd_cells microblaze_0]
+endgroup
+startgroup
+set_property -dict [list \
+  CONFIG.NUM_MI {1} \
+  CONFIG.NUM_SI {7} \
+  CONFIG.SI_SIDEBAND_PINS {0,0,0,0,0,0} \
+] [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.CATEGORY {ps_pcie}] [get_bd_intf_pins /axi_noc_0/M00_AXI]
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+endgroup
+connect_bd_intf_net [get_bd_intf_pins axi_noc_0/S06_AXI] [get_bd_intf_pins tb3d_pcie_bridge_0/m_dma]
+delete_bd_objs [get_bd_intf_nets tb3d_pcie_bridge_0_m_csr]
+connect_bd_intf_net [get_bd_intf_pins axi_noc_0/M00_AXI] [get_bd_intf_pins tb3d_engine_top_0/s_axi]
+startgroup
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+endgroup
+delete_bd_objs [get_bd_intf_nets axi_noc_0_M00_AXI]
+delete_bd_objs [get_bd_intf_nets tb3d_engine_top_0_m_axi]
+delete_bd_objs [get_bd_intf_nets tb3d_pcie_bridge_0_s_axis_tx]
+delete_bd_objs [get_bd_intf_nets tb3d_pcie_bridge_0_m_dma]
+delete_bd_objs [get_bd_intf_nets axis_subset_converter_M_AXIS]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/rst_n] [get_bd_pins tb3d_pcie_bridge_0/rst_n]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/rst_n] [get_bd_pins rst_noc_clk_gen_300M/mb_reset]
+disconnect_bd_net /rst_noc_clk_gen_300M_mb_reset [get_bd_pins tb3d_pcie_bridge_0/rst_n]
+connect_bd_net [get_bd_pins tb3d_pcie_bridge_0/rst_n] [get_bd_pins rst_noc_clk_gen_300M/mb_reset]
+disconnect_bd_net /rst_noc_clk_gen_300M_mb_reset [get_bd_pins tb3d_pcie_bridge_0/rst_n]
+connect_bd_net [get_bd_pins tb3d_pcie_bridge_0/rst_n] [get_bd_pins axi_fifo_mm_s/mm2s_prmry_reset_out_n]
+delete_bd_objs [get_bd_nets axi_fifo_mm_s_mm2s_prmry_reset_out_n]
+disconnect_bd_net /rst_noc_clk_gen_300M_mb_reset [get_bd_pins tb3d_engine_top_0/rst_n]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/rst_n] [get_bd_pins axi_fifo_mm_s/mm2s_prmry_reset_out_n]
+connect_bd_net [get_bd_pins tb3d_pcie_bridge_0/rst_n] [get_bd_pins axi_fifo_mm_s/mm2s_cntrl_reset_out_n]
+connect_bd_intf_net [get_bd_intf_pins tb3d_pcie_bridge_0/m_dma] [get_bd_intf_pins axi_noc_0/S06_AXI]
+connect_bd_intf_net [get_bd_intf_pins axi_noc_0/M00_AXI] [get_bd_intf_pins tb3d_engine_top_0/s_axi]
+connect_bd_intf_net [get_bd_intf_pins tb3d_engine_top_0/m_axi] [get_bd_intf_pins axi_smc/S00_AXI]
+connect_bd_intf_net [get_bd_intf_pins tb3d_pcie_bridge_0/s_axis_tx] [get_bd_intf_pins axis_dwidth_converter/S_AXIS]
+startgroup
+set_property CONFIG.NUM_MC {2} [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+endgroup
+startgroup
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Board_Interface {ch0_lpddr4_trip1} Manual_Source {Auto}}  [get_bd_intf_pins axi_noc_0/CH0_LPDDR4_1]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Board_Interface {ch0_lpddr4_trip1} Manual_Source {Auto}}  [get_bd_intf_pins axi_noc_0/CH1_LPDDR4_1]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Board_Interface {lpddr4_clk2 ( LPDDR4 Clock 2 ) } Manual_Source {Auto}}  [get_bd_intf_pins axi_noc_0/sys_clk1]
+endgroup
+connect_bd_intf_net [get_bd_intf_pins tb3d_pcie_bridge_0/m_axis_rx] [get_bd_intf_pins axi_fifo_mm_s/AXI_STR_TXC]
+startgroup
+set_property -dict [list \
+  CONFIG.NUM_MI {2} \
+  CONFIG.NUM_SI {9} \
+] [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+endgroup
+apply_bd_automation -rule xilinx.com:bd_rule:axi4_s2mm -config {Dest_Intf "/microblaze_0/M_AXI_DP" Bridge_IP "New AXI-Stream FIFO (Medium/Low frequency transfer)" Clk_Stream "/noc_clk_gen/axi_clk_0 (300 MHz)" Clk_MM "/noc_clk_gen/axi_clk_0 (300 MHz)" }  [get_bd_intf_pins axis_subset_converter/M_AXIS]
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0
+endgroup
+connect_bd_intf_net [get_bd_intf_pins axi_uartlite_0/S_AXI] [get_bd_intf_pins microblaze_0/M_AXI_DP]
+startgroup
+make_bd_intf_pins_external  [get_bd_intf_pins axi_uartlite_0/UART]
+endgroup
+apply_bd_automation -rule xilinx.com:bd_rule:clkrst -config { Clk {/noc_clk_gen/axi_clk_0 (300 MHz)} Freq {300} Ref_Clk0 {} Ref_Clk1 {} Ref_Clk2 {}}  [get_bd_pins axi_uartlite_0/s_axi_aclk]
+connect_bd_intf_net [get_bd_intf_pins axi_noc_0/S07_AXI] [get_bd_intf_pins tb3d_pcie_bridge_0/m_csr]
+connect_bd_net [get_bd_pins tb3d_pcie_bridge_0/completer_id] [get_bd_pins noc_clk_gen/axi_clk_0]
+set_property location {4.5 934 673} [get_bd_cells noc_clk_gen]
+startgroup
+make_bd_pins_external  [get_bd_pins tb3d_engine_top_0/intr_req]
+endgroup
+connect_bd_intf_net [get_bd_intf_pins microblaze_0/M_AXI_IP] [get_bd_intf_pins axi_noc_0/S08_AXI]
+regenerate_bd_layout -routing
+regenerate_bd_layout
+delete_bd_objs [get_bd_cells tb3d_transcoder_0]
+update_compile_order -fileset sources_1
+regenerate_bd_layout
+startgroup
+make_bd_intf_pins_external  [get_bd_intf_pins axis_subset_converter/M_AXIS]
+endgroup
+regenerate_bd_layout
+set_property location {-17 9} [get_bd_intf_ports lpddr4_clk2]
+set_property location {-6 46} [get_bd_intf_ports lpddr4_clk2]
+regenerate_bd_layout
+assign_bd_address
+regenerate_bd_layout
+regenerate_bd_layout -routing
+validate_bd_design
+startgroup
+set_property CONFIG.UARTLITE_BOARD_INTERFACE {sysctrl_uart} [get_bd_cells axi_uartlite_0]
+endgroup
+delete_bd_objs [get_bd_intf_nets microblaze_0_M_AXI_DP]
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { Clk_master {/noc_clk_gen/axi_clk_0 (300 MHz)} Clk_slave {/noc_clk_gen/axi_clk_0 (300 MHz)} Clk_xbar {/noc_clk_gen/axi_clk_0 (300 MHz)} Master {/microblaze_0 (Periph)} Slave {/axi_uartlite_0/S_AXI} ddr_seg {Auto} intc_ip {New AXI SmartConnect} master_apm {0}}  [get_bd_intf_pins axi_uartlite_0/S_AXI]
+delete_bd_objs [get_bd_intf_nets axi_uartlite_0_UART]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Board_Interface {sysctrl_uart ( Sysctrl UART ) } Manual_Source {Auto}}  [get_bd_intf_pins axi_uartlite_0/UART]
+delete_bd_objs [get_bd_intf_ports UART_0]
+delete_bd_objs [get_bd_intf_nets axis_subset_converter_M_AXIS]
+delete_bd_objs [get_bd_intf_ports M_AXIS_0]
+startgroup
+make_bd_intf_pins_external  [get_bd_intf_pins axis_subset_converter/M_AXIS]
+endgroup
+startgroup
+set_property -dict [list CONFIG.CATEGORY {pl}] [get_bd_intf_pins /axi_noc_0/M00_AXI]
+set_property -dict [list CONFIG.CATEGORY {ps_cci}] [get_bd_intf_pins /axi_noc_0/M01_AXI]
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+endgroup
+regenerate_bd_layout
+validate_bd_design
+make_wrapper -files [get_files /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd] -top
+delete_bd_objs [get_bd_intf_nets axi_noc_0_M00_AXI]
+regenerate_bd_layout
+startgroup
+set_property -dict [list \
+  CONFIG.MI_NAMES {} \
+  CONFIG.MI_SIDEBAND_PINS {} \
+  CONFIG.NUM_MI {0} \
+] [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.CATEGORY {ps_rpu}] [get_bd_intf_pins /axi_noc_0/S04_AXI]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S08_AXI:S07_AXI:S06_AXI}] [get_bd_pins /axi_noc_0/aclk7]
+endgroup
+startgroup
+set_property -dict [list \
+  CONFIG.CPM_CONFIG { \
+    CPM_PCIE0_MODES {DMA} \
+  } \
+  CONFIG.PS_PMC_CONFIG { \
+    DDR_MEMORY_MODE {Connectivity to DDR via NOC} \
+    DESIGN_MODE {1} \
+    DEVICE_INTEGRITY_MODE {Sysmon temperature voltage and external IO monitoring} \
+    PCIE_APERTURES_DUAL_ENABLE {0} \
+    PCIE_APERTURES_SINGLE_ENABLE {1} \
+    PMC_GPIO0_MIO_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 0 .. 25}}} \
+    PMC_GPIO1_MIO_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 26 .. 51}}} \
+    PMC_MIO37 {{AUX_IO 0} {DIRECTION out} {DRIVE_STRENGTH 8mA} {OUTPUT_DATA high} {PULL pullup} {SCHMITT 0} {SLEW slow} {USAGE GPIO}} \
+    PMC_QSPI_FBCLK {{ENABLE 1} {IO {PMC_MIO 6}}} \
+    PMC_QSPI_PERIPHERAL_DATA_MODE {x4} \
+    PMC_QSPI_PERIPHERAL_ENABLE {1} \
+    PMC_QSPI_PERIPHERAL_MODE {Dual Parallel} \
+    PMC_REF_CLK_FREQMHZ {33.3333} \
+    PMC_SD1 {{CD_ENABLE 1} {CD_IO {PMC_MIO 28}} {POW_ENABLE 1} {POW_IO {PMC_MIO 51}} {RESET_ENABLE 0} {RESET_IO {PMC_MIO 12}} {WP_ENABLE 0} {WP_IO {PMC_MIO 1}}} \
+    PMC_SD1_PERIPHERAL {{CLK_100_SDR_OTAP_DLY 0x3} {CLK_200_SDR_OTAP_DLY 0x2} {CLK_50_DDR_ITAP_DLY 0x2A} {CLK_50_DDR_OTAP_DLY 0x3} {CLK_50_SDR_ITAP_DLY 0x25} {CLK_50_SDR_OTAP_DLY 0x4} {ENABLE 1} {IO {PMC_MIO 26 .. 36}}} \
+    PMC_SD1_SLOT_TYPE {SD 3.0 AUTODIR} \
+    PMC_USE_PMC_NOC_AXI0 {1} \
+    PS_BOARD_INTERFACE {ps_pmc_fixed_io} \
+    PS_ENET0_MDIO {{ENABLE 1} {IO {PS_MIO 24 .. 25}}} \
+    PS_ENET0_PERIPHERAL {{ENABLE 1} {IO {PS_MIO 0 .. 11}}} \
+    PS_GEN_IPI0_ENABLE {1} \
+    PS_GEN_IPI0_MASTER {A72} \
+    PS_GEN_IPI1_ENABLE {1} \
+    PS_GEN_IPI2_ENABLE {1} \
+    PS_GEN_IPI3_ENABLE {1} \
+    PS_GEN_IPI4_ENABLE {1} \
+    PS_GEN_IPI5_ENABLE {1} \
+    PS_GEN_IPI6_ENABLE {1} \
+    PS_I2C0_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 46 .. 47}}} \
+    PS_I2C1_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 44 .. 45}}} \
+    PS_I2CSYSMON_PERIPHERAL {{ENABLE 0} {IO {PMC_MIO 39 .. 40}}} \
+    PS_MIO7 {{AUX_IO 0} {DIRECTION in} {DRIVE_STRENGTH 8mA} {OUTPUT_DATA default} {PULL disable} {SCHMITT 0} {SLEW slow} {USAGE Reserved}} \
+    PS_MIO9 {{AUX_IO 0} {DIRECTION in} {DRIVE_STRENGTH 8mA} {OUTPUT_DATA default} {PULL disable} {SCHMITT 0} {SLEW slow} {USAGE Reserved}} \
+    PS_M_AXI_FPD_DATA_WIDTH {128} \
+    PS_NUM_FABRIC_RESETS {0} \
+    PS_PCIE1_PERIPHERAL_ENABLE {1} \
+    PS_PCIE2_PERIPHERAL_ENABLE {0} \
+    PS_PCIE_EP_RESET1_IO {PS_MIO 18} \
+    PS_PCIE_EP_RESET2_IO {PS_MIO 19} \
+    PS_PCIE_RESET {ENABLE 1} \
+    PS_PL_CONNECTIVITY_MODE {Custom} \
+    PS_S_AXI_FPD_DATA_WIDTH {128} \
+    PS_UART0_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 42 .. 43}}} \
+    PS_USB3_PERIPHERAL {{ENABLE 1} {IO {PMC_MIO 13 .. 25}}} \
+    PS_USE_FPD_CCI_NOC {1} \
+    PS_USE_FPD_CCI_NOC0 {1} \
+    PS_USE_M_AXI_FPD {0} \
+    PS_USE_NOC_LPD_AXI0 {1} \
+    PS_USE_PMCPL_CLK0 {0} \
+    PS_USE_PMCPL_CLK1 {0} \
+    PS_USE_PMCPL_CLK2 {0} \
+    PS_USE_PMCPL_CLK3 {0} \
+    PS_USE_S_AXI_FPD {0} \
+    SMON_ALARMS {Set_Alarms_On} \
+    SMON_ENABLE_TEMP_AVERAGING {0} \
+    SMON_INTERFACE_TO_USE {I2C} \
+    SMON_PMBUS_ADDRESS {0x18} \
+    SMON_TEMP_AVERAGING_SAMPLES {0} \
+  } \
+] [get_bd_cells versal_cips_0]
+endgroup
+startgroup
+delete_bd_objs [get_bd_intf_nets axi_fifo_mm_s_AXI_STR_TXC] [get_bd_intf_nets axi_fifo_mm_s_AXI_STR_TXD] [get_bd_intf_nets axi_noc_0_CH0_LPDDR4_0] [get_bd_intf_nets axi_noc_0_CH0_LPDDR4_1] [get_bd_intf_nets axi_noc_0_CH1_LPDDR4_0] [get_bd_intf_nets axi_noc_0_CH1_LPDDR4_1] [get_bd_intf_nets axi_smc_M00_AXI] [get_bd_intf_nets axi_smc_1_M00_AXI] [get_bd_intf_nets axi_uartlite_0_UART] [get_bd_intf_nets axis_dwidth_converter_M_AXIS] [get_bd_intf_nets axis_subset_converter_M_AXIS] [get_bd_intf_nets lpddr4_clk1_1] [get_bd_intf_nets lpddr4_clk2_1] [get_bd_intf_nets microblaze_0_DLMB] [get_bd_intf_nets microblaze_0_ILMB] [get_bd_intf_nets microblaze_0_M_AXI_DP] [get_bd_intf_nets microblaze_0_M_AXI_IP] [get_bd_intf_nets tb3d_pcie_bridge_0_m_csr] [get_bd_intf_nets tb3d_pcie_bridge_0_m_dma] [get_bd_intf_nets versal_cips_0_FPD_CCI_NOC_0] [get_bd_intf_nets versal_cips_0_FPD_CCI_NOC_1] [get_bd_intf_nets versal_cips_0_FPD_CCI_NOC_2] [get_bd_intf_nets versal_cips_0_FPD_CCI_NOC_3] [get_bd_intf_nets versal_cips_0_LPD_AXI_NOC_0] [get_bd_intf_nets versal_cips_0_PMC_NOC_AXI_0]
+delete_bd_objs [get_bd_nets Net] [get_bd_nets axi_fifo_mm_s_mm2s_cntrl_reset_out_n] [get_bd_nets axi_fifo_mm_s_mm2s_prmry_reset_out_n] [get_bd_nets microblaze_0_Clk] [get_bd_nets noc_clk_gen_axi_rst_0_n] [get_bd_nets rst_noc_clk_gen_300M_bus_struct_reset] [get_bd_nets tb3d_engine_top_0_intr_req] [get_bd_nets tb3d_engine_top_0_vec_tb3d_bytes_o] [get_bd_nets tb3d_transcoder_0_legacy_out] [get_bd_nets versal_cips_0_fpd_cci_noc_axi0_clk] [get_bd_nets versal_cips_0_fpd_cci_noc_axi1_clk] [get_bd_nets versal_cips_0_fpd_cci_noc_axi2_clk] [get_bd_nets versal_cips_0_fpd_cci_noc_axi3_clk] [get_bd_nets versal_cips_0_lpd_axi_noc_clk]
+delete_bd_objs [get_bd_intf_ports M_AXIS_0] [get_bd_intf_ports ch0_lpddr4_trip1] [get_bd_intf_ports ch0_lpddr4_trip1_0] [get_bd_intf_ports ch0_lpddr4_trip1_1] [get_bd_intf_ports ch1_lpddr4_trip1] [get_bd_intf_ports sysctrl_uart]
+delete_bd_objs [get_bd_cells axi_fifo_mm_s] [get_bd_cells axi_noc_0] [get_bd_cells axi_smc_1] [get_bd_cells axi_uartlite_0] [get_bd_cells axis_subset_converter] [get_bd_cells versal_cips_0]
+delete_bd_objs [get_bd_cells microblaze_0_local_memory]
+delete_bd_objs [get_bd_ports intr_req_0]
+endgroup
+regenerate_bd_layout
+startgroup
+delete_bd_objs [get_bd_nets clk_wiz_clk_out1] [get_bd_nets clk_wiz_locked] [get_bd_nets clk_100MHz_1] [get_bd_nets mdm_1_debug_sys_rst] [get_bd_nets reset_rtl_1] [get_bd_nets rst_clk_wiz_100M_peripheral_aresetn] [get_bd_nets rst_noc_clk_gen_300M_mb_reset]
+delete_bd_objs [get_bd_intf_ports lpddr4_clk1] [get_bd_intf_ports lpddr4_clk2]
+delete_bd_objs [get_bd_cells mdm_1] [get_bd_cells clk_wiz] [get_bd_cells rst_clk_wiz_100M] [get_bd_cells rst_noc_clk_gen_300M] [get_bd_cells noc_clk_gen] [get_bd_cells microblaze_0]
+delete_bd_objs [get_bd_ports clk_100MHz] [get_bd_ports reset_rtl]
+endgroup
+regenerate_bd_layout
+startgroup
+delete_bd_objs [get_bd_intf_nets tb3d_engine_top_0_m_axi] [get_bd_intf_nets tb3d_pcie_bridge_0_s_axis_tx]
+delete_bd_objs [get_bd_cells axi_smc] [get_bd_cells axis_dwidth_converter]
+endgroup
+regenerate_bd_layout
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { Clk_master {Auto} Clk_slave {Auto} Clk_xbar {Auto} Master {/tb3d_pcie_bridge_0/m_csr} Slave {/tb3d_engine_top_0/s_axi} ddr_seg {Auto} intc_ip {New AXI SmartConnect} master_apm {0}}  [get_bd_intf_pins tb3d_engine_top_0/s_axi]
+regenerate_bd_layout -routing
+regenerate_bd_layout
+apply_bd_automation -rule xilinx.com:bd_rule:clkrst -config { Clk {New Clocking Wizard} Freq {100.0} Ref_Clk0 {} Ref_Clk1 {} Ref_Clk2 {}}  [get_bd_pins noc_clk_gen/axi_clk_in_0]
+startgroup
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Clk {New External Port} Manual_Source {Auto}}  [get_bd_pins clk_wiz/clk_in1]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Manual_Source {New External Port (ACTIVE_HIGH)}}  [get_bd_pins clk_wiz/reset]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Manual_Source {Auto}}  [get_bd_pins rst_clk_wiz_100M/ext_reset_in]
+endgroup
+generate_target all [get_files  /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd]
+export_ip_user_files -of_objects [get_files /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd] -no_script -sync -force -quiet
+export_simulation -lib_map_path [list {modelsim=/home/smartscott/platform_driver/tb3d.cache/compile_simlib/modelsim} {questa=/home/smartscott/platform_driver/tb3d.cache/compile_simlib/questa} {xcelium=/home/smartscott/platform_driver/tb3d.cache/compile_simlib/xcelium} {vcs=/home/smartscott/platform_driver/tb3d.cache/compile_simlib/vcs} {riviera=/home/smartscott/platform_driver/tb3d.cache/compile_simlib/riviera}] -of_objects [get_files /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd] -directory /home/smartscott/platform_driver/tb3d.ip_user_files/sim_scripts -ip_user_files_dir /home/smartscott/platform_driver/tb3d.ip_user_files -ipstatic_source_dir /home/smartscott/platform_driver/tb3d.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+update_compile_order -fileset sources_1
+make_wrapper -files [get_files /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd] -top
+make_wrapper -files [get_files /home/smartscott/platform_driver/tb3d.srcs/sources_1/bd/design_1/design_1.bd] -top
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:versal_cips:3.4 versal_cips_0
+endgroup
+set_property -dict [list \
+  CONFIG.CPM_CONFIG { \
+    CPM_PCIE0_MODES {None} \
+    CPM_PRESET {QDMA_Controller0_MMST_1PF_G4x8_TandemPCIe} \
+  } \
+  CONFIG.PS_PMC_CONFIG { \
+    DESIGN_MODE {1} \
+    PCIE_APERTURES_DUAL_ENABLE {0} \
+    PCIE_APERTURES_SINGLE_ENABLE {1} \
+    PMC_USE_NOC_PMC_AXI0 {1} \
+    PMC_USE_PMC_NOC_AXI0 {1} \
+    PS_BOARD_INTERFACE {Custom} \
+    PS_PCIE1_PERIPHERAL_ENABLE {1} \
+    PS_PCIE2_PERIPHERAL_ENABLE {0} \
+    PS_PCIE_RESET {ENABLE 1} \
+    SMON_ALARMS {Set_Alarms_On} \
+    SMON_ENABLE_TEMP_AVERAGING {0} \
+    SMON_TEMP_AVERAGING_SAMPLES {0} \
+  } \
+] [get_bd_cells versal_cips_0]
+connect_bd_net [get_bd_pins tb3d_engine_top_0/intr_req] [get_bd_pins versal_cips_0/cpm_irq0]

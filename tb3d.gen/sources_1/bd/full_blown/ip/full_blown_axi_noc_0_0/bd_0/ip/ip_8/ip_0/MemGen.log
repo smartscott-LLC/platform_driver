@@ -1,0 +1,1034 @@
+#!/bin/sh -v 
+
+GCC=$1
+upmem=$2
+c_files=$6/temp
+h_files=$6/temp
+mblaze_include=$3/mblaze_files/include
+mblaze_lib=$3/mblaze_files/lib
+linker_script=$3/linker_script/lscript.ld
+elf_name=$6/$5\_ddrmc.elf
+smi_file=$3/ddrmc.smi
+upmem_proc=ddrmc/microblaze_I
+new_h_files=$6/h_files
+
+$GCC -Wall -Os -g3 -c -fmessage-length=0 -I/$h_files -I/$new_h_files -I/$mblaze_include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mno-xl-soft-div -mcpu=v10.0 -mno-xl-soft-mul -mxl-multiply-high -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP $c_files/*.c
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/calibration.c: In function 'main':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/calibration.c:199:19: warning: implicit declaration of function 'en_mission_mode_tracking' [-Wimplicit-function-declaration]
+  199 |          status = en_mission_mode_tracking();
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/calibration.c:216:13: warning: implicit declaration of function 'read_def_vref' [-Wimplicit-function-declaration]
+  216 |             read_def_vref();
+      |             ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/calibration.c:115:8: warning: unused variable 'vmm_ral_status' [-Wunused-variable]
+  115 |    int vmm_ral_status;
+      |        ^~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/calibration.c:72:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c: In function 'ddr_ca_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:104:4: warning: statement with no effect [-Wunused-value]
+  104 |    glbl_bits_error_status_31_0;
+      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:101:8: warning: unused variable 'step_size_coarse' [-Wunused-variable]
+  101 |    u16 step_size_coarse = FINE_CRS_STEP_SIZE;
+      |        ^~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:99:8: warning: unused variable 'iteration' [-Wunused-variable]
+   99 |    u16 iteration = 0;
+      |        ^~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:97:8: warning: unused variable 'ck_bit' [-Wunused-variable]
+   97 |    u8  ck_bit;
+      |        ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:96:8: warning: unused variable 'step' [-Wunused-variable]
+   96 |    u8  step= 1;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:94:8: warning: unused variable 'rank' [-Wunused-variable]
+   94 |    u8  rank=RANKS;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c: In function 'ca_cs_center':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:287:16: warning: implicit declaration of function 'write_error_nibble_XRAM'; did you mean 'write_riu_nibble_reg'? [-Wimplicit-function-declaration]
+  287 |                write_error_nibble_XRAM(0, glbl_bits_error_status_31_0);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~
+      |                write_riu_nibble_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:289:19: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  289 |                   write_error_XRAM(ERR_CODE_116_CA_CAL_FAIL_NOISE_RIGHT_CA_ODELAY_HIGHER_TAPS);
+      |                   ^~~~~~~~~~~~~~~~
+      |                   write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:406:21: warning: variable 'delay_final' set but not used [-Wunused-but-set-variable]
+  406 |          static u16 delay_final[CA_BITS];
+      |                     ^~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_cal.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c: In function 'ddr_ca_vref_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:122:7: warning: unused variable 'i' [-Wunused-variable]
+  122 |    u8 i;
+      |       ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:121:20: warning: unused variable 'dq_7_4_o' [-Wunused-variable]
+  121 |    u32 dq_3_0_o=0, dq_7_4_o=0;
+      |                    ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:121:8: warning: unused variable 'dq_3_0_o' [-Wunused-variable]
+  121 |    u32 dq_3_0_o=0, dq_7_4_o=0;
+      |        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:120:15: warning: unused variable 'dq_7_4' [-Wunused-variable]
+  120 |    u8 dq_3_0, dq_7_4;
+      |               ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:120:7: warning: unused variable 'dq_3_0' [-Wunused-variable]
+  120 |    u8 dq_3_0, dq_7_4;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:119:8: warning: unused variable 'default_pattern' [-Wunused-variable]
+  119 |    u32 default_pattern;
+      |        ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:84:4: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+   84 | u8 status = 0;
+      |    ^~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_ca_vref_cal.c:70:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c: In function 'ddr_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:296:24: warning: statement with no effect [-Wunused-value]
+  296 |                        temp_nibble;
+      |                        ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:333:19: warning: statement with no effect [-Wunused-value]
+  333 |                   temp_nibble;
+      |                   ^~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:69:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/xsdb_reg_define.h:251:56: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  251 | #define F0_PRBS_READ                              0x1A | F0_MODE_PRBS_READ
+      |                                                        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:473:56: note: in expansion of macro 'F0_PRBS_READ'
+  473 |    prbs_cal_time = readIO_XRAM(XRAM_CAL_STAGE_TIME + ((F0_PRBS_READ & 0x3F) * 4));
+      |                                                        ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/xsdb_reg_define.h:252:56: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  252 | #define F0_PRBS_WRITE                             0x1B | F0_MODE_PRBS_WRITE
+      |                                                        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:475:56: note: in expansion of macro 'F0_PRBS_WRITE'
+  475 |    prbs_cal_time = readIO_XRAM(XRAM_CAL_STAGE_TIME + ((F0_PRBS_WRITE & 0x3F) * 4));
+      |                                                        ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/xsdb_reg_define.h:274:56: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  274 | #define F1_PRBS_READ                       0x20 | 0x1A | F1_MODE_PRBS_READ
+      |                                                        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:477:56: note: in expansion of macro 'F1_PRBS_READ'
+  477 |    prbs_cal_time = readIO_XRAM(XRAM_CAL_STAGE_TIME + ((F1_PRBS_READ & 0x3F) * 4));
+      |                                                        ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/xsdb_reg_define.h:275:56: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  275 | #define F1_PRBS_WRITE                      0x20 | 0x1B | F1_MODE_PRBS_WRITE
+      |                                                        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:479:56: note: in expansion of macro 'F1_PRBS_WRITE'
+  479 |    prbs_cal_time = readIO_XRAM(XRAM_CAL_STAGE_TIME + ((F1_PRBS_WRITE & 0x3F) * 4));
+      |                                                        ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:152:8: warning: unused variable 'i' [-Wunused-variable]
+  152 |    int i;
+      |        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:147:8: warning: unused variable 'bit' [-Wunused-variable]
+  147 |    u8  bit, nibble;
+      |        ^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:146:32: warning: unused variable 'dbi_idelay_val' [-Wunused-variable]
+  146 |    u16 dq_idelay_val[DQ_BITS], dbi_idelay_val[DBI_BITS];
+      |                                ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:146:8: warning: unused variable 'dq_idelay_val' [-Wunused-variable]
+  146 |    u16 dq_idelay_val[DQ_BITS], dbi_idelay_val[DBI_BITS];
+      |        ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:145:30: warning: unused variable 'nqtr_val' [-Wunused-variable]
+  145 |    u16 pqtr_val[DQ_NIBBLES], nqtr_val[DQ_NIBBLES];
+      |                              ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:145:8: warning: unused variable 'pqtr_val' [-Wunused-variable]
+  145 |    u16 pqtr_val[DQ_NIBBLES], nqtr_val[DQ_NIBBLES];
+      |        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:144:8: warning: unused variable 'xpi_map_bitslip' [-Wunused-variable]
+  144 |    u32 xpi_map_bitslip;
+      |        ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:143:8: warning: unused variable 'CAL_ITER_LIMIT' [-Wunused-variable]
+  143 |    u32 CAL_ITER_LIMIT = 62; // Calibration iterations limit
+      |        ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:142:8: warning: unused variable 'cal_iter' [-Wunused-variable]
+  142 |    u32 cal_iter=0;
+      |        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:141:8: warning: unused variable 'cal_stage_iter' [-Wunused-variable]
+  141 |    u32 cal_stage_iter=0;
+      |        ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:140:8: warning: unused variable 'cal_index_freq_switch' [-Wunused-variable]
+  140 |    u32 cal_index_freq_switch=0;
+      |        ^~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:135:14: warning: variable 'val' set but not used [-Wunused-but-set-variable]
+  135 |    u32 addr, val;
+      |              ^~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_cal.c:67:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c: In function 'ddr_dqs_gate':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:299:19: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  299 |                   write_error_XRAM(ERR_CODE_6_DQS_GATE_TRAIN_TIMEOUT);
+      |                   ^~~~~~~~~~~~~~~~
+      |                   write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:300:19: warning: implicit declaration of function 'write_error_nibble_XRAM'; did you mean 'write_riu_nibble_reg'? [-Wimplicit-function-declaration]
+  300 |                   write_error_nibble_XRAM(1, ~glbl_nibble_mask);
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~
+      |                   write_riu_nibble_reg
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c: In function 'edge_detect_phase':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:1172:24: warning: 'dqs_exp_pattern' may be used uninitialized [-Wmaybe-uninitialized]
+ 1172 |                      if((dqs_received_pattern[nibble] & dqs_exp_pattern_mask) == dqs_exp_pattern) {
+      |                        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:1079:14: note: 'dqs_exp_pattern' was declared here
+ 1079 |          u32 dqs_exp_pattern;
+      |              ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:1172:55: warning: 'dqs_exp_pattern_mask' may be used uninitialized [-Wmaybe-uninitialized]
+ 1172 |                      if((dqs_received_pattern[nibble] & dqs_exp_pattern_mask) == dqs_exp_pattern) {
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_dqs_gate.c:1080:14: note: 'dqs_exp_pattern_mask' was declared here
+ 1080 |          u32 dqs_exp_pattern_mask;
+      |              ^~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_cal.c: In function 'ddr_rd_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_cal.c:265:13: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  265 |             write_error_XRAM(ERR_CODE_65_RD_PRBS_FAIL_PRE_SANITY_CHECK);
+      |             ^~~~~~~~~~~~~~~~
+      |             write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_cal.c:378:13: warning: implicit declaration of function 'write_error_bit_XRAM' [-Wimplicit-function-declaration]
+  378 |             write_error_bit_XRAM();
+      |             ^~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_cal.c:123:8: warning: unused variable 'i' [-Wunused-variable]
+  123 |    int i;
+      |        ^
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_cal.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_dbi_cal.c: In function 'ddr_rd_dbi_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_dbi_cal.c:266:10: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  266 |          write_error_XRAM(ERR_CODE_48_RD_DBI_FAIL_VALID_WINDOW_DBI_IDELAY);
+      |          ^~~~~~~~~~~~~~~~
+      |          write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_dbi_cal.c:135:10: warning: unused variable 'temp_nibble' [-Wunused-variable]
+  135 |       u8 temp_nibble;
+      |          ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_dbi_cal.c:118:8: warning: unused variable 'steps' [-Wunused-variable]
+  118 |    u16 steps;
+      |        ^~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_dbi_cal.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_rd_vref_cal.c:70:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c: In function 'ddr_read_mgchk':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:217:9: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  217 |         write_error_XRAM(ERR_CODE_65_RD_PRBS_FAIL_PRE_SANITY_CHECK);
+      |         ^~~~~~~~~~~~~~~~
+      |         write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:98:15: warning: unused variable 'idelay_ref' [-Wunused-variable]
+   98 |    static u16 idelay_ref[DQ_NIBBLES];
+      |               ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:96:8: warning: unused variable 'i' [-Wunused-variable]
+   96 |    int i;
+      |        ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:94:8: warning: unused variable 'error_mask' [-Wunused-variable]
+   94 |    u32 error_mask;
+      |        ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:93:8: warning: unused variable 'rank' [-Wunused-variable]
+   93 |    u8  rank;
+      |        ^~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_read_mgchk.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_complex.c: In function 'ddr_write_complex':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_complex.c:305:9: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  305 |         write_error_XRAM(ERR_CODE_60_WR_COMPLEX_FAIL_RIGHT_EDGE_DQ_ODELAY_HIGHER_TAPS);
+      |         ^~~~~~~~~~~~~~~~
+      |         write_err_reg
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_complex.c:69:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c: In function 'ddr_write_dqs_to_dq':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:446:9: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  446 |         write_error_XRAM(ERR_CODE_35_WR_DQ_DBI_FAIL_DQS_OSC_VALUE_ZERO);
+      |         ^~~~~~~~~~~~~~~~
+      |         write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:553:7: warning: implicit declaration of function 'write_error_bit_XRAM' [-Wimplicit-function-declaration]
+  553 |       write_error_bit_XRAM();
+      |       ^~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:435:27: warning: unused variable 'dbi_fine' [-Wunused-variable]
+  435 |     u8 dq_fine[DQS_BITS], dbi_fine[DQS_BITS];
+      |                           ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:95:14: warning: unused variable 'dqs_right_delay_init' [-Wunused-variable]
+   95 |   static u16 dqs_right_delay_init[DQS_BITS];
+      |              ^~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:92:7: warning: unused variable 'mr2_1tck_wr_pre' [-Wunused-variable]
+   92 |   u32 mr2_1tck_wr_pre;
+      |       ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:91:27: warning: unused variable 'xpi_oe_all_nib' [-Wunused-variable]
+   91 |   u32 xpi_wrdata_all_nib, xpi_oe_all_nib;
+      |                           ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:91:7: warning: unused variable 'xpi_wrdata_all_nib' [-Wunused-variable]
+   91 |   u32 xpi_wrdata_all_nib, xpi_oe_all_nib;
+      |       ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:87:9: warning: unused variable 'j' [-Wunused-variable]
+   87 |   u8 i, j, rank;
+      |         ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:85:7: warning: unused variable 'left_margin' [-Wunused-variable]
+   85 |   u16 left_margin[DQS_BITS];
+      |       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:84:7: warning: unused variable 'dqs_right_delay' [-Wunused-variable]
+   84 |   u16 dqs_right_delay[DQS_BITS];
+      |       ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:83:7: warning: unused variable 'dbi_delay' [-Wunused-variable]
+   83 |   u16 dbi_delay[DQS_BITS];
+      |       ^~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:82:7: warning: unused variable 'dq_delay' [-Wunused-variable]
+   82 |   u16 dq_delay[DQS_BITS*4*NIBBLE_PER_DQS];
+      |       ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:81:7: warning: unused variable 'dqs_delay' [-Wunused-variable]
+   81 |   u16 dqs_delay[DQS_BITS];
+      |       ^~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c: In function 'ddr_write_dqs_to_dq':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:604:101: warning: 'dbi_coarse' may be used uninitialized [-Wmaybe-uninitialized]
+  604 |         writeIO_XRAM(glbl_xram_freq_base + XRAM_F0_WRDQDBI_STG2C_WLDLYRNK_CRSE + (i * 4), dbi_coarse[i]);
+      |                                                                                           ~~~~~~~~~~^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_dqs_to_dq.c:434:29: note: 'dbi_coarse' declared here
+  434 |     u8 dq_coarse[DQS_BITS], dbi_coarse[DQS_BITS];
+      |                             ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c: In function 'ddr_write_latency_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:305:7: warning: implicit declaration of function 'write_error_nibble_XRAM'; did you mean 'write_riu_nibble_reg'? [-Wimplicit-function-declaration]
+  305 |       write_error_nibble_XRAM(0, dq_compare_result);
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+      |       write_riu_nibble_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:306:7: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  306 |       write_error_XRAM(ERR_CODE_37_WRLAT_PATTERN_MISMATCH);
+      |       ^~~~~~~~~~~~~~~~
+      |       write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:113:68: warning: unused variable 'prea2act_timer' [-Wunused-variable]
+  113 |   u8 cas_gap_timer, act_gap_timer, burst_gap_timer, cas2pre_timer, prea2act_timer;
+      |                                                                    ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:113:53: warning: unused variable 'cas2pre_timer' [-Wunused-variable]
+  113 |   u8 cas_gap_timer, act_gap_timer, burst_gap_timer, cas2pre_timer, prea2act_timer;
+      |                                                     ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:113:36: warning: unused variable 'burst_gap_timer' [-Wunused-variable]
+  113 |   u8 cas_gap_timer, act_gap_timer, burst_gap_timer, cas2pre_timer, prea2act_timer;
+      |                                    ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:113:21: warning: unused variable 'act_gap_timer' [-Wunused-variable]
+  113 |   u8 cas_gap_timer, act_gap_timer, burst_gap_timer, cas2pre_timer, prea2act_timer;
+      |                     ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:113:6: warning: unused variable 'cas_gap_timer' [-Wunused-variable]
+  113 |   u8 cas_gap_timer, act_gap_timer, burst_gap_timer, cas2pre_timer, prea2act_timer;
+      |      ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:112:7: warning: unused variable 'cplx_config2' [-Wunused-variable]
+  112 |   u32 cplx_config2;
+      |       ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:103:6: warning: unused variable 'odelay' [-Wunused-variable]
+  103 |   u8 odelay;
+      |      ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:98:6: warning: unused variable 'first_iteration' [-Wunused-variable]
+   98 |   u8 first_iteration = 1;
+      |      ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:85:7: warning: unused variable 'mr2_1tck_wr_pre' [-Wunused-variable]
+   85 |   u32 mr2_1tck_wr_pre;
+      |       ^~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:70:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c: In function 'ddr_write_latency_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:745:112: warning: iteration 7 invokes undefined behavior [-Waggressive-loop-optimizations]
+  745 |     phy_oe_dly = 0x07 & readIO_DMC(ral_addr_of_phy_oe_nib0_in_ddrmc_main_ddrmc_main_bank(BLK) + (4*glbl_map_riu[(i*NIBBLE_PER_DQS)+j]));
+      |                                                                                                    ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_latency_cal.c:743:13: note: within this loop
+  743 |   for(i=0; i<DQS_BITS; i++) {
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_mgchk.c: In function 'ddr_write_mgchk':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_mgchk.c:90:5: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+   90 |     write_error_XRAM(ERR_CODE_75_WR_PRBS_FAIL_POST_SANITY_CHECK_1);
+      |     ^~~~~~~~~~~~~~~~
+      |     write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_mgchk.c: In function 'get_write_window_margin':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_mgchk.c:148:6: warning: unused variable 'i' [-Wunused-variable]
+  148 |   u8 i, j;
+      |      ^
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_mgchk.c:69:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_prbs.c: In function 'ddr_write_prbs':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_prbs.c:135:5: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  135 |     write_error_XRAM(ERR_CODE_75_WR_PRBS_FAIL_POST_SANITY_CHECK_1);
+      |     ^~~~~~~~~~~~~~~~
+      |     write_err_reg
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_write_prbs.c:69:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c: In function 'ddr_wrlvl':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:320:11: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+  320 |           write_error_XRAM(ERR_CODE_9_WRLVL_FAIL_RISE_EDGE_DETECTION);
+      |           ^~~~~~~~~~~~~~~~
+      |           write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:321:11: warning: implicit declaration of function 'write_error_nibble_XRAM'; did you mean 'write_riu_nibble_reg'? [-Wimplicit-function-declaration]
+  321 |           write_error_nibble_XRAM(0, ~dqs_coarse_status);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~
+      |           write_riu_nibble_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:92:26: warning: variable 'rank_rcd' set but not used [-Wunused-but-set-variable]
+   92 |   u8 current_rank, rank, rank_rcd;
+      |                          ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c: In function 'noise_width_calculation':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:454:9: warning: unused variable 'j' [-Wunused-variable]
+  454 |   u8 i, j;
+      |         ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c: In function 'mult_sample_dqs':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:815:9: warning: unused variable 'j' [-Wunused-variable]
+  815 |   u8 i, j;
+      |         ^
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrlvl.c:70:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c: In function 'ddr_write_vref':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:89:14: warning: variable 'vref_right_width' set but not used [-Wunused-but-set-variable]
+   89 |   static u16 vref_right_width[100][DQS_BITS];
+      |              ^~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:88:14: warning: variable 'vref_left_width' set but not used [-Wunused-but-set-variable]
+   88 |   static u16 vref_left_width[100][DQS_BITS];
+      |              ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:83:7: warning: unused variable 'nibble_mask' [-Wunused-variable]
+   83 |   u32 nibble_mask;
+      |       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:82:7: warning: variable 'dq_odelay_per_byte_flag' set but not used [-Wunused-but-set-variable]
+   82 |   u32 dq_odelay_per_byte_flag, vref_per_byte_flag;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:80:6: warning: unused variable 'xpi_write_dm_dbi' [-Wunused-variable]
+   80 |   u8 xpi_write_dm_dbi;
+      |      ^~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:69:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c: In function 'ddr_write_vref':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:278:47: warning: 'lower_vref_value' may be used uninitialized [-Wmaybe-uninitialized]
+  278 |       final_vref_value[j] = (lower_vref_value + upper_vref_value)/2;
+      |                             ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:97:6: note: 'lower_vref_value' was declared here
+   97 |   u8 lower_vref_value, upper_vref_value, final_vref_value[DQS_BITS];
+      |      ^~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:278:47: warning: 'upper_vref_value' may be used uninitialized [-Wmaybe-uninitialized]
+  278 |       final_vref_value[j] = (lower_vref_value + upper_vref_value)/2;
+      |                             ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ddr_wrvref.c:97:24: note: 'upper_vref_value' was declared here
+   97 |   u8 lower_vref_value, upper_vref_value, final_vref_value[DQS_BITS];
+      |                        ^~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'get_write_latency':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:594:7: warning: variable 'cwl' set but not used [-Wunused-but-set-variable]
+  594 |    u8 cwl;
+      |       ^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'banks_refresh':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1178:7: warning: unused variable 'lcl_3ds_lranks' [-Wunused-variable]
+ 1178 |    u8 lcl_3ds_lranks;
+      |       ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1177:8: warning: unused variable 't_rfc' [-Wunused-variable]
+ 1177 |    u16 t_rfc;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1176:7: warning: unused variable 'side_cnt' [-Wunused-variable]
+ 1176 |    u8 side_cnt;
+      |       ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1175:8: warning: unused variable 'ref' [-Wunused-variable]
+ 1175 |    u32 ref;
+      |        ^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1174:7: warning: unused variable 'lrank' [-Wunused-variable]
+ 1174 |    u8 lrank;
+      |       ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1172:7: warning: unused variable 'loop' [-Wunused-variable]
+ 1172 |    u8 loop;
+      |       ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'read_compared_status':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1616:8: warning: unused variable 'error_bytes' [-Wunused-variable]
+ 1616 |    u16 error_bytes   = 0;
+      |        ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'read_ca_compared_status':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1809:8: warning: unused variable 'wait' [-Wunused-variable]
+ 1809 |    u8  wait          = 0;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1803:8: warning: unused variable 'error_bytes' [-Wunused-variable]
+ 1803 |    u16 error_bytes   = 0;
+      |        ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'region_detect':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2165:16: warning: implicit declaration of function 'write_error_nibble_XRAM'; did you mean 'write_riu_nibble_reg'? [-Wimplicit-function-declaration]
+ 2165 |                write_error_nibble_XRAM(1, (~glbl_nibble_mask) | (~glbl_nibble_mask_nqtr));
+      |                ^~~~~~~~~~~~~~~~~~~~~~~
+      |                write_riu_nibble_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1941:15: warning: unused variable 'pqtr_delay' [-Wunused-variable]
+ 1941 |    static u16 pqtr_delay[27];
+      |               ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1940:8: warning: unused variable 'step' [-Wunused-variable]
+ 1940 |    int step = glbl_inc_dec_load*glbl_step_size;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:1939:8: warning: variable 'mask' set but not used [-Wunused-but-set-variable]
+ 1939 |    u32 mask;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'update_rd_path_delay':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2250:7: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+ 2250 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'update_ca_delay':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2506:7: warning: unused variable 'bit_slip_en' [-Wunused-variable]
+ 2506 |    u8 bit_slip_en;
+      |       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2505:7: warning: unused variable 'ca_group' [-Wunused-variable]
+ 2505 |    u8 ca_group;
+      |       ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'set_globals':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2668:8: warning: unused variable 'wdata' [-Wunused-variable]
+ 2668 |    u32 wdata;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2667:8: warning: unused variable 'phy_rank_override' [-Wunused-variable]
+ 2667 |    u32 phy_rank_override;
+      |        ^~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2666:8: warning: unused variable 'reg_retry_0' [-Wunused-variable]
+ 2666 |    u32 reg_retry_0;
+      |        ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2664:8: warning: unused variable 'nibble_ctrl2' [-Wunused-variable]
+ 2664 |    u16 nibble_ctrl2;
+      |        ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2663:8: warning: unused variable 'nibble_ctrl0' [-Wunused-variable]
+ 2663 |    u16 nibble_ctrl0;
+      |        ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:2652:7: warning: unused variable 'phy_nibble' [-Wunused-variable]
+ 2652 |    u8 phy_nibble;
+      |       ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'set_defaults':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3513:7: warning: unused variable 'rcd_rc0f_offset' [-Wunused-variable]
+ 3513 |    u8 rcd_rc0f_offset;
+      |       ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3512:7: warning: unused variable 'db_rcd_tpdm_offset' [-Wunused-variable]
+ 3512 |    u8 db_rcd_tpdm_offset;
+      |       ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3511:8: warning: unused variable 'db_tpdm' [-Wunused-variable]
+ 3511 |    u32 db_tpdm;
+      |        ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3510:8: warning: unused variable 'rcd_tpdm' [-Wunused-variable]
+ 3510 |    u32 rcd_tpdm;
+      |        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3509:7: warning: unused variable 'rcd_tpdm_offset' [-Wunused-variable]
+ 3509 |    u8 rcd_tpdm_offset;
+      |       ^~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3508:8: warning: unused variable 'reg_safe_config5' [-Wunused-variable]
+ 3508 |    u32 reg_safe_config5;
+      |        ^~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3506:7: warning: unused variable 'mirror_en' [-Wunused-variable]
+ 3506 |    u8 mirror_en;
+      |       ^~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3505:7: warning: unused variable 'status' [-Wunused-variable]
+ 3505 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3504:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 3504 |    u8 nibble;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3503:7: warning: unused variable 'loop' [-Wunused-variable]
+ 3503 |    u8 loop;
+      |       ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_1':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3757:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 3757 |    u8 nibble;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_2':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3888:7: warning: unused variable 'slot_b' [-Wunused-variable]
+ 3888 |    u8 slot_b;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3887:7: warning: unused variable 'slot_a' [-Wunused-variable]
+ 3887 |    u8 slot_a;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:3884:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 3884 |    u8 nibble;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_ddr':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4088:15: warning: unused variable 'mem_data' [-Wunused-variable]
+ 4088 |    static u32 mem_data[DQS_BITS*NIBBLE_PER_DQS];
+      |               ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4087:17: warning: unused variable 'exp_data' [-Wunused-variable]
+ 4087 |    u32 rd_data, exp_data;
+      |                 ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4087:8: warning: unused variable 'rd_data' [-Wunused-variable]
+ 4087 |    u32 rd_data, exp_data;
+      |        ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4086:7: warning: unused variable 'rd_error' [-Wunused-variable]
+ 4086 |    u8 rd_error;
+      |       ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4084:7: warning: unused variable 'loop' [-Wunused-variable]
+ 4084 |    u8 loop;
+      |       ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4082:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 4082 |    u8 nibble;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'ddr_self_calibrate':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4519:13: warning: implicit declaration of function 'write_error_XRAM'; did you mean 'write_err_reg'? [-Wimplicit-function-declaration]
+ 4519 |             write_error_XRAM(ERR_CODE_3_XPHY_BISC_TIMEOUT);
+      |             ^~~~~~~~~~~~~~~~
+      |             write_err_reg
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4394:8: warning: unused variable 'nibble_ctrl0' [-Wunused-variable]
+ 4394 |    u16 nibble_ctrl0;
+      |        ^~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:4392:7: warning: variable 'self_calibrate' set but not used [-Wunused-but-set-variable]
+ 4392 |    u8 self_calibrate;
+      |       ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'lp4_dqs_osc_read':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5028:7: warning: unused variable 'bit' [-Wunused-variable]
+ 5028 |    u8 bit;
+      |       ^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5010:7: warning: unused variable 'status' [-Wunused-variable]
+ 5010 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5009:8: warning: unused variable 'loop' [-Wunused-variable]
+ 5009 |    u32 loop;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5007:7: warning: unused variable 'dq_log' [-Wunused-variable]
+ 5007 |    u8 dq_log;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5006:7: warning: unused variable 'bit_phy' [-Wunused-variable]
+ 5006 |    u8 bit_phy;
+      |       ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5005:7: warning: unused variable 'bit_log' [-Wunused-variable]
+ 5005 |    u8 bit_log;
+      |       ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5004:8: warning: unused variable 'dq_7_4' [-Wunused-variable]
+ 5004 |    u32 dq_7_4;
+      |        ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'intr_lp4_dqs_osc_read':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5306:7: warning: unused variable 'bit' [-Wunused-variable]
+ 5306 |    u8 bit;
+      |       ^~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5289:7: warning: unused variable 'dq_log' [-Wunused-variable]
+ 5289 |    u8 dq_log;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5288:8: warning: unused variable 'rdata' [-Wunused-variable]
+ 5288 |    u32 rdata;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5287:7: warning: unused variable 'bit_phy' [-Wunused-variable]
+ 5287 |    u8 bit_phy;
+      |       ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5286:7: warning: unused variable 'bit_log' [-Wunused-variable]
+ 5286 |    u8 bit_log;
+      |       ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'ddr_init_f1':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5460:8: warning: unused variable 'mbdr_freq_base' [-Wunused-variable]
+ 5460 |    u32 mbdr_freq_base = (glbl_freq_f1 == 0) ? MBDR_BASE_F0 : MBDR_BASE_F1;
+      |        ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5459:7: warning: unused variable 'vref' [-Wunused-variable]
+ 5459 |    u8 vref;
+      |       ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5458:8: warning: unused variable 'rdata' [-Wunused-variable]
+ 5458 |    u32 rdata;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5457:56: warning: unused variable 'rank_rcd' [-Wunused-variable]
+ 5457 |    u8 nibble, rank, ranks_per_slot, rank_db, rank_phy, rank_rcd;
+      |                                                        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5457:46: warning: unused variable 'rank_phy' [-Wunused-variable]
+ 5457 |    u8 nibble, rank, ranks_per_slot, rank_db, rank_phy, rank_rcd;
+      |                                              ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5457:37: warning: unused variable 'rank_db' [-Wunused-variable]
+ 5457 |    u8 nibble, rank, ranks_per_slot, rank_db, rank_phy, rank_rcd;
+      |                                     ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5457:21: warning: unused variable 'ranks_per_slot' [-Wunused-variable]
+ 5457 |    u8 nibble, rank, ranks_per_slot, rank_db, rank_phy, rank_rcd;
+      |                     ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5457:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 5457 |    u8 nibble, rank, ranks_per_slot, rank_db, rank_phy, rank_rcd;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'pll_clkoutphy_en':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5586:7: warning: unused variable 'clkout' [-Wunused-variable]
+ 5586 |    u8 clkout;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5585:7: warning: unused variable 'divclk_edge' [-Wunused-variable]
+ 5585 |    u8 divclk_edge;
+      |       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5584:7: warning: unused variable 'divclk' [-Wunused-variable]
+ 5584 |    u8 divclk;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5583:7: warning: unused variable 'clkfbout_edge' [-Wunused-variable]
+ 5583 |    u8 clkfbout_edge;
+      |       ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5582:7: warning: unused variable 'clkfbout' [-Wunused-variable]
+ 5582 |    u8 clkfbout;
+      |       ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5581:7: warning: unused variable 'clkoutphy_divmode' [-Wunused-variable]
+ 5581 |    u8 clkoutphy_divmode;
+      |       ^~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5580:15: warning: unused variable 'wdata' [-Wunused-variable]
+ 5580 |    u16 rdata, wdata;
+      |               ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5580:8: warning: unused variable 'rdata' [-Wunused-variable]
+ 5580 |    u16 rdata, wdata;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5579:8: warning: unused variable 'calib_ctrl' [-Wunused-variable]
+ 5579 |    u16 calib_ctrl;
+      |        ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:5578:7: warning: unused variable 'nibble' [-Wunused-variable]
+ 5578 |    u8 nibble;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'ddr_freq_switch':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:6056:7: warning: unused variable 'rank' [-Wunused-variable]
+ 6056 |    u8 rank;
+      |       ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'en_mission_mode_tracking':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:6269:8: warning: unused variable 'scrub_busy' [-Wunused-variable]
+ 6269 |    u32 scrub_busy;
+      |        ^~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'self_ref_entry':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:6366:7: warning: unused variable 'lrank' [-Wunused-variable]
+ 6366 |    u8 lrank;
+      |       ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'ddr_save_val':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:6899:14: warning: unused variable 'cal_fine' [-Wunused-variable]
+ 6899 |    u16 crse, cal_fine, cal_dly, vref;
+      |              ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:6899:8: warning: unused variable 'crse' [-Wunused-variable]
+ 6899 |    u16 crse, cal_fine, cal_dly, vref;
+      |        ^~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_complex_read':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7762:6: warning: unused variable 'nibble' [-Wunused-variable]
+ 7762 |   u8 nibble;
+      |      ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_complex_write':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7833:6: warning: unused variable 'nibble' [-Wunused-variable]
+ 7833 |   u8 nibble;
+      |      ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_prbs_write':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7884:6: warning: unused variable 'nibble' [-Wunused-variable]
+ 7884 |   u8 nibble;
+      |      ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'sanity_check_prbs_read':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7906:6: warning: unused variable 'nibble' [-Wunused-variable]
+ 7906 |   u8 nibble;
+      |      ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'set_write_vref':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9395:7: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+ 9395 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'get_write_window':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9496:6: warning: unused variable 'i' [-Wunused-variable]
+ 9496 |   u8 i, j;
+      |      ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'temp_control_ref_rate':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9852:7: warning: unused variable 'logical_nib' [-Wunused-variable]
+ 9852 |    u8 logical_nib;
+      |       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9846:7: warning: unused variable 'temp_sensor_rd' [-Wunused-variable]
+ 9846 |    u8 temp_sensor_rd;
+      |       ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9845:8: warning: unused variable 'exp_data' [-Wunused-variable]
+ 9845 |    u32 exp_data;
+      |        ^~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9844:8: warning: unused variable 'ui_data' [-Wunused-variable]
+ 9844 |    u32 ui_data;
+      |        ^~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9843:8: warning: unused variable 'rdata' [-Wunused-variable]
+ 9843 |    u32 rdata;
+      |        ^~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:9839:7: warning: unused variable 'status' [-Wunused-variable]
+ 9839 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'set_mgchk_def_vref':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10024:11: warning: unused variable 'nibble' [-Wunused-variable]
+10024 |       u8  nibble;
+      |           ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'post_cal':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10245:59: warning: suggest parentheses around comparison in operand of '&' [-Wparentheses]
+10245 |        if ((readIO_XRAM(XRAM_MGCHK_CTRL) >> MGCHK_ENABLE) & 0x01 == 1) {
+      |                                                           ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10272:64: warning: suggest parentheses around comparison in operand of '&' [-Wparentheses]
+10272 |              if ((readIO_XRAM(XRAM_MGCHK_CTRL) >> MGCHK_START) & 0x01 == 1) { //check margin
+      |                                                                ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10302:30: warning: implicit declaration of function 'ddr_read_mgchk' [-Wimplicit-function-declaration]
+10302 |                     status = ddr_read_mgchk(glbl_margin_pat);
+      |                              ^~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10310:21: warning: implicit declaration of function 'precharge_all' [-Wimplicit-function-declaration]
+10310 |                     precharge_all(glbl_margin_rank);
+      |                     ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10315:30: warning: implicit declaration of function 'ddr_write_mgchk'; did you mean 'ddr_write_prbs'? [-Wimplicit-function-declaration]
+10315 |                     status = ddr_write_mgchk(glbl_margin_pat);
+      |                              ^~~~~~~~~~~~~~~
+      |                              ddr_write_prbs
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'read_dbi_settings':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10342:23: warning: unused variable 'temp_nibble' [-Wunused-variable]
+10342 |                   u32 temp_nibble;
+      |                       ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10368:27: warning: unused variable 'temp_nibble' [-Wunused-variable]
+10368 |                        u8 temp_nibble;
+      |                           ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'wait_intr_src_clr':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10414:7: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+10414 |    u8 status;
+      |       ^~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'get_lp4_dq_dbi_region':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10837:13: warning: unused variable 'nibble_mask' [-Wunused-variable]
+10837 |         u32 nibble_mask;
+      |             ^~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:11777:6: warning: conflicting types for 'precharge_all'; have 'void(u8)' {aka 'void(unsigned char)'}
+11777 | void precharge_all (u8 rank) {
+      |      ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:10310:21: note: previous implicit declaration of 'precharge_all' with type 'void(u8)' {aka 'void(unsigned char)'}
+10310 |                     precharge_all(glbl_margin_rank);
+      |                     ^~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'precharge_all':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:11778:7: warning: unused variable 'lrank' [-Wunused-variable]
+11778 |    u8 lrank;
+      |       ^~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:73:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c: In function 'ddr_restore_val':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7293:21: warning: 'rdram' may be used uninitialized [-Wmaybe-uninitialized]
+ 7293 |       vref = (rdram >> ((nibble % 3) * 10)) & 0x3FF;
+      |              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_def.c:7271:28: note: 'rdram' was declared here
+ 7271 |    u32 addr, rdata, wdata, rdram, val;
+      |                            ^~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lpddr4_init_seq.c:68:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lpddr4_init_seq.c: In function 'lpddr4_init_seq':
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:95:41: error: expected expression before '{' token
+   95 |    #define F0_MR22                      {0x0006}
+      |                                         ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lpddr4_init_seq.c:145:32: note: in expansion of macro 'F0_MR22'
+  145 |         lp4_mode_reg_wr(0, 22, F0_MR22);
+      |                                ^~~~~~~
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:95:41: error: expected expression before '{' token
+   95 |    #define F0_MR22                      {0x0006}
+      |                                         ^
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lpddr4_init_seq.c:150:32: note: in expansion of macro 'F0_MR22'
+  150 |         lp4_mode_reg_wr(1, 22, F0_MR22);
+      |                                ^~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lpddr4_init_seq.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/lrdimm_cal.c:71:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/function_dec.c:67,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/register_dump.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/register_dump.c:55:
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:76: warning: "DIS_MEM_FILL" redefined
+   76 |    #define DIS_MEM_FILL                 1
+      | 
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/register_dump.h:56:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:122: note: this is the location of the previous definition
+  122 |    #define DIS_MEM_FILL  0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:153: warning: "F0_REG_CONFIG1" redefined
+  153 | #define F0_REG_CONFIG1          0x00000006
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:64: note: this is the location of the previous definition
+   64 |    #define F0_REG_CONFIG1               0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:154: warning: "F1_REG_CONFIG1" redefined
+  154 | #define F1_REG_CONFIG1          0x00000000
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:77: note: this is the location of the previous definition
+   77 |    #define F1_REG_CONFIG1               0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:155: warning: "F0_REG_CONFIG2" redefined
+  155 | #define F0_REG_CONFIG2          0x00000000
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:67: note: this is the location of the previous definition
+   67 |    #define F0_REG_CONFIG2               0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:156: warning: "F1_REG_CONFIG2" redefined
+  156 | #define F1_REG_CONFIG2          0x00000000
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:80: note: this is the location of the previous definition
+   80 |    #define F1_REG_CONFIG2               0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:157: warning: "F0_REG_SCRUB2" redefined
+  157 | #define F0_REG_SCRUB2           0x00000005
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:70: note: this is the location of the previous definition
+   70 |    #define F0_REG_SCRUB2                0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:158: warning: "F1_REG_SCRUB2" redefined
+  158 | #define F1_REG_SCRUB2           0x00000000
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:83: note: this is the location of the previous definition
+   83 |    #define F1_REG_SCRUB2                0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:159: warning: "F0_REG_MRS_2" redefined
+  159 | #define F0_REG_MRS_2            0x00000003
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:73: note: this is the location of the previous definition
+   73 |    #define F0_REG_MRS_2                 0
+      | 
+//home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/h_files/bd_d2b0_MC1_ddrc_0_phy_cal_config_define.h:160: warning: "F1_REG_MRS_2" redefined
+  160 | #define F1_REG_MRS_2            0x00000000
+      | 
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/internal_reg_define.h:86: note: this is the location of the previous definition
+   86 |    #define F1_REG_MRS_2                 0
+      | 
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/register_dump.h:57:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_ddr4.c: In function 'rpi_bcast_nibble_mask_test':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_ddr4.c:425:7: warning: variable 'read_mask' set but not used [-Wunused-but-set-variable]
+  425 |   u32 read_mask = 0;
+      |       ^~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_ddr4.c: In function 'rpi_adjustments_test':
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_ddr4.c:482:7: warning: variable 'read_data' set but not used [-Wunused-but-set-variable]
+  482 |   u32 read_data = 0;
+      |       ^~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_ddr4.c:67:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h: At top level:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/test_lpddr4.c:67:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/ral_ddrmc_main.h:72,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/cal_reg_define.h:61,
+                 from /home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/xsdb_functions.c:72:
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:136:21: warning: 'vmm_ral_addr_lshift' defined but not used [-Wunused-variable]
+  136 | static unsigned int vmm_ral_addr_lshift;
+      |                     ^~~~~~~~~~~~~~~~~~~
+/home/smartscott/platform_driver/tb3d.gen/sources_1/bd/full_blown/ip/full_blown_axi_noc_0_0/bd_0/ip/ip_8/ip_0/temp/vmm_ral.h:133:12: warning: 'sizeof_int_in_bits' defined but not used [-Wunused-variable]
+  133 | static int sizeof_int_in_bits = sizeof(int) * 8;
+      |            ^~~~~~~~~~~~~~~~~~
+$GCC -Wl,-T -Wl,$linker_script -L$mblaze_lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mno-xl-soft-div -mcpu=v10.0 -mno-xl-soft-mul -mxl-multiply-high -Wl,--no-relax -Wl,--gc-sections -o "$elf_name" *.o
+cp -rf MemGen.log ..

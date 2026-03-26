@@ -53,46 +53,6 @@
 -- COMP_TAG     ------ Begin cut for COMPONENT Declaration ------
 COMPONENT design_1
   PORT (
-    ch0_lpddr4_trip1_dq_a : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    ch0_lpddr4_trip1_dq_b : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    ch0_lpddr4_trip1_dqs_t_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_dqs_t_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_dqs_c_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_dqs_c_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_ca_a : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    ch0_lpddr4_trip1_ca_b : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    ch0_lpddr4_trip1_cs_a : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_cs_b : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_ck_t_a : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_ck_t_b : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_ck_c_a : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_ck_c_b : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_cke_a : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_cke_b : OUT STD_LOGIC;
-    ch0_lpddr4_trip1_dmi_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_dmi_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch0_lpddr4_trip1_reset_n : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_dq_a : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    ch1_lpddr4_trip1_dq_b : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    ch1_lpddr4_trip1_dqs_t_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_dqs_t_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_dqs_c_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_dqs_c_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_ca_a : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    ch1_lpddr4_trip1_ca_b : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    ch1_lpddr4_trip1_cs_a : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_cs_b : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_ck_t_a : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_ck_t_b : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_ck_c_a : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_ck_c_b : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_cke_a : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_cke_b : OUT STD_LOGIC;
-    ch1_lpddr4_trip1_dmi_a : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_dmi_b : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    ch1_lpddr4_trip1_reset_n : OUT STD_LOGIC;
-    lpddr4_clk1_clk_p : IN STD_LOGIC;
-    lpddr4_clk1_clk_n : IN STD_LOGIC;
     clk_100MHz : IN STD_LOGIC;
     reset_rtl : IN STD_LOGIC
   );
@@ -105,46 +65,6 @@ END COMPONENT;
 -- INST_TAG     ------ Begin cut for INSTANTIATION Template ------
 your_instance_name : design_1
   PORT MAP (
-    ch0_lpddr4_trip1_dq_a => ch0_lpddr4_trip1_dq_a,
-    ch0_lpddr4_trip1_dq_b => ch0_lpddr4_trip1_dq_b,
-    ch0_lpddr4_trip1_dqs_t_a => ch0_lpddr4_trip1_dqs_t_a,
-    ch0_lpddr4_trip1_dqs_t_b => ch0_lpddr4_trip1_dqs_t_b,
-    ch0_lpddr4_trip1_dqs_c_a => ch0_lpddr4_trip1_dqs_c_a,
-    ch0_lpddr4_trip1_dqs_c_b => ch0_lpddr4_trip1_dqs_c_b,
-    ch0_lpddr4_trip1_ca_a => ch0_lpddr4_trip1_ca_a,
-    ch0_lpddr4_trip1_ca_b => ch0_lpddr4_trip1_ca_b,
-    ch0_lpddr4_trip1_cs_a => ch0_lpddr4_trip1_cs_a,
-    ch0_lpddr4_trip1_cs_b => ch0_lpddr4_trip1_cs_b,
-    ch0_lpddr4_trip1_ck_t_a => ch0_lpddr4_trip1_ck_t_a,
-    ch0_lpddr4_trip1_ck_t_b => ch0_lpddr4_trip1_ck_t_b,
-    ch0_lpddr4_trip1_ck_c_a => ch0_lpddr4_trip1_ck_c_a,
-    ch0_lpddr4_trip1_ck_c_b => ch0_lpddr4_trip1_ck_c_b,
-    ch0_lpddr4_trip1_cke_a => ch0_lpddr4_trip1_cke_a,
-    ch0_lpddr4_trip1_cke_b => ch0_lpddr4_trip1_cke_b,
-    ch0_lpddr4_trip1_dmi_a => ch0_lpddr4_trip1_dmi_a,
-    ch0_lpddr4_trip1_dmi_b => ch0_lpddr4_trip1_dmi_b,
-    ch0_lpddr4_trip1_reset_n => ch0_lpddr4_trip1_reset_n,
-    ch1_lpddr4_trip1_dq_a => ch1_lpddr4_trip1_dq_a,
-    ch1_lpddr4_trip1_dq_b => ch1_lpddr4_trip1_dq_b,
-    ch1_lpddr4_trip1_dqs_t_a => ch1_lpddr4_trip1_dqs_t_a,
-    ch1_lpddr4_trip1_dqs_t_b => ch1_lpddr4_trip1_dqs_t_b,
-    ch1_lpddr4_trip1_dqs_c_a => ch1_lpddr4_trip1_dqs_c_a,
-    ch1_lpddr4_trip1_dqs_c_b => ch1_lpddr4_trip1_dqs_c_b,
-    ch1_lpddr4_trip1_ca_a => ch1_lpddr4_trip1_ca_a,
-    ch1_lpddr4_trip1_ca_b => ch1_lpddr4_trip1_ca_b,
-    ch1_lpddr4_trip1_cs_a => ch1_lpddr4_trip1_cs_a,
-    ch1_lpddr4_trip1_cs_b => ch1_lpddr4_trip1_cs_b,
-    ch1_lpddr4_trip1_ck_t_a => ch1_lpddr4_trip1_ck_t_a,
-    ch1_lpddr4_trip1_ck_t_b => ch1_lpddr4_trip1_ck_t_b,
-    ch1_lpddr4_trip1_ck_c_a => ch1_lpddr4_trip1_ck_c_a,
-    ch1_lpddr4_trip1_ck_c_b => ch1_lpddr4_trip1_ck_c_b,
-    ch1_lpddr4_trip1_cke_a => ch1_lpddr4_trip1_cke_a,
-    ch1_lpddr4_trip1_cke_b => ch1_lpddr4_trip1_cke_b,
-    ch1_lpddr4_trip1_dmi_a => ch1_lpddr4_trip1_dmi_a,
-    ch1_lpddr4_trip1_dmi_b => ch1_lpddr4_trip1_dmi_b,
-    ch1_lpddr4_trip1_reset_n => ch1_lpddr4_trip1_reset_n,
-    lpddr4_clk1_clk_p => lpddr4_clk1_clk_p,
-    lpddr4_clk1_clk_n => lpddr4_clk1_clk_n,
     clk_100MHz => clk_100MHz,
     reset_rtl => reset_rtl
   );

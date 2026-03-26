@@ -1,0 +1,9 @@
+#
+# An unexpected error has occurred (11) Segmentation fault
+#
+Stack:
+/home/smartscott/AMD/2025.2/Vivado/tps/lnx64/jre21.0.5_11/lib//server/libjvm.so(+0xe7195c) [0x748218e7195c]
+/home/smartscott/AMD/2025.2/Vivado/tps/lnx64/jre21.0.5_11/lib//server/libjvm.so(JVM_handle_linux_signal+0x23e) [0x748218e7242e]
+/lib/x86_64-linux-gnu/libc.so.6(+0x45330) [0x748258a45330]
+/home/smartscott/AMD/2025.2/Vivado/lib/lnx64.o/libxv_rsb.so(Java_ui_data_rsbi_RSBBlockInterface_1getName+0x4b) [0x74823bb4afeb]
+[0x74820880e46a]

@@ -54,46 +54,6 @@
 
 // INST_TAG     ------ Begin cut for INSTANTIATION Template ------
 design_1 your_instance_name (
-  .ch0_lpddr4_trip1_dq_a(ch0_lpddr4_trip1_dq_a), // inout wire [15:0] ch0_lpddr4_trip1_dq_a
-  .ch0_lpddr4_trip1_dq_b(ch0_lpddr4_trip1_dq_b), // inout wire [15:0] ch0_lpddr4_trip1_dq_b
-  .ch0_lpddr4_trip1_dqs_t_a(ch0_lpddr4_trip1_dqs_t_a), // inout wire [1:0] ch0_lpddr4_trip1_dqs_t_a
-  .ch0_lpddr4_trip1_dqs_t_b(ch0_lpddr4_trip1_dqs_t_b), // inout wire [1:0] ch0_lpddr4_trip1_dqs_t_b
-  .ch0_lpddr4_trip1_dqs_c_a(ch0_lpddr4_trip1_dqs_c_a), // inout wire [1:0] ch0_lpddr4_trip1_dqs_c_a
-  .ch0_lpddr4_trip1_dqs_c_b(ch0_lpddr4_trip1_dqs_c_b), // inout wire [1:0] ch0_lpddr4_trip1_dqs_c_b
-  .ch0_lpddr4_trip1_ca_a(ch0_lpddr4_trip1_ca_a), // output wire [5:0] ch0_lpddr4_trip1_ca_a
-  .ch0_lpddr4_trip1_ca_b(ch0_lpddr4_trip1_ca_b), // output wire [5:0] ch0_lpddr4_trip1_ca_b
-  .ch0_lpddr4_trip1_cs_a(ch0_lpddr4_trip1_cs_a), // output wire ch0_lpddr4_trip1_cs_a
-  .ch0_lpddr4_trip1_cs_b(ch0_lpddr4_trip1_cs_b), // output wire ch0_lpddr4_trip1_cs_b
-  .ch0_lpddr4_trip1_ck_t_a(ch0_lpddr4_trip1_ck_t_a), // output wire ch0_lpddr4_trip1_ck_t_a
-  .ch0_lpddr4_trip1_ck_t_b(ch0_lpddr4_trip1_ck_t_b), // output wire ch0_lpddr4_trip1_ck_t_b
-  .ch0_lpddr4_trip1_ck_c_a(ch0_lpddr4_trip1_ck_c_a), // output wire ch0_lpddr4_trip1_ck_c_a
-  .ch0_lpddr4_trip1_ck_c_b(ch0_lpddr4_trip1_ck_c_b), // output wire ch0_lpddr4_trip1_ck_c_b
-  .ch0_lpddr4_trip1_cke_a(ch0_lpddr4_trip1_cke_a), // output wire ch0_lpddr4_trip1_cke_a
-  .ch0_lpddr4_trip1_cke_b(ch0_lpddr4_trip1_cke_b), // output wire ch0_lpddr4_trip1_cke_b
-  .ch0_lpddr4_trip1_dmi_a(ch0_lpddr4_trip1_dmi_a), // inout wire [1:0] ch0_lpddr4_trip1_dmi_a
-  .ch0_lpddr4_trip1_dmi_b(ch0_lpddr4_trip1_dmi_b), // inout wire [1:0] ch0_lpddr4_trip1_dmi_b
-  .ch0_lpddr4_trip1_reset_n(ch0_lpddr4_trip1_reset_n), // output wire ch0_lpddr4_trip1_reset_n
-  .ch1_lpddr4_trip1_dq_a(ch1_lpddr4_trip1_dq_a), // inout wire [15:0] ch1_lpddr4_trip1_dq_a
-  .ch1_lpddr4_trip1_dq_b(ch1_lpddr4_trip1_dq_b), // inout wire [15:0] ch1_lpddr4_trip1_dq_b
-  .ch1_lpddr4_trip1_dqs_t_a(ch1_lpddr4_trip1_dqs_t_a), // inout wire [1:0] ch1_lpddr4_trip1_dqs_t_a
-  .ch1_lpddr4_trip1_dqs_t_b(ch1_lpddr4_trip1_dqs_t_b), // inout wire [1:0] ch1_lpddr4_trip1_dqs_t_b
-  .ch1_lpddr4_trip1_dqs_c_a(ch1_lpddr4_trip1_dqs_c_a), // inout wire [1:0] ch1_lpddr4_trip1_dqs_c_a
-  .ch1_lpddr4_trip1_dqs_c_b(ch1_lpddr4_trip1_dqs_c_b), // inout wire [1:0] ch1_lpddr4_trip1_dqs_c_b
-  .ch1_lpddr4_trip1_ca_a(ch1_lpddr4_trip1_ca_a), // output wire [5:0] ch1_lpddr4_trip1_ca_a
-  .ch1_lpddr4_trip1_ca_b(ch1_lpddr4_trip1_ca_b), // output wire [5:0] ch1_lpddr4_trip1_ca_b
-  .ch1_lpddr4_trip1_cs_a(ch1_lpddr4_trip1_cs_a), // output wire ch1_lpddr4_trip1_cs_a
-  .ch1_lpddr4_trip1_cs_b(ch1_lpddr4_trip1_cs_b), // output wire ch1_lpddr4_trip1_cs_b
-  .ch1_lpddr4_trip1_ck_t_a(ch1_lpddr4_trip1_ck_t_a), // output wire ch1_lpddr4_trip1_ck_t_a
-  .ch1_lpddr4_trip1_ck_t_b(ch1_lpddr4_trip1_ck_t_b), // output wire ch1_lpddr4_trip1_ck_t_b
-  .ch1_lpddr4_trip1_ck_c_a(ch1_lpddr4_trip1_ck_c_a), // output wire ch1_lpddr4_trip1_ck_c_a
-  .ch1_lpddr4_trip1_ck_c_b(ch1_lpddr4_trip1_ck_c_b), // output wire ch1_lpddr4_trip1_ck_c_b
-  .ch1_lpddr4_trip1_cke_a(ch1_lpddr4_trip1_cke_a), // output wire ch1_lpddr4_trip1_cke_a
-  .ch1_lpddr4_trip1_cke_b(ch1_lpddr4_trip1_cke_b), // output wire ch1_lpddr4_trip1_cke_b
-  .ch1_lpddr4_trip1_dmi_a(ch1_lpddr4_trip1_dmi_a), // inout wire [1:0] ch1_lpddr4_trip1_dmi_a
-  .ch1_lpddr4_trip1_dmi_b(ch1_lpddr4_trip1_dmi_b), // inout wire [1:0] ch1_lpddr4_trip1_dmi_b
-  .ch1_lpddr4_trip1_reset_n(ch1_lpddr4_trip1_reset_n), // output wire ch1_lpddr4_trip1_reset_n
-  .lpddr4_clk1_clk_p(lpddr4_clk1_clk_p), // input wire lpddr4_clk1_clk_p
-  .lpddr4_clk1_clk_n(lpddr4_clk1_clk_n), // input wire lpddr4_clk1_clk_n
   .clk_100MHz(clk_100MHz), // input wire clk_100MHz
   .reset_rtl(reset_rtl) // input wire reset_rtl
 );

@@ -2,24 +2,12 @@
 <Root MajorVersion="0" MinorVersion="43">
   <CompositeFile CompositeFileTopName="design_1" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1774391116"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1774391116"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1774391116"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1774391116"/>
-    <Generation Name="INSTANTIATION_TEMPLATE" State="GENERATED" Timestamp="1774391116"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1774484400"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1774484400"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1774484400"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1774484400"/>
+    <Generation Name="INSTANTIATION_TEMPLATE" State="GENERATED" Timestamp="1774484400"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
-      <File Name="nsln/design_1.nts" Type="NTS">
-        <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="IMPLEMENTATION"/>
-        <ProcessingOrder Val="NORMAL"/>
-      </File>
-      <File Name="nsln/design_1.ncr" Type="NCR">
-        <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="IMPLEMENTATION"/>
-        <ProcessingOrder Val="NORMAL"/>
-      </File>
       <File Name="synth/design_1.v" Type="Verilog">
         <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
         <Library Name="xil_defaultlib"/>
@@ -53,13 +41,6 @@
       <File Name="design_1_sv.sveo" Type="SystemVerilogTemplate">
         <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
         <Library Name="xil_defaultlib"/>
-        <ProcessingOrder Val="NORMAL"/>
-      </File>
-      <File Name="design_1.bmm" Type="BMM">
-        <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="IMPLEMENTATION"/>
-        <UsedIn Val="SIMULATION"/>
         <ProcessingOrder Val="NORMAL"/>
       </File>
       <File Name="design_1_ooc.xdc" Type="XDC">

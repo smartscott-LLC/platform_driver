@@ -1,0 +1,19 @@
+vhdl xil_defaultlib  \
+"../../../bd/full_blown/ip/full_blown_axi_smc_0/bd_0/ip/ip_1/sim/bd_b30e_psr0_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_axi_smc_0/bd_0/ip/ip_2/sim/bd_b30e_psr_aclk_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_axi_smc_0/bd_0/ip/ip_3/sim/bd_b30e_psr_aclk1_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_rst_clk_wiz_100M_0/sim/full_blown_rst_clk_wiz_100M_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_axi_fifo_mm_s_0/sim/full_blown_axi_fifo_mm_s_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_microblaze_0_0/sim/full_blown_microblaze_0_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_dlmb_v10_0/sim/full_blown_dlmb_v10_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_ilmb_v10_0/sim/full_blown_ilmb_v10_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_dlmb_bram_if_cntlr_0/sim/full_blown_dlmb_bram_if_cntlr_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_ilmb_bram_if_cntlr_0/sim/full_blown_ilmb_bram_if_cntlr_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_microblaze_0_axi_intc_0/sim/full_blown_microblaze_0_axi_intc_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_mdm_1_0/sim/full_blown_mdm_1_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_rst_clk_wiz_100M_1_0/sim/full_blown_rst_clk_wiz_100M_1_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_axi_uartlite_0_0/sim/full_blown_axi_uartlite_0_0.vhd" \
+"../../../bd/full_blown/ip/full_blown_axi_dma_0_0/sim/full_blown_axi_dma_0_0.vhd" \
+
+# Do not sort compile order
+nosort
