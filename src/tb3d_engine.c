@@ -38,11 +38,11 @@
  * COMPRESS is the inverse of SPREAD_PHYS:  bit 2n of input → bit n of output.
  */
 
-#include "dyasmart/tb3d.h"
+#include "Dyasmart/tb3d.h"
 
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 /* ---- CPU feature detection (compile-time + runtime) ------------------- */
 
 #if defined(__x86_64__) || defined(_M_X64)

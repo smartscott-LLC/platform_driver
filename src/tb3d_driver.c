@@ -26,8 +26,8 @@
  * actual load/store instructions execute.
  */
 
-#include "dyasmart/tb3d_driver.h"
-#include "dyasmart/tb3d.h"
+#include "Dyasmart/tb3d_driver.h"
+#include "Dyasmart/tb3d.h"
 
 #include <stdlib.h>
 #include <string.h>
