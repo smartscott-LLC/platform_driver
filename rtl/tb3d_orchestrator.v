@@ -56,6 +56,7 @@ module tb3d_orchestrator #(
     // =========================================================================
     // Clock & Reset (primary clock domain = AXI)
     // =========================================================================
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI, ASSOCIATED_RESET axi_rst_n" *)
     input  wire                     axi_clk,        // 200 MHz primary clock
     input  wire                     axi_rst_n,      // Active-low reset (synchronous to axi_clk)
     input  wire                     mb_clk,         // Microblaze clock (variable freq)
@@ -68,32 +69,51 @@ module tb3d_orchestrator #(
     // Exposed to NoC / CIP / system for TB3-D configuration and status
     // =========================================================================
     // Write address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWPROT" *)
     input  wire [2:0]                 s_axi_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWVALID" *)
     input  wire                       s_axi_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWREADY" *)
     output wire                       s_axi_awready,
 
     // Write data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WDATA" *)
     input  wire [AXI_DATA_WIDTH-1:0]  s_axi_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WSTRB" *)
     input  wire [(AXI_DATA_WIDTH/8)-1:0] s_axi_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WVALID" *)
     input  wire                       s_axi_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WREADY" *)
     output wire                       s_axi_wready,
 
     // Write response channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BRESP" *)
     output wire [1:0]                 s_axi_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BVALID" *)
     output wire                       s_axi_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BREADY" *)
     input  wire                       s_axi_bready,
 
     // Read address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARPROT" *)
     input  wire [2:0]                 s_axi_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARVALID" *)
     input  wire                       s_axi_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARREADY" *)
     output wire                       s_axi_arready,
 
     // Read data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RDATA" *)
     output wire [AXI_DATA_WIDTH-1:0]  s_axi_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RRESP" *)
     output wire [1:0]                 s_axi_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RVALID" *)
     output wire                       s_axi_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RREADY" *)
     input  wire                       s_axi_rready,
 
     // =========================================================================

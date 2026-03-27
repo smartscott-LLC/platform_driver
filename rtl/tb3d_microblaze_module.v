@@ -56,11 +56,12 @@ module tb3d_microblaze_module #(
     // =========================================================================
     // Clock & Reset (local Microblaze domain)
     // =========================================================================
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF M_AXI, ASSOCIATED_RESET mb_rst_n" *)
     input  wire                     mb_clk,         // Microblaze processor clock
     input  wire                     mb_rst_n,       // Active-low reset
 
     // =========================================================================
-    // CSR Interface (mb_clk domain)
+    // CSR Interface (mb_clk domain) — Control/Status, NOT AXI
     // From orchestrator via async FIFO
     // =========================================================================
     // Control signals
@@ -80,23 +81,37 @@ module tb3d_microblaze_module #(
     // Connects to Versal PS DDR4 controller via async CDC
     // =========================================================================
     // AXI4 Write Address
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWADDR" *)
     output wire [DDR_ADDR_WIDTH-1:0] m_axi_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWLEN" *)
     output wire [7:0]               m_axi_awlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWSIZE" *)
     output wire [2:0]               m_axi_awsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWBURST" *)
     output wire [1:0]               m_axi_awburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWVALID" *)
     output wire                     m_axi_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI AWREADY" *)
     input  wire                     m_axi_awready,
 
     // AXI4 Write Data
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI WDATA" *)
     output wire [DDR_DATA_WIDTH-1:0] m_axi_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI WSTRB" *)
     output wire [(DDR_DATA_WIDTH/8)-1:0] m_axi_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI WLAST" *)
     output wire                     m_axi_wlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI WVALID" *)
     output wire                     m_axi_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI WREADY" *)
     input  wire                     m_axi_wready,
 
     // AXI4 Write Response
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI BRESP" *)
     input  wire [1:0]               m_axi_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI BVALID" *)
     input  wire                     m_axi_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI BREADY" *)
     output wire                     m_axi_bready,
 
     // AXI4 Read Address

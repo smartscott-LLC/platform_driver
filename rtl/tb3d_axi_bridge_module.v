@@ -33,6 +33,7 @@ module tb3d_axi_bridge_module #(
     // =========================================================================
     // Clock & Reset
     // =========================================================================
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI, ASSOCIATED_RESET axi_rst_n" *)
     input  wire                     axi_clk,
     input  wire                     axi_rst_n,
 
@@ -42,42 +43,71 @@ module tb3d_axi_bridge_module #(
     // =========================================================================
 
     // Write address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWLEN" *)
     input  wire [7:0]                 s_axi_awlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWSIZE" *)
     input  wire [2:0]                 s_axi_awsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWBURST" *)
     input  wire [1:0]                 s_axi_awburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWID" *)
     input  wire [AXI_ID_WIDTH-1:0]    s_axi_awid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWVALID" *)
     input  wire                       s_axi_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWREADY" *)
     output wire                       s_axi_awready,
 
     // Write data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WDATA" *)
     input  wire [AXI_DATA_WIDTH-1:0]  s_axi_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WSTRB" *)
     input  wire [(AXI_DATA_WIDTH/8)-1:0] s_axi_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WLAST" *)
     input  wire                       s_axi_wlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WVALID" *)
     input  wire                       s_axi_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WREADY" *)
     output wire                       s_axi_wready,
 
     // Write response channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BRESP" *)
     output wire [1:0]                 s_axi_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BID" *)
     output wire [AXI_ID_WIDTH-1:0]    s_axi_bid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BVALID" *)
     output wire                       s_axi_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BREADY" *)
     input  wire                       s_axi_bready,
 
     // Read address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARLEN" *)
     input  wire [7:0]                 s_axi_arlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARSIZE" *)
     input  wire [2:0]                 s_axi_arsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARBURST" *)
     input  wire [1:0]                 s_axi_arburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARID" *)
     input  wire [AXI_ID_WIDTH-1:0]    s_axi_arid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARVALID" *)
     input  wire                       s_axi_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARREADY" *)
     output wire                       s_axi_arready,
 
     // Read data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RDATA" *)
     output wire [AXI_DATA_WIDTH-1:0]  s_axi_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RRESP" *)
     output wire [1:0]                 s_axi_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RID" *)
     output wire [AXI_ID_WIDTH-1:0]    s_axi_rid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RLAST" *)
     output wire                       s_axi_rlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RVALID" *)
     output wire                       s_axi_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RREADY" *)
     input  wire                       s_axi_rready,
 
     // =========================================================================
