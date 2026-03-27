@@ -1,0 +1,136 @@
+ss_helixsphereai@dyasmart:~/Dyasmart/build$ ./test_tb3d
+========================================
+  DyaSmart TB3-D Logic Engine — Tests   
+========================================
+
+--- 1. Nibble encode/decode round-trip (all 256 pairs) ---
+--- 2. Bit-layout verification ---
+--- 3. Full-byte encode/decode round-trip (all 256 values) ---
+--- 4. tb3d_decode_byte lossless ---
+--- 5. Color state query and mutation ---
+--- 6. Buffer encode/decode round-trip ---
+--- 7. Split-buffer encode/decode ---
+--- 8. DMA bitmask layer (tb3d_dma_fetch) ---
+--- 9. Dragonfly Cache Interface ---
+--- 10. State Buffer ---
+--- 11. Transcoder (Secretary / Executive paths) ---
+--- 12. Lossless reconstruction guarantee ---
+--- 13. Bitmask invariants ---
+--- 14. CPU feature detection ---
+    BMI2:   yes
+    AVX2:   yes
+    AVX-512:no
+
+========================================
+  Results: 3789/3789 passed
+========================================
+ss_helixsphereai@dyasmart:~/Dyasmart/build$ ./test_tb3d_bench
+============================================================
+  DyaSmart TB3-D — Metrics & Performance Benchmark Suite    
+  Warmup iters: 5   Timed iters: 20
+  ISA: BMI2=ON  AVX2=ON  AVX-512=off
+  CSV output: metrics_report.csv
+============================================================
+
+[BENCH] Scalar nibble operations
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  tb3d_encode_nibble (65536 pairs)            642.1        1.485    673248205
+  tb3d_decode_nibble (256 values)             537.8        1.773    563876652
+
+[BENCH] Buffer encode/decode throughput
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  encode_buffer  ( 256  B)                   5250.3        0.182
+  decode_buffer  ( 256  B)                    894.3        1.066
+  encode_buffer  (   4 KB)                   8898.1        0.107
+  decode_buffer  (   4 KB)                   1627.6        0.586
+  encode_buffer  (  64 KB)                   8835.8        0.108
+  decode_buffer  (  64 KB)                   1633.0        0.584
+  encode_buffer  (   1 MB)                   8682.3        0.110
+  decode_buffer  (   1 MB)                   1624.4        0.587
+  encode_buffer  (  16 MB)                   8528.0        0.112
+  decode_buffer  (  16 MB)                   1616.8        0.590
+
+[BENCH] DMA bitmask fetch throughput
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  dma_fetch      ( 256  B packed)           20345.1        0.047
+  dma_fetch      (   4 KB packed)           25656.8        0.037
+  dma_fetch      (  64 KB packed)           28216.7        0.034
+  dma_fetch      (   1 MB packed)           23650.6        0.040
+  dma_fetch      (  16 MB packed)            9522.4        0.100
+
+[BENCH] Dragonfly Cache Interface write/read throughput
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  cache_write    ( 256  B)                    846.2        1.127
+  cache_read     ( 256  B)                  18780.0        0.051
+  cache_write    (   4 KB)                   1414.8        0.674
+  cache_read     (   4 KB)                  59637.4        0.016
+  cache_write    (  64 KB)                   1522.1        0.627
+  cache_read     (  64 KB)                  30849.0        0.031
+  cache_write    (   1 MB)                   1558.3        0.612
+  cache_read     (   1 MB)                  25541.2        0.037
+  cache_write    (  16 MB)                   1556.6        0.613
+  cache_read     (  16 MB)                  19397.3        0.049
+
+[BENCH] Transcoder (Secretary/Executive) throughput
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  transcode_to_cache ( 256  B)               1208.6        0.789
+  transcode_from_cache ( 256  B)            25699.0        0.037
+  transcode_to_cache (   4 KB)               1542.1        0.618
+  transcode_from_cache (   4 KB)            61515.7        0.016
+  transcode_to_cache (  64 KB)               1543.6        0.618
+  transcode_from_cache (  64 KB)            39407.3        0.024
+  transcode_to_cache (   1 MB)               1541.0        0.619
+  transcode_from_cache (   1 MB)            33565.5        0.028
+  transcode_to_cache (  16 MB)               1514.6        0.630
+  transcode_from_cache (  16 MB)            23178.5        0.041
+
+[BENCH] Split-buffer encode/decode throughput
+
+Operation / Buffer size                        MB/s      ns/byte        ops/s
+------------------------------------     ---------- ------------ ------------
+  encode_split   ( 256  B)                    867.3        1.100
+  decode_split   ( 256  B)                   1737.7        0.549
+  encode_split   (   4 KB)                   1183.7        0.806
+  decode_split   (   4 KB)                   1734.6        0.550
+  encode_split   (  64 KB)                   1442.6        0.661
+  decode_split   (  64 KB)                   2363.3        0.404
+  encode_split   (   1 MB)                   1486.5        0.642
+  decode_split   (   1 MB)                   2344.8        0.407
+  encode_split   (  16 MB)                   1489.5        0.640
+  decode_split   (  16 MB)                   2342.8        0.407
+
+[STRESS] Alignment boundary / tail-loop correctness (1-128 bytes)
+  Checked sizes 1..128 bytes — all correct.
+
+[STRESS] Large random buffer (1 MB, varied color masks)
+  1 MB, 6 color mask variants — all correct.
+
+[STRESS] Null-pointer & bounds-error guard audit
+  All null-guard checks passed.
+
+[STRESS] State buffer — all 256 packed byte patterns
+  128 legacy bytes, 8 bits each — all correct.
+
+[STRESS] Color mutation idempotency (set_bit_color)
+  All 256×4 idempotency checks passed.
+
+[STRESS] Lane isolation: color mutation must not alter physical bits
+  All 16×16×4 lane isolation checks passed.
+
+[STRESS] Word encode/decode — full data + color round-trip
+  All 256×256 byte+color word round-trips passed.
+
+============================================================
+  Correctness checks: 142451/142451 passed
+  Metrics written to: metrics_report.csv
+============================================================
