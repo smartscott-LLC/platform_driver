@@ -3,23 +3,23 @@
 # SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
 # IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
 # SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
-# Start of session at: Wed Mar 25 15:08:00 2026
-# Process ID         : 735189
-# Current directory  : /home/smartscott/NEW/tb3d/tb3d.runs/synth_1
+# Start of session at: Thu Mar 26 17:35:55 2026
+# Process ID         : 29695
+# Current directory  : /home/smartscott/platform_driver/tb3d.runs/synth_1
 # Command line       : vivado -log design_1_wrapper.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_wrapper.tcl
-# Log file           : /home/smartscott/NEW/tb3d/tb3d.runs/synth_1/design_1_wrapper.vds
-# Journal file       : /home/smartscott/NEW/tb3d/tb3d.runs/synth_1/vivado.jou
+# Log file           : /home/smartscott/platform_driver/tb3d.runs/synth_1/design_1_wrapper.vds
+# Journal file       : /home/smartscott/platform_driver/tb3d.runs/synth_1/vivado.jou
 # Running On         : smarTech
 # Platform           : Ubuntu
 # Operating System   : Ubuntu 24.04.4 LTS
 # Processor Detail   : Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
-# CPU Frequency      : 3784.912 MHz
+# CPU Frequency      : 1660.056 MHz
 # CPU Physical cores : 4
 # CPU Logical cores  : 8
 # Host memory        : 15658 MB
 # Swap memory        : 12124 MB
 # Total Virtual      : 27782 MB
-# Available Virtual  : 22917 MB
+# Available Virtual  : 23268 MB
 #-----------------------------------------------------------
 source design_1_wrapper.tcl -notrace
 validate_noc  -part xcvp1802-lsvc4072-2MP-e-S -no_compile 
