@@ -17,8 +17,8 @@
  *  12. Bitmask invariants (spec: 0x55 physical, 0xAA color)
  */
 
-#include "dyasmart/tb3d.h"
-#include "dyasmart/tb3d_driver.h"
+#include "Dyasmart/tb3d.h"
+#include "Dyasmart/tb3d_driver.h"
 
 #include <stdint.h>
 #include <stdio.h>

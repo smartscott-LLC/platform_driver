@@ -39,8 +39,8 @@
 /* POSIX timers (clock_gettime / CLOCK_MONOTONIC) require _POSIX_C_SOURCE */
 #define _POSIX_C_SOURCE 200809L
 
-#include "dyasmart/tb3d.h"
-#include "dyasmart/tb3d_driver.h"
+#include "Dyasmart/tb3d.h"
+#include "Dyasmart/tb3d_driver.h"
 
 #include <inttypes.h>
 #include <stdio.h>
