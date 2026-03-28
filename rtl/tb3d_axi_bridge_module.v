@@ -1,4 +1,3 @@
-\
 // =============================================================================
 // Module  : tb3d_axi_bridge_module
 // Project : TB3-D Platform Driver — Versal VPK180 (VP1802)

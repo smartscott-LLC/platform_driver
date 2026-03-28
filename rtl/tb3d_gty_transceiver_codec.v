@@ -1,4 +1,3 @@
-\
 // =============================================================================
 // Module  : tb3d_gty_transceiver_codec
 // Project : TB3-D Platform Driver — Versal VPK180 (VP1802)
@@ -138,12 +137,12 @@ module tb3d_gty_transceiver_codec #(
     //        line rate, PLL multiplier, or encoding mode at runtime without
     //        a system reboot.
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP EN"   *) input  wire        drp_en,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP WE"   *) input  wire        drp_we,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP ADDR" *) input  wire [9:0]  drp_addr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DEN"   *) input  wire        drp_den,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DWE"   *) input  wire        drp_dwe,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DADDR" *) input  wire [9:0]  drp_daddr,
     (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DI"   *) input  wire [15:0] drp_di,
     (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DO"   *) output wire [15:0] drp_do,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP RDY"  *) output wire        drp_rdy,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DRDY"  *) output wire        drp_drdy,
 
     // Per-lane lock / error — raw status for orchestrator monitoring
     output wire [NUM_LANES-1:0] lane_locked,
@@ -237,8 +236,8 @@ module tb3d_gty_transceiver_codec #(
     reg        drp_rdy_r;
     reg [15:0] drp_do_r;
 
-    assign drp_do  = drp_do_r;
-    assign drp_rdy = drp_rdy_r;
+    assign drp_do   = drp_do_r;
+    assign drp_drdy = drp_rdy_r;
 
     integer i;
     always @(posedge drp_clk or negedge drp_rst_n) begin
@@ -247,9 +246,9 @@ module tb3d_gty_transceiver_codec #(
             for (i=0; i<32; i=i+1) drp_ram[i] <= 16'h0;
         end else begin
             drp_rdy_r <= 1'b0;
-            if (drp_en) begin
-                if (drp_we) drp_ram[drp_addr[4:0]] <= drp_di;
-                drp_do_r  <= drp_ram[drp_addr[4:0]];
+            if (drp_den) begin
+                if (drp_dwe) drp_ram[drp_daddr[4:0]] <= drp_di;
+                drp_do_r  <= drp_ram[drp_daddr[4:0]];
                 drp_rdy_r <= 1'b1;
             end
         end
@@ -259,7 +258,7 @@ module tb3d_gty_transceiver_codec #(
     // (simple registered transfer — acceptable because DRP ops are infrequent)
     always @(posedge axi_clk or negedge axi_rst_n) begin
         if (!axi_rst_n) csr_drp_rdat <= 16'h0;
-        else if (drp_rdy) csr_drp_rdat <= drp_do;
+        else if (drp_drdy) csr_drp_rdat <= drp_do;
     end
 
     // =========================================================================
