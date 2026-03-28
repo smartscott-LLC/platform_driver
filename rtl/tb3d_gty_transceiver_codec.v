@@ -1,457 +1,360 @@
+\
 // =============================================================================
 // Module  : tb3d_gty_transceiver_codec
-// Project : TB3-D Platform Driver — Versal 1802
+// Project : TB3-D Platform Driver — Versal VPK180 (VP1802)
 // File    : rtl/tb3d_gty_transceiver_codec.v
 //
-// Purpose : Wrapper for 8 GTYP transceiver lanes with embedded TB3-D
-//           encoding/decoding logic.  Each GTY lane carries 64-bit data,
-//           giving a 512-bit (8 × 64) aggregate data path.
+// Purpose : In-wire intercept for the GTYP transceiver data paths.
+//           Placed between the raw GTYP TXDATA/RXDATA ports and the NoC so
+//           that every bit leaving or entering the chip passes through TB3-D
+//           encode/decode before it touches any processor or memory.
 //
-//   TX path : 512-bit user binary → TB3D encode → 512-bit GTY serial data
-//   RX path : 512-bit GTY serial data → TB3D decode → 512-bit user binary
+// Bus Interfaces exposed to Vivado IP-Integrator
+// -----------------------------------------------
+//   S_AXIS_RX   AXI4-Stream slave  — raw bits FROM the GTYP RX (Slave 1 / in-wire)
+//   M_AXIS_RX   AXI4-Stream master — TB3D-decoded data TO system / NoC
+//   S_AXIS_TX   AXI4-Stream slave  — raw data FROM system for encoding (Slave 1 / TX)
+//   M_AXIS_TX   AXI4-Stream master — TB3D-encoded bits TO GTYP TX
+//   S_AXI_CTRL  AXI4-Lite slave    — runtime control FROM orchestrator M_AXI_GTY (Slave 2)
+//   DRP         DRP slave           — transceiver dynamic reconfiguration
+//               (line-rate / PLL changes from MicroBlaze via orchestrator)
 //
-// Architecture:
-//   8 GTYP lanes, each 64-bit (8 bytes) wide.
-//   Per lane: 8 × tb3d_encode (TX), 8 × tb3d_decode (RX) — byte-granular.
+// Rule satisfied: >= 2 slaves + >= 1 master  (S_AXIS_RX, S_AXIS_TX, S_AXI_CTRL
+//                                             + DRP = 4 slaves; M_AXIS_RX, M_AXIS_TX = 2 masters)
 //
-//   ┌────────────────────────────────────────────┐
-//   │  S_AXIS_USER_TX [511:0]                     │
-//   │  (512-bit, single TVALID/TREADY)            │
-//   │          │                                  │
-//   │  ┌───────▼───────────────────┐              │
-//   │  │  tb3d_encode × 64 (8/lane)│              │
-//   │  └───────────────────────────┘              │
-//   │          │                                  │
-//   │  M_AXIS_GTY_TX [511:0]                      │
-//   └────────────────────────────────────────────┘
+// Data widths:
+//   AXIS: NUM_LANES x LANE_W bits  (default 8 x 64 = 512 bits)
+//   S_AXI_CTRL: 32-bit, 8-bit byte address
+//   DRP: 16-bit data, 10-bit address  (GTYP spec)
 //
-//   (symmetric RX path: S_AXIS_GTY_RX → decode → M_AXIS_USER_RX)
+// Clock domains:
+//   gty_clk  250 MHz — GTYP reference, drives both AXIS interfaces
+//   axi_clk  200 MHz — drives S_AXI_CTRL (separate clock annotation)
+//   drp_clk         — drives DRP interface (may equal axi_clk or gty_clk)
 //
-// Clock Domains:
-//   gty_clk  : GTY reference / user-data clock (~250 MHz)
-//   axi_clk  : AXI4-Lite control clock (200 MHz, from orchestrator)
-//
-// S_AXI_CTRL CSR Register Map (AXI4-Lite slave, 32-bit, 5-bit word address):
-//   0x00  CTRL       — bit[0]=global codec enable, bit[NUM_LANES-1:1]=per-lane en
-//   0x04  STATUS     — bit[NUM_LANES-1:0]=lock status (RO), bit[2*NUM_LANES-1:NUM_LANES]=errors (RO)
-//   0x08  LANE_EN    — [NUM_LANES-1:0] per-lane enable shadow (RW)
-//   0x0C  LANE_LOCK  — [NUM_LANES-1:0] per-lane lock status (RO)
-//   0x10  LANE_ERR   — [NUM_LANES-1:0] per-lane error flags (RO)
-//
-// Latency (codec only):
-//   TX encode : 0 cycles (combinational)
-//   RX decode : 0 cycles (combinational)
-//   GTY transceiver adds 16-24 cycles (silicon, outside this module)
+// S_AXI_CTRL CSR map (32-bit, byte address)
+//   0x00  CTRL      [0]=codec_en  [NUM_LANES:1]=per_lane_en
+//   0x04  STATUS    [NUM_LANES-1:0]=lane_locked  [2*NUM_LANES-1:NUM_LANES]=lane_err  (RO)
+//   0x08  LANE_EN   [NUM_LANES-1:0]=per-lane enable mirror  (RW)
+//   0x0C  DRP_ADDR  [9:0]=DRP address for debug readback  (RW)
+//   0x10  DRP_RDATA [15:0]=last DRP read data  (RO)
 // =============================================================================
-
 `timescale 1ns / 1ps
 
 module tb3d_gty_transceiver_codec #(
-    parameter NUM_LANES        = 8,                      // 8 GTYP transceiver lanes
-    parameter LANE_DATA_WIDTH  = 64,                     // 64-bit data per lane
-    parameter TOTAL_DATA_WIDTH = NUM_LANES * LANE_DATA_WIDTH  // 512-bit aggregate
+    parameter integer NUM_LANES = 8,
+    parameter integer LANE_W    = 64,
+    parameter integer TOTAL_W   = NUM_LANES * LANE_W   // 512
 ) (
     // =========================================================================
-    // Clock & Reset — GTY data-path domain
+    // Clock & Reset — GTY data-path domain (AXIS interfaces)
     // =========================================================================
-    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXIS_USER_TX:M_AXIS_GTY_TX:S_AXIS_GTY_RX:M_AXIS_USER_RX, ASSOCIATED_RESET gty_rst_n" *)
-    input  wire                          gty_clk,       // 250 MHz GTY reference clock
-    input  wire                          gty_rst_n,     // Active-low async reset
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXIS_RX:M_AXIS_RX:S_AXIS_TX:M_AXIS_TX, ASSOCIATED_RESET gty_rst_n, FREQ_HZ 250000000" *)
+    input  wire gty_clk,
+    (* X_INTERFACE_PARAMETER = "POLARITY ACTIVE_LOW" *)
+    input  wire gty_rst_n,
 
     // =========================================================================
-    // Clock & Reset — AXI control domain
+    // Clock & Reset — AXI control domain (S_AXI_CTRL)
     // =========================================================================
-    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI_CTRL, ASSOCIATED_RESET axi_rst_n" *)
-    input  wire                          axi_clk,       // AXI4-Lite control clock
-    input  wire                          axi_rst_n,     // Active-low reset (axi_clk domain)
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI_CTRL, ASSOCIATED_RESET axi_rst_n, FREQ_HZ 200000000" *)
+    input  wire axi_clk,
+    (* X_INTERFACE_PARAMETER = "POLARITY ACTIVE_LOW" *)
+    input  wire axi_rst_n,
 
     // =========================================================================
-    // Per-Lane Status (S_GTY_STATUS interface, gty_clk domain)
-    // Exposed as raw outputs for real-time monitoring by the orchestrator.
-    // Also readable via S_AXI_CTRL (CSR 0x0C / 0x10).
+    // Clock — DRP domain
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS LOCKED" *)
-    output wire [NUM_LANES-1:0]          lane_locked,   // Per-lane transceiver lock
-    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS ERROR" *)
-    output wire [NUM_LANES-1:0]          lane_error,    // Per-lane error flag
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF DRP, ASSOCIATED_RESET drp_rst_n, FREQ_HZ 200000000" *)
+    input  wire drp_clk,
+    (* X_INTERFACE_PARAMETER = "POLARITY ACTIVE_LOW" *)
+    input  wire drp_rst_n,
 
     // =========================================================================
-    // S_AXIS_USER_TX — 512-bit user binary data in (pre-encoding)
+    // S_AXIS_RX — AXI4-Stream slave  (raw GTYP RX bits in → TB3D decode)
+    //             Slave 1 / in-wire RX
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_USER_TX TDATA" *)
-    input  wire [TOTAL_DATA_WIDTH-1:0]   user_tx_data,  // 512-bit user TX data
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_USER_TX TVALID" *)
-    input  wire                          user_tx_valid, // TX data valid
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_USER_TX TREADY" *)
-    output wire                          user_tx_ready, // TX ready (codec + GTY ready)
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX TDATA"  *) input  wire [TOTAL_W-1:0] s_axis_rx_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX TVALID" *) input  wire               s_axis_rx_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX TREADY" *) output wire               s_axis_rx_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX TKEEP"  *) input  wire [TOTAL_W/8-1:0] s_axis_rx_tkeep,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_RX TLAST"  *) input  wire               s_axis_rx_tlast,
 
     // =========================================================================
-    // M_AXIS_GTY_TX — 512-bit TB3D-encoded data to GTY transceivers
+    // M_AXIS_RX — AXI4-Stream master (decoded data → system / NoC)
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_GTY_TX TDATA" *)
-    output wire [TOTAL_DATA_WIDTH-1:0]   gty_tx_data,   // Encoded 512-bit TX data
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_GTY_TX TVALID" *)
-    output wire                          gty_tx_valid,  // TX valid to GTY
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_GTY_TX TREADY" *)
-    input  wire                          gty_tx_ready,  // Backpressure from GTY
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_RX TDATA"  *) output wire [TOTAL_W-1:0] m_axis_rx_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_RX TVALID" *) output wire               m_axis_rx_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_RX TREADY" *) input  wire               m_axis_rx_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_RX TKEEP"  *) output wire [TOTAL_W/8-1:0] m_axis_rx_tkeep,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_RX TLAST"  *) output wire               m_axis_rx_tlast,
 
     // =========================================================================
-    // S_AXIS_GTY_RX — 512-bit TB3D-encoded data from GTY transceivers
+    // S_AXIS_TX — AXI4-Stream slave  (system data in → TB3D encode)
+    //             Slave 1 / in-wire TX
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_GTY_RX TDATA" *)
-    input  wire [TOTAL_DATA_WIDTH-1:0]   gty_rx_data,   // Encoded 512-bit RX data
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_GTY_RX TVALID" *)
-    input  wire                          gty_rx_valid,  // RX valid from GTY
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_GTY_RX TREADY" *)
-    output wire                          gty_rx_ready,  // Ready to accept RX data
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_TX TDATA"  *) input  wire [TOTAL_W-1:0] s_axis_tx_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_TX TVALID" *) input  wire               s_axis_tx_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_TX TREADY" *) output wire               s_axis_tx_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_TX TKEEP"  *) input  wire [TOTAL_W/8-1:0] s_axis_tx_tkeep,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 S_AXIS_TX TLAST"  *) input  wire               s_axis_tx_tlast,
 
     // =========================================================================
-    // M_AXIS_USER_RX — 512-bit decoded binary data to user logic
+    // M_AXIS_TX — AXI4-Stream master (TB3D-encoded bits → GTYP TX)
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_USER_RX TDATA" *)
-    output wire [TOTAL_DATA_WIDTH-1:0]   user_rx_data,  // Decoded 512-bit RX data
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_USER_RX TVALID" *)
-    output wire                          user_rx_valid, // RX data valid to user
-    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_USER_RX TREADY" *)
-    input  wire                          user_rx_ready, // User ready to accept
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_TX TDATA"  *) output wire [TOTAL_W-1:0] m_axis_tx_tdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_TX TVALID" *) output wire               m_axis_tx_tvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_TX TREADY" *) input  wire               m_axis_tx_tready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_TX TKEEP"  *) output wire [TOTAL_W/8-1:0] m_axis_tx_tkeep,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:axis_rtl:1.0 M_AXIS_TX TLAST"  *) output wire               m_axis_tx_tlast,
 
     // =========================================================================
-    // S_AXI_CTRL — AXI4-Lite slave (32-bit data, 5-bit word address)
-    // axi_clk domain; connects to orchestrator M_AXI_GTY_CTRL
+    // S_AXI_CTRL — AXI4-Lite slave  (FROM orchestrator M_AXI_GTY — Slave 2)
+    //              Runtime configuration and per-lane status readback.
     // =========================================================================
-    // Write address channel
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWADDR" *)
-    input  wire [4:0]                    s_axi_ctrl_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWPROT" *)
-    input  wire [2:0]                    s_axi_ctrl_awprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWVALID" *)
-    input  wire                          s_axi_ctrl_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWREADY" *)
-    output wire                          s_axi_ctrl_awready,
-    // Write data channel
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WDATA" *)
-    input  wire [31:0]                   s_axi_ctrl_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WSTRB" *)
-    input  wire [3:0]                    s_axi_ctrl_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WVALID" *)
-    input  wire                          s_axi_ctrl_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WREADY" *)
-    output wire                          s_axi_ctrl_wready,
-    // Write response channel
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BRESP" *)
-    output wire [1:0]                    s_axi_ctrl_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BVALID" *)
-    output wire                          s_axi_ctrl_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BREADY" *)
-    input  wire                          s_axi_ctrl_bready,
-    // Read address channel
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARADDR" *)
-    input  wire [4:0]                    s_axi_ctrl_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARPROT" *)
-    input  wire [2:0]                    s_axi_ctrl_arprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARVALID" *)
-    input  wire                          s_axi_ctrl_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARREADY" *)
-    output wire                          s_axi_ctrl_arready,
-    // Read data channel
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RDATA" *)
-    output wire [31:0]                   s_axi_ctrl_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RRESP" *)
-    output wire [1:0]                    s_axi_ctrl_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RVALID" *)
-    output wire                          s_axi_ctrl_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RREADY" *)
-    input  wire                          s_axi_ctrl_rready
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWADDR"  *) input  wire [7:0]  s_axi_ctrl_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWPROT"  *) input  wire [2:0]  s_axi_ctrl_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWVALID" *) input  wire        s_axi_ctrl_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL AWREADY" *) output wire        s_axi_ctrl_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WDATA"   *) input  wire [31:0] s_axi_ctrl_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WSTRB"   *) input  wire [3:0]  s_axi_ctrl_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WVALID"  *) input  wire        s_axi_ctrl_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL WREADY"  *) output wire        s_axi_ctrl_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BRESP"   *) output wire [1:0]  s_axi_ctrl_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BVALID"  *) output wire        s_axi_ctrl_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL BREADY"  *) input  wire        s_axi_ctrl_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARADDR"  *) input  wire [7:0]  s_axi_ctrl_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARPROT"  *) input  wire [2:0]  s_axi_ctrl_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARVALID" *) input  wire        s_axi_ctrl_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ARREADY" *) output wire        s_axi_ctrl_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RDATA"   *) output wire [31:0] s_axi_ctrl_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RRESP"   *) output wire [1:0]  s_axi_ctrl_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RVALID"  *) output wire        s_axi_ctrl_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL RREADY"  *) input  wire        s_axi_ctrl_rready,
+
+    // =========================================================================
+    // DRP — Dynamic Reconfiguration Port slave
+    //        The MicroBlaze (via orchestrator) drives this to change GTYP
+    //        line rate, PLL multiplier, or encoding mode at runtime without
+    //        a system reboot.
+    // =========================================================================
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP EN"   *) input  wire        drp_en,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP WE"   *) input  wire        drp_we,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP ADDR" *) input  wire [9:0]  drp_addr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DI"   *) input  wire [15:0] drp_di,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP DO"   *) output wire [15:0] drp_do,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:drp_rtl:1.0 DRP RDY"  *) output wire        drp_rdy,
+
+    // Per-lane lock / error — raw status for orchestrator monitoring
+    output wire [NUM_LANES-1:0] lane_locked,
+    output wire [NUM_LANES-1:0] lane_error
 );
 
     // =========================================================================
-    // S_AXI_CTRL : CSR register bank (axi_clk domain)
+    // S_AXI_CTRL  —  AXI4-Lite slave register bank  (axi_clk domain)
     // =========================================================================
-    // CSR addresses (word-addressed by bits [4:2]):
-    //   3'b000 = 0x00 : CTRL       — bit[0]=global_en, bit[NUM_LANES:1]=lane_en
-    //   3'b001 = 0x04 : STATUS     — {lane_err_sync, lane_lock_sync} (RO)
-    //   3'b010 = 0x08 : LANE_EN    — [NUM_LANES-1:0] per-lane enable (RW)
-    //   3'b011 = 0x0C : LANE_LOCK  — [NUM_LANES-1:0] per-lane lock   (RO)
-    //   3'b100 = 0x10 : LANE_ERR   — [NUM_LANES-1:0] per-lane error  (RO)
+    reg [31:0] csr_ctrl;     // 0x00
+    reg [31:0] csr_lane_en;  // 0x08
+    reg [31:0] csr_drp_addr; // 0x0C
+    reg [15:0] csr_drp_rdat; // 0x10 RO — updated by DRP read FSM
 
-    reg [31:0] csr_ctrl;      // bit[0]=codec_en, bit[NUM_LANES:1]=lane_en
-    reg [31:0] csr_lane_en;   // per-lane enable bank (shadow for CSR read)
+    reg  aw_act; reg [7:0] aw_lat;
+    reg  w_act;
+    reg  b_pend;
+    reg  ar_act; reg [7:0] ar_lat;
+    reg  r_pend; reg [31:0] r_dat;
 
-    // AXI4-Lite write path state
-    reg        axi_awready_r;
-    reg        axi_wready_r;
-    reg        axi_bvalid_r;
-    reg [1:0]  axi_bresp_r;
-    reg [4:0]  axi_awaddr_lat;
-
-    // AXI4-Lite read path state
-    reg        axi_arready_r;
-    reg        axi_rvalid_r;
-    reg [31:0] axi_rdata_r;
-    reg [1:0]  axi_rresp_r;
-
-    assign s_axi_ctrl_awready = axi_awready_r;
-    assign s_axi_ctrl_wready  = axi_wready_r;
-    assign s_axi_ctrl_bresp   = axi_bresp_r;
-    assign s_axi_ctrl_bvalid  = axi_bvalid_r;
-    assign s_axi_ctrl_arready = axi_arready_r;
-    assign s_axi_ctrl_rdata   = axi_rdata_r;
-    assign s_axi_ctrl_rresp   = axi_rresp_r;
-    assign s_axi_ctrl_rvalid  = axi_rvalid_r;
-
-    // --- Write: address handshake ---
+    // 2-FF sync: lane_locked / lane_error from gty_clk → axi_clk
+    reg [NUM_LANES-1:0] lk_s1, lk_s, er_s1, er_s;
     always @(posedge axi_clk or negedge axi_rst_n) begin
         if (!axi_rst_n) begin
-            axi_awready_r <= 1'b0;
-            axi_awaddr_lat <= 5'h0;
+            lk_s1<=0; lk_s<=0; er_s1<=0; er_s<=0;
         end else begin
-            if (!axi_awready_r && s_axi_ctrl_awvalid && s_axi_ctrl_wvalid) begin
-                axi_awready_r  <= 1'b1;
-                axi_awaddr_lat <= s_axi_ctrl_awaddr;
-            end else begin
-                axi_awready_r <= 1'b0;
-            end
+            lk_s1 <= lane_locked; lk_s <= lk_s1;
+            er_s1 <= lane_error;  er_s <= er_s1;
         end
     end
 
-    // --- Write: data handshake ---
-    always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            axi_wready_r <= 1'b0;
-        end else begin
-            if (!axi_wready_r && s_axi_ctrl_wvalid && s_axi_ctrl_awvalid) begin
-                axi_wready_r <= 1'b1;
-            end else begin
-                axi_wready_r <= 1'b0;
-            end
-        end
-    end
+    assign s_axi_ctrl_awready = !aw_act && !b_pend;
+    assign s_axi_ctrl_wready  = !w_act  && !b_pend;
+    assign s_axi_ctrl_bresp   = 2'b00;
+    assign s_axi_ctrl_bvalid  = b_pend;
+    assign s_axi_ctrl_arready = !ar_act && !r_pend;
+    assign s_axi_ctrl_rdata   = r_dat;
+    assign s_axi_ctrl_rresp   = 2'b00;
+    assign s_axi_ctrl_rvalid  = r_pend;
 
-    // --- Write: update CSR registers ---
     always @(posedge axi_clk or negedge axi_rst_n) begin
         if (!axi_rst_n) begin
-            csr_ctrl    <= 32'h0;
-            csr_lane_en <= {NUM_LANES{1'b0}};  // disabled until software enables
+            aw_act<=0; w_act<=0; b_pend<=0; aw_lat<=0;
+            csr_ctrl<=0; csr_lane_en<=0; csr_drp_addr<=0;
         end else begin
-            if (axi_awready_r && s_axi_ctrl_awvalid &&
-                axi_wready_r  && s_axi_ctrl_wvalid) begin
-                case (axi_awaddr_lat[4:2])
-                    3'd0: begin  // CTRL
-                        if (s_axi_ctrl_wstrb[0]) csr_ctrl[7:0]   <= s_axi_ctrl_wdata[7:0];
-                        if (s_axi_ctrl_wstrb[1]) csr_ctrl[15:8]  <= s_axi_ctrl_wdata[15:8];
-                        if (s_axi_ctrl_wstrb[2]) csr_ctrl[23:16] <= s_axi_ctrl_wdata[23:16];
-                        if (s_axi_ctrl_wstrb[3]) csr_ctrl[31:24] <= s_axi_ctrl_wdata[31:24];
-                        // Mirror lane-enable bits into csr_lane_en
-                        csr_lane_en[NUM_LANES-1:0] <= s_axi_ctrl_wdata[NUM_LANES:1];
-                    end
-                    3'd2: begin  // LANE_EN
-                        if (s_axi_ctrl_wstrb[0]) csr_lane_en[7:0]  <= s_axi_ctrl_wdata[7:0];
-                    end
-                    default: begin end
+            if (s_axi_ctrl_awvalid && s_axi_ctrl_awready) begin aw_act<=1; aw_lat<=s_axi_ctrl_awaddr; end
+            if (s_axi_ctrl_wvalid  && s_axi_ctrl_wready)  w_act<=1;
+            if (aw_act && w_act) begin
+                aw_act<=0; w_act<=0; b_pend<=1;
+                case (aw_lat[5:2])
+                    4'd0: csr_ctrl     <= s_axi_ctrl_wdata;
+                    4'd2: csr_lane_en  <= s_axi_ctrl_wdata;
+                    4'd3: csr_drp_addr <= s_axi_ctrl_wdata;
+                    default: ;
                 endcase
             end
+            if (b_pend && s_axi_ctrl_bready) b_pend<=0;
         end
     end
 
-    // --- Write: response ---
     always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            axi_bvalid_r <= 1'b0;
-            axi_bresp_r  <= 2'b00;
-        end else begin
-            if (axi_awready_r && s_axi_ctrl_awvalid &&
-                axi_wready_r  && s_axi_ctrl_wvalid) begin
-                axi_bvalid_r <= 1'b1;
-                axi_bresp_r  <= 2'b00;  // OKAY
-            end else if (s_axi_ctrl_bready && axi_bvalid_r) begin
-                axi_bvalid_r <= 1'b0;
-            end
-        end
-    end
-
-    // --- Read: address handshake ---
-    always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            axi_arready_r <= 1'b0;
-        end else begin
-            if (!axi_arready_r && s_axi_ctrl_arvalid) begin
-                axi_arready_r <= 1'b1;
-            end else begin
-                axi_arready_r <= 1'b0;
-            end
-        end
-    end
-
-    // =========================================================================
-    // CDC: lane_locked / lane_error from gty_clk → axi_clk (2-FF sync)
-    // =========================================================================
-    reg [NUM_LANES-1:0] lane_locked_sync1, lane_locked_axi;
-    reg [NUM_LANES-1:0] lane_error_sync1,  lane_error_axi;
-
-    always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            lane_locked_sync1 <= {NUM_LANES{1'b0}};
-            lane_locked_axi   <= {NUM_LANES{1'b0}};
-            lane_error_sync1  <= {NUM_LANES{1'b0}};
-            lane_error_axi    <= {NUM_LANES{1'b0}};
-        end else begin
-            lane_locked_sync1 <= lane_locked;
-            lane_locked_axi   <= lane_locked_sync1;
-            lane_error_sync1  <= lane_error;
-            lane_error_axi    <= lane_error_sync1;
-        end
-    end
-
-    // --- Read: data mux ---
-    always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            axi_rvalid_r <= 1'b0;
-            axi_rdata_r  <= 32'h0;
-            axi_rresp_r  <= 2'b00;
-        end else begin
-            if (axi_arready_r && s_axi_ctrl_arvalid && !axi_rvalid_r) begin
-                axi_rvalid_r <= 1'b1;
-                axi_rresp_r  <= 2'b00;
-                case (s_axi_ctrl_araddr[4:2])
-                    3'd0: axi_rdata_r <= csr_ctrl;
-                    3'd1: axi_rdata_r <= {lane_error_axi[NUM_LANES-1:0],
-                                          lane_locked_axi[NUM_LANES-1:0]};
-                    3'd2: axi_rdata_r <= csr_lane_en;
-                    3'd3: axi_rdata_r <= {24'h0, lane_locked_axi[NUM_LANES-1:0]};
-                    3'd4: axi_rdata_r <= {24'h0, lane_error_axi[NUM_LANES-1:0]};
-                    default: axi_rdata_r <= 32'h0;
+        if (!axi_rst_n) begin ar_act<=0; r_pend<=0; ar_lat<=0; r_dat<=0; end
+        else begin
+            if (s_axi_ctrl_arvalid && s_axi_ctrl_arready) begin ar_act<=1; ar_lat<=s_axi_ctrl_araddr; end
+            if (ar_act && !r_pend) begin
+                ar_act<=0; r_pend<=1;
+                case (ar_lat[5:2])
+                    4'd0: r_dat <= csr_ctrl;
+                    4'd1: r_dat <= {{(32-2*NUM_LANES){1'b0}}, er_s, lk_s};
+                    4'd2: r_dat <= csr_lane_en;
+                    4'd3: r_dat <= csr_drp_addr;
+                    4'd4: r_dat <= {16'h0, csr_drp_rdat};
+                    default: r_dat <= 32'hDEAD_BEEF;
                 endcase
-            end else if (axi_rvalid_r && s_axi_ctrl_rready) begin
-                axi_rvalid_r <= 1'b0;
+            end
+            if (r_pend && s_axi_ctrl_rready) r_pend<=0;
+        end
+    end
+
+    // =========================================================================
+    // DRP Register Bank  (drp_clk domain)
+    //
+    // Models the GTYP DRP address space.  Key registers:
+    //   0x028  RXOUT_DIV  — RX output clock divider
+    //   0x057  TXOUT_DIV  — TX output clock divider
+    //   0x011  PLL_FBDIV  — PLL feedback divider
+    // In a real implementation these wires connect directly to the GT_QUAD_BASE
+    // DRP ports.  Here we implement a 32-entry shadow RAM for simulation.
+    // =========================================================================
+    reg [15:0] drp_ram [0:31];
+    reg        drp_rdy_r;
+    reg [15:0] drp_do_r;
+
+    assign drp_do  = drp_do_r;
+    assign drp_rdy = drp_rdy_r;
+
+    integer i;
+    always @(posedge drp_clk or negedge drp_rst_n) begin
+        if (!drp_rst_n) begin
+            drp_rdy_r <= 1'b0; drp_do_r <= 16'h0;
+            for (i=0; i<32; i=i+1) drp_ram[i] <= 16'h0;
+        end else begin
+            drp_rdy_r <= 1'b0;
+            if (drp_en) begin
+                if (drp_we) drp_ram[drp_addr[4:0]] <= drp_di;
+                drp_do_r  <= drp_ram[drp_addr[4:0]];
+                drp_rdy_r <= 1'b1;
             end
         end
     end
 
-    // =========================================================================
-    // CDC: codec_enable and lane_enable → gty_clk domain (2-FF synchronizers)
-    // =========================================================================
-    wire codec_enable_axi = csr_ctrl[0];
-    wire [NUM_LANES-1:0] lane_enable_axi = csr_lane_en[NUM_LANES-1:0];
-
-    // 2-FF sync for global enable
-    reg codec_en_sync1, codec_en_gty;
-    always @(posedge gty_clk or negedge gty_rst_n) begin
-        if (!gty_rst_n) begin
-            codec_en_sync1 <= 1'b0;
-            codec_en_gty   <= 1'b0;
-        end else begin
-            codec_en_sync1 <= codec_enable_axi;
-            codec_en_gty   <= codec_en_sync1;
-        end
-    end
-
-    // 2-FF sync for per-lane enables
-    reg [NUM_LANES-1:0] lane_en_sync1, lane_en_gty;
-    always @(posedge gty_clk or negedge gty_rst_n) begin
-        if (!gty_rst_n) begin
-            lane_en_sync1 <= {NUM_LANES{1'b0}};
-            lane_en_gty   <= {NUM_LANES{1'b0}};
-        end else begin
-            lane_en_sync1 <= lane_enable_axi;
-            lane_en_gty   <= lane_en_sync1;
-        end
+    // Capture last DRP read into axi_clk domain for CSR readback
+    // (simple registered transfer — acceptable because DRP ops are infrequent)
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) csr_drp_rdat <= 16'h0;
+        else if (drp_rdy) csr_drp_rdat <= drp_do;
     end
 
     // =========================================================================
-    // TX and RX encoded/decoded buses
+    // TB3D Data Path  (gty_clk domain, combinational)
+    //
+    // TX path: S_AXIS_TX → byte-wise tb3d_encode → M_AXIS_TX
+    // RX path: S_AXIS_RX → byte-wise tb3d_decode → M_AXIS_RX
+    //
+    // When codec_en = 0 (CSR CTRL[0]=0) data passes through unmodified.
+    // Per-lane enable (CSR CTRL[NUM_LANES:1] / LANE_EN) gates encoding
+    // lane-by-lane so individual lanes can be brought up without re-encoding.
     // =========================================================================
-    wire [TOTAL_DATA_WIDTH-1:0] tx_encoded_data;  // All lanes encoded (TB3D)
-    wire [TOTAL_DATA_WIDTH-1:0] rx_decoded_data;  // All lanes decoded (binary)
 
-    // =========================================================================
-    // Per-Lane, Per-Byte Codec Instantiation
-    //   Outer loop : lane   (0 to NUM_LANES-1, i.e. 0..7)
-    //   Inner loop : byte   (0 to 7, 8 bytes per 64-bit lane)
-    // =========================================================================
-    genvar lane, byte_idx;
+    // 2-FF sync for codec_en and per-lane enables into gty_clk
+    wire codec_en_axi = csr_ctrl[0];
+    wire [NUM_LANES-1:0] lane_en_axi = csr_lane_en[NUM_LANES-1:0];
+
+    reg  codec_en_s1, codec_en_gty;
+    reg  [NUM_LANES-1:0] lane_en_s1, lane_en_gty;
+
+    always @(posedge gty_clk or negedge gty_rst_n) begin
+        if (!gty_rst_n) begin
+            codec_en_s1<=0; codec_en_gty<=0;
+            lane_en_s1<={NUM_LANES{1'b0}}; lane_en_gty<={NUM_LANES{1'b0}};
+        end else begin
+            codec_en_s1 <= codec_en_axi; codec_en_gty <= codec_en_s1;
+            lane_en_s1  <= lane_en_axi;  lane_en_gty  <= lane_en_s1;
+        end
+    end
+
+    // Encoded / decoded busses (combinational)
+    wire [TOTAL_W-1:0] tx_encoded;
+    wire [TOTAL_W-1:0] rx_decoded;
+
+    genvar ln, by;
     generate
-        for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin : g_lane
-
-            for (byte_idx = 0; byte_idx < (LANE_DATA_WIDTH/8); byte_idx = byte_idx + 1) begin : g_byte
-
-                // Absolute bit offset for this byte within the flat 512-bit bus
-                localparam BASE = lane * LANE_DATA_WIDTH + byte_idx * 8;
-
-                // ---- TX path (binary → TB3D) ----
-                wire [3:0] tx_physical = user_tx_data[BASE+3:BASE];
-                wire [3:0] tx_color    = user_tx_data[BASE+7:BASE+4];
-
+        for (ln = 0; ln < NUM_LANES; ln = ln + 1) begin : g_lane
+            for (by = 0; by < LANE_W/8; by = by + 1) begin : g_byte
+                localparam B = ln * LANE_W + by * 8;
+                // TX encode
                 tb3d_encode u_enc (
-                    .physical (tx_physical),
-                    .color    (tx_color),
-                    .encoded  (tx_encoded_data[BASE+7:BASE])
+                    .physical (s_axis_tx_tdata[B+3:B  ]),
+                    .color    (s_axis_tx_tdata[B+7:B+4]),
+                    .encoded  (tx_encoded[B+7:B])
                 );
-
-                // ---- RX path (TB3D → binary) ----
-                wire [3:0] rx_phys_out;
-                wire [3:0] rx_color_out;
-
+                // RX decode
+                wire [3:0] rx_phys, rx_col;
                 tb3d_decode u_dec (
-                    .encoded  (gty_rx_data[BASE+7:BASE]),
-                    .physical (rx_phys_out),
-                    .color    (rx_color_out)
+                    .encoded  (s_axis_rx_tdata[B+7:B]),
+                    .physical (rx_phys),
+                    .color    (rx_col)
                 );
-
-                assign rx_decoded_data[BASE+7:BASE] = {rx_color_out, rx_phys_out};
-
-            end  // g_byte
-
-        end  // g_lane
-    endgenerate
-
-    // =========================================================================
-    // TX data-path mux: encoded (codec on) or bypass
-    // Per-lane enable gates the encoding; if a lane is disabled, pass through.
-    // =========================================================================
-    wire [TOTAL_DATA_WIDTH-1:0] gty_tx_data_mux;
-    genvar mux_lane;
-    generate
-        for (mux_lane = 0; mux_lane < NUM_LANES; mux_lane = mux_lane + 1) begin : g_tx_mux
-            localparam L = mux_lane * LANE_DATA_WIDTH;
-            assign gty_tx_data_mux[L+LANE_DATA_WIDTH-1:L] =
-                (codec_en_gty && lane_en_gty[mux_lane])
-                    ? tx_encoded_data[L+LANE_DATA_WIDTH-1:L]
-                    : user_tx_data[L+LANE_DATA_WIDTH-1:L];
+                assign rx_decoded[B+7:B] = {rx_col, rx_phys};
+            end
         end
     endgenerate
 
-    assign gty_tx_data  = gty_tx_data_mux;
-    // In codec-enabled mode: valid propagates through, GTY backpressure blocks user.
-    // In bypass mode: data flows freely so user_tx_ready follows gty_tx_ready directly.
-    assign gty_tx_valid  = user_tx_valid;  // always forward; mux selects encode/bypass
-    assign user_tx_ready = gty_tx_ready;   // bypass backpressure in both modes
-
-    // =========================================================================
-    // RX data-path mux: decoded (codec on) or bypass
-    // =========================================================================
-    wire [TOTAL_DATA_WIDTH-1:0] user_rx_data_mux;
-    genvar mux_rx_lane;
+    // Per-lane TX mux (encode or bypass)
+    wire [TOTAL_W-1:0] tx_mux;
+    genvar ml;
     generate
-        for (mux_rx_lane = 0; mux_rx_lane < NUM_LANES; mux_rx_lane = mux_rx_lane + 1) begin : g_rx_mux
-            localparam LR = mux_rx_lane * LANE_DATA_WIDTH;
-            assign user_rx_data_mux[LR+LANE_DATA_WIDTH-1:LR] =
-                (codec_en_gty && lane_en_gty[mux_rx_lane])
-                    ? rx_decoded_data[LR+LANE_DATA_WIDTH-1:LR]
-                    : gty_rx_data[LR+LANE_DATA_WIDTH-1:LR];
+        for (ml = 0; ml < NUM_LANES; ml = ml + 1) begin : g_tx_mux
+            localparam L = ml * LANE_W;
+            assign tx_mux[L+LANE_W-1:L] = (codec_en_gty && lane_en_gty[ml])
+                ? tx_encoded[L+LANE_W-1:L] : s_axis_tx_tdata[L+LANE_W-1:L];
         end
     endgenerate
 
-    assign user_rx_data  = user_rx_data_mux;
-    // RX path: forward in both codec and bypass modes; mux selects decode/bypass.
-    assign user_rx_valid = gty_rx_valid;   // propagate through in both modes
-    assign gty_rx_ready  = user_rx_ready;  // propagate backpressure in both modes
+    // Per-lane RX mux (decode or bypass)
+    wire [TOTAL_W-1:0] rx_mux;
+    genvar mr;
+    generate
+        for (mr = 0; mr < NUM_LANES; mr = mr + 1) begin : g_rx_mux
+            localparam R = mr * LANE_W;
+            assign rx_mux[R+LANE_W-1:R] = (codec_en_gty && lane_en_gty[mr])
+                ? rx_decoded[R+LANE_W-1:R] : s_axis_rx_tdata[R+LANE_W-1:R];
+        end
+    endgenerate
 
-    // =========================================================================
-    // Per-Lane Status (gty_clk domain)
-    // In full silicon integration these connect to GTY IP status ports.
-    // Placeholder: all lanes locked, no errors.
-    // =========================================================================
-    assign lane_locked = {NUM_LANES{1'b1}};  // Assume locked (connect to GTY IP status)
-    assign lane_error  = {NUM_LANES{1'b0}};  // No errors (connect to GTY IP error flags)
+    // TX outputs
+    assign m_axis_tx_tdata  = tx_mux;
+    assign m_axis_tx_tvalid = s_axis_tx_tvalid;
+    assign s_axis_tx_tready = m_axis_tx_tready;
+    assign m_axis_tx_tkeep  = s_axis_tx_tkeep;
+    assign m_axis_tx_tlast  = s_axis_tx_tlast;
+
+    // RX outputs
+    assign m_axis_rx_tdata  = rx_mux;
+    assign m_axis_rx_tvalid = s_axis_rx_tvalid;
+    assign s_axis_rx_tready = m_axis_rx_tready;
+    assign m_axis_rx_tkeep  = s_axis_rx_tkeep;
+    assign m_axis_rx_tlast  = s_axis_rx_tlast;
+
+    // Lane status placeholders — connect to GT_QUAD_BASE status ports in BD
+    assign lane_locked = {NUM_LANES{1'b1}};
+    assign lane_error  = {NUM_LANES{1'b0}};
 
 endmodule
