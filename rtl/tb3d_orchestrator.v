@@ -1,562 +1,527 @@
+\
 // =============================================================================
 // Module  : tb3d_orchestrator
-// Project : TB3-D Platform Driver — Versal 1802
+// Project : TB3-D Platform Driver — Versal VPK180 (VP1802)
 // File    : rtl/tb3d_orchestrator.v
 //
-// Purpose : Master coordinator for the TB3-D SoC. Orchestrates three independent
-//           clock domains (GTY, Microblaze, AXI) via async FIFO CDC (Clock Domain
-//           Crossing) bridges, ensuring address space coherence and safe multi-clock
-//           data handoff.
+// Purpose : Hardware-Defined-OS boot master.  Loaded by the PMC before the
+//           ARM cores wake up.  Controls four in-wire intercept modules via
+//           AXI4-Lite master ports and receives a UART console for telemetry
+//           and runtime command injection.
 //
-// Architecture:
-//   ┌──────────────────────────────┐
-//   │   tb3d_orchestrator          │
-//   │   (AXI clock domain @ 200MHz)│
-//   └──────────────────────────────┘
-//     ↓              ↓              ↓
-//   GTY Bridge   MB Bridge      AXI Bridge
-//   (async FIFO) (async FIFO)    (primary)
-//     ↓              ↓              ↓
-//   GTY Codec     Microblaze    AXI Interface
-//   Module        Module        & NoC
+// Bus Interfaces exposed to Vivado IP-Integrator
+// -----------------------------------------------
+//   S_AXI         AXI4-Lite slave  — CSR entry-point from NoC / test bench
+//   S_UART        UART slave        — 8 N 1 console (RxD in, TxD out)
+//   M_AXI_GTY     AXI4-Lite master  — drives GTY transceiver intercept
+//   M_AXI_MB      AXI4-Lite master  — drives MicroBlaze cache shim
+//   M_AXI_AXB     AXI4-Lite master  — drives AXI / NoC bridge intercept
+//   M_AXI_PMC     AXI4-Lite master  — drives PMC boot intercept
 //
-// Clock Domains:
-//   axi_clk   = 200 MHz  (primary system clock, all CSR operations)
-//   mb_clk    = variable (Microblaze processor clock, 125-200 MHz)
-//   gty_clk   = 250 MHz  (GTY transceiver reference clock)
+// All interfaces share axi_clk (200 MHz) and axi_rst_n (active-low).
 //
-// CDC Policy:
-//   - All domain crossings use async FIFOs (32-bit wide minimum)
-//   - All CSR access is synchronous to axi_clk (primary domain)
-//   - Handshakes are registered before CDC FIFO insertion
-//   - All CDC outputs are sampled synchronously in destination domain
-//
-// Address Map (all addresses in AXI clock domain):
-//   0x4000_0000 - 0x4000_FFFF    AXI Bridge CSR (64 KB)
-//   0x4001_0000 - 0x4001_FFFF    AXI Bridge DMA queue (64 KB)
-//   0x5000_0000 - 0x50FF_FFFF    Microblaze L2 cache (16 MB)
-//   0x6000_0000 - 0x60FF_FFFF    GTY codec status (16 MB, 32 KB actual)
-//
+// S_AXI CSR register map (byte address, 32-bit words)
+//   0x00  CTRL        [0]=global_en [1]=gty_en [2]=mb_en [3]=axb_en [4]=pmc_en
+//   0x04  STATUS      [7:0]=gty_locked  [15:8]=gty_error  (read-only)
+//   0x08  UART_CTRL   [0]=tx_go  [7:1]=rsvd  [23:8]=baud_div (clk/baud-1)
+//   0x0C  UART_TXD    [7:0]=byte to transmit (write triggers TX)
+//   0x10  UART_RXD    [7:0]=last received byte (read-only)
+//   0x14  UART_STAT   [0]=rx_valid  [1]=tx_busy  (read-only)
 // =============================================================================
-
 `timescale 1ns / 1ps
 
 module tb3d_orchestrator #(
-    // =========================================================================
-    // Parameterization
-    // =========================================================================
-    parameter NUM_GTY_LANES        = 8,         // 8 GTYP lanes (each 64-bit)
-    parameter AXI_ADDR_WIDTH       = 32,
-    parameter AXI_DATA_WIDTH       = 64,
-    parameter MB_DATA_WIDTH        = 32,
-    parameter CDC_FIFO_DEPTH       = 16         // Async FIFO depth (power of 2)
+    parameter integer AXI_ADDR_W  = 8,   // CSR byte-address bits
+    parameter integer AXI_DATA_W  = 32,  // AXI4-Lite data width
+    parameter integer NUM_GTY     = 8,   // GTYP lanes (status width)
+    parameter integer BAUD_DIV    = 1735 // 200 MHz / 115200 - 1
 ) (
     // =========================================================================
-    // Clock & Reset (primary clock domain = AXI)
+    // Clock & Reset  (all interfaces associated to this clock)
     // =========================================================================
-    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI:M_AXI_DMA:M_AXI_GTY_CTRL:M_AXI_MB_CTRL:M_AXI_AXB_CTRL, ASSOCIATED_RESET axi_rst_n" *)
-    input  wire                     axi_clk,        // 200 MHz primary clock
-    input  wire                     axi_rst_n,      // Active-low reset (axi_clk domain)
-    input  wire                     mb_clk,         // Microblaze clock (variable freq)
-    input  wire                     mb_rst_n,       // Microblaze reset
-    input  wire                     gty_clk,        // GTY transceiver clock (250 MHz)
-    input  wire                     gty_rst_n,      // GTY domain reset
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI:S_UART:M_AXI_GTY:M_AXI_MB:M_AXI_AXB:M_AXI_PMC, ASSOCIATED_RESET axi_rst_n, FREQ_HZ 200000000" *)
+    input  wire                   axi_clk,
+    (* X_INTERFACE_PARAMETER = "POLARITY ACTIVE_LOW" *)
+    input  wire                   axi_rst_n,
 
     // =========================================================================
-    // S_AXI — AXI4-Lite CSR Interface (axi_clk domain)
-    // System entry point: NoC / CIP writes TB3-D configuration here.
+    // S_AXI — AXI4-Lite slave  (CSR configuration / status)
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWADDR" *)
-    input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWPROT" *)
-    input  wire [2:0]                 s_axi_awprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWVALID" *)
-    input  wire                       s_axi_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWREADY" *)
-    output wire                       s_axi_awready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WDATA" *)
-    input  wire [AXI_DATA_WIDTH-1:0]  s_axi_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WSTRB" *)
-    input  wire [(AXI_DATA_WIDTH/8)-1:0] s_axi_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WVALID" *)
-    input  wire                       s_axi_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WREADY" *)
-    output wire                       s_axi_wready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BRESP" *)
-    output wire [1:0]                 s_axi_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BVALID" *)
-    output wire                       s_axi_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BREADY" *)
-    input  wire                       s_axi_bready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARADDR" *)
-    input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARPROT" *)
-    input  wire [2:0]                 s_axi_arprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARVALID" *)
-    input  wire                       s_axi_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARREADY" *)
-    output wire                       s_axi_arready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RDATA" *)
-    output wire [AXI_DATA_WIDTH-1:0]  s_axi_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RRESP" *)
-    output wire [1:0]                 s_axi_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RVALID" *)
-    output wire                       s_axi_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RREADY" *)
-    input  wire                       s_axi_rready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWADDR"  *) input  wire [AXI_ADDR_W-1:0] s_axi_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWPROT"  *) input  wire [2:0]            s_axi_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWVALID" *) input  wire                  s_axi_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWREADY" *) output wire                  s_axi_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WDATA"   *) input  wire [AXI_DATA_W-1:0] s_axi_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WSTRB"   *) input  wire [3:0]            s_axi_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WVALID"  *) input  wire                  s_axi_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WREADY"  *) output wire                  s_axi_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BRESP"   *) output wire [1:0]            s_axi_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BVALID"  *) output wire                  s_axi_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BREADY"  *) input  wire                  s_axi_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARADDR"  *) input  wire [AXI_ADDR_W-1:0] s_axi_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARPROT"  *) input  wire [2:0]            s_axi_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARVALID" *) input  wire                  s_axi_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARREADY" *) output wire                  s_axi_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RDATA"   *) output wire [AXI_DATA_W-1:0] s_axi_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RRESP"   *) output wire [1:0]            s_axi_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RVALID"  *) output wire                  s_axi_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RREADY"  *) input  wire                  s_axi_rready,
 
     // =========================================================================
-    // M_AXI_DMA — AXI4 Master for bulk DMA (axi_clk domain)
-    // Connects to system memory (DDR4) via Versal NoC / PL-to-PS interconnect.
+    // S_UART — UART slave  (8 N 1 boot console, active from Early-PL)
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARADDR" *)
-    output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARLEN" *)
-    output wire [7:0]                 m_axi_dma_arlen,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARSIZE" *)
-    output wire [2:0]                 m_axi_dma_arsize,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARBURST" *)
-    output wire [1:0]                 m_axi_dma_arburst,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARVALID" *)
-    output wire                       m_axi_dma_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARREADY" *)
-    input  wire                       m_axi_dma_arready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RDATA" *)
-    input  wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RRESP" *)
-    input  wire [1:0]                 m_axi_dma_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RLAST" *)
-    input  wire                       m_axi_dma_rlast,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RVALID" *)
-    input  wire                       m_axi_dma_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RREADY" *)
-    output wire                       m_axi_dma_rready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWADDR" *)
-    output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWLEN" *)
-    output wire [7:0]                 m_axi_dma_awlen,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWSIZE" *)
-    output wire [2:0]                 m_axi_dma_awsize,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWBURST" *)
-    output wire [1:0]                 m_axi_dma_awburst,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWVALID" *)
-    output wire                       m_axi_dma_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWREADY" *)
-    input  wire                       m_axi_dma_awready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WDATA" *)
-    output wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WSTRB" *)
-    output wire [(AXI_DATA_WIDTH/8)-1:0] m_axi_dma_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WLAST" *)
-    output wire                       m_axi_dma_wlast,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WVALID" *)
-    output wire                       m_axi_dma_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WREADY" *)
-    input  wire                       m_axi_dma_wready,
-
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BRESP" *)
-    input  wire [1:0]                 m_axi_dma_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BVALID" *)
-    input  wire                       m_axi_dma_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BREADY" *)
-    output wire                       m_axi_dma_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:uart_rtl:1.0 S_UART RxD" *) input  wire uart_rxd,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:uart_rtl:1.0 S_UART TxD" *) output wire uart_txd,
 
     // =========================================================================
-    // M_AXI_GTY_CTRL — AXI4-Lite Master to GTY Codec S_AXI_CTRL (axi_clk)
-    // Orchestrator controls codec enable / lane enables via this interface.
+    // M_AXI_GTY — AXI4-Lite master → GTY transceiver intercept S_AXI_CTRL
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWADDR" *)
-    output wire [4:0]                 m_axi_gty_ctrl_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWPROT" *)
-    output wire [2:0]                 m_axi_gty_ctrl_awprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWVALID" *)
-    output wire                       m_axi_gty_ctrl_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWREADY" *)
-    input  wire                       m_axi_gty_ctrl_awready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WDATA" *)
-    output wire [31:0]                m_axi_gty_ctrl_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WSTRB" *)
-    output wire [3:0]                 m_axi_gty_ctrl_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WVALID" *)
-    output wire                       m_axi_gty_ctrl_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WREADY" *)
-    input  wire                       m_axi_gty_ctrl_wready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BRESP" *)
-    input  wire [1:0]                 m_axi_gty_ctrl_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BVALID" *)
-    input  wire                       m_axi_gty_ctrl_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BREADY" *)
-    output wire                       m_axi_gty_ctrl_bready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARADDR" *)
-    output wire [4:0]                 m_axi_gty_ctrl_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARPROT" *)
-    output wire [2:0]                 m_axi_gty_ctrl_arprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARVALID" *)
-    output wire                       m_axi_gty_ctrl_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARREADY" *)
-    input  wire                       m_axi_gty_ctrl_arready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RDATA" *)
-    input  wire [31:0]                m_axi_gty_ctrl_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RRESP" *)
-    input  wire [1:0]                 m_axi_gty_ctrl_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RVALID" *)
-    input  wire                       m_axi_gty_ctrl_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RREADY" *)
-    output wire                       m_axi_gty_ctrl_rready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY AWADDR"  *) output wire [7:0]            m_axi_gty_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY AWPROT"  *) output wire [2:0]            m_axi_gty_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY AWVALID" *) output wire                  m_axi_gty_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY AWREADY" *) input  wire                  m_axi_gty_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY WDATA"   *) output wire [31:0]           m_axi_gty_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY WSTRB"   *) output wire [3:0]            m_axi_gty_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY WVALID"  *) output wire                  m_axi_gty_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY WREADY"  *) input  wire                  m_axi_gty_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY BRESP"   *) input  wire [1:0]            m_axi_gty_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY BVALID"  *) input  wire                  m_axi_gty_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY BREADY"  *) output wire                  m_axi_gty_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY ARADDR"  *) output wire [7:0]            m_axi_gty_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY ARPROT"  *) output wire [2:0]            m_axi_gty_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY ARVALID" *) output wire                  m_axi_gty_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY ARREADY" *) input  wire                  m_axi_gty_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY RDATA"   *) input  wire [31:0]           m_axi_gty_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY RRESP"   *) input  wire [1:0]            m_axi_gty_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY RVALID"  *) input  wire                  m_axi_gty_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY RREADY"  *) output wire                  m_axi_gty_rready,
 
     // =========================================================================
-    // M_AXI_MB_CTRL — AXI4-Lite Master to Microblaze Module S_AXI_CTRL (mb_clk)
-    // Orchestrator triggers cache operations and reads performance stats via here.
+    // M_AXI_MB — AXI4-Lite master → MicroBlaze cache shim S_AXI_CTRL
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWADDR" *)
-    output wire [4:0]                 m_axi_mb_ctrl_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWPROT" *)
-    output wire [2:0]                 m_axi_mb_ctrl_awprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWVALID" *)
-    output wire                       m_axi_mb_ctrl_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWREADY" *)
-    input  wire                       m_axi_mb_ctrl_awready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WDATA" *)
-    output wire [31:0]                m_axi_mb_ctrl_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WSTRB" *)
-    output wire [3:0]                 m_axi_mb_ctrl_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WVALID" *)
-    output wire                       m_axi_mb_ctrl_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WREADY" *)
-    input  wire                       m_axi_mb_ctrl_wready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BRESP" *)
-    input  wire [1:0]                 m_axi_mb_ctrl_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BVALID" *)
-    input  wire                       m_axi_mb_ctrl_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BREADY" *)
-    output wire                       m_axi_mb_ctrl_bready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARADDR" *)
-    output wire [4:0]                 m_axi_mb_ctrl_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARPROT" *)
-    output wire [2:0]                 m_axi_mb_ctrl_arprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARVALID" *)
-    output wire                       m_axi_mb_ctrl_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARREADY" *)
-    input  wire                       m_axi_mb_ctrl_arready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RDATA" *)
-    input  wire [31:0]                m_axi_mb_ctrl_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RRESP" *)
-    input  wire [1:0]                 m_axi_mb_ctrl_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RVALID" *)
-    input  wire                       m_axi_mb_ctrl_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RREADY" *)
-    output wire                       m_axi_mb_ctrl_rready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB AWADDR"  *) output wire [7:0]  m_axi_mb_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB AWPROT"  *) output wire [2:0]  m_axi_mb_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB AWVALID" *) output wire        m_axi_mb_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB AWREADY" *) input  wire        m_axi_mb_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB WDATA"   *) output wire [31:0] m_axi_mb_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB WSTRB"   *) output wire [3:0]  m_axi_mb_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB WVALID"  *) output wire        m_axi_mb_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB WREADY"  *) input  wire        m_axi_mb_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB BRESP"   *) input  wire [1:0]  m_axi_mb_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB BVALID"  *) input  wire        m_axi_mb_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB BREADY"  *) output wire        m_axi_mb_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB ARADDR"  *) output wire [7:0]  m_axi_mb_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB ARPROT"  *) output wire [2:0]  m_axi_mb_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB ARVALID" *) output wire        m_axi_mb_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB ARREADY" *) input  wire        m_axi_mb_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB RDATA"   *) input  wire [31:0] m_axi_mb_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB RRESP"   *) input  wire [1:0]  m_axi_mb_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB RVALID"  *) input  wire        m_axi_mb_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB RREADY"  *) output wire        m_axi_mb_rready,
 
     // =========================================================================
-    // M_AXI_AXB_CTRL — AXI4-Lite Master to AXI Bridge (axi_clk domain)
-    // Orchestrator writes TB3D status into bridge CSR (readable by system via
-    // bridge S_AXI); reads codec enable and mode configuration from bridge.
+    // M_AXI_AXB — AXI4-Lite master → AXI/NoC bridge intercept S_AXI_CTRL
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWADDR" *)
-    output wire [15:0]                m_axi_axb_ctrl_awaddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWPROT" *)
-    output wire [2:0]                 m_axi_axb_ctrl_awprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWVALID" *)
-    output wire                       m_axi_axb_ctrl_awvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWREADY" *)
-    input  wire                       m_axi_axb_ctrl_awready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WDATA" *)
-    output wire [31:0]                m_axi_axb_ctrl_wdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WSTRB" *)
-    output wire [3:0]                 m_axi_axb_ctrl_wstrb,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WVALID" *)
-    output wire                       m_axi_axb_ctrl_wvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WREADY" *)
-    input  wire                       m_axi_axb_ctrl_wready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BRESP" *)
-    input  wire [1:0]                 m_axi_axb_ctrl_bresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BVALID" *)
-    input  wire                       m_axi_axb_ctrl_bvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BREADY" *)
-    output wire                       m_axi_axb_ctrl_bready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARADDR" *)
-    output wire [15:0]                m_axi_axb_ctrl_araddr,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARPROT" *)
-    output wire [2:0]                 m_axi_axb_ctrl_arprot,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARVALID" *)
-    output wire                       m_axi_axb_ctrl_arvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARREADY" *)
-    input  wire                       m_axi_axb_ctrl_arready,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RDATA" *)
-    input  wire [31:0]                m_axi_axb_ctrl_rdata,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RRESP" *)
-    input  wire [1:0]                 m_axi_axb_ctrl_rresp,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RVALID" *)
-    input  wire                       m_axi_axb_ctrl_rvalid,
-    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RREADY" *)
-    output wire                       m_axi_axb_ctrl_rready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB AWADDR"  *) output wire [7:0]  m_axi_axb_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB AWPROT"  *) output wire [2:0]  m_axi_axb_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB AWVALID" *) output wire        m_axi_axb_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB AWREADY" *) input  wire        m_axi_axb_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB WDATA"   *) output wire [31:0] m_axi_axb_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB WSTRB"   *) output wire [3:0]  m_axi_axb_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB WVALID"  *) output wire        m_axi_axb_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB WREADY"  *) input  wire        m_axi_axb_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB BRESP"   *) input  wire [1:0]  m_axi_axb_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB BVALID"  *) input  wire        m_axi_axb_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB BREADY"  *) output wire        m_axi_axb_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB ARADDR"  *) output wire [7:0]  m_axi_axb_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB ARPROT"  *) output wire [2:0]  m_axi_axb_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB ARVALID" *) output wire        m_axi_axb_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB ARREADY" *) input  wire        m_axi_axb_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB RDATA"   *) input  wire [31:0] m_axi_axb_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB RRESP"   *) input  wire [1:0]  m_axi_axb_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB RVALID"  *) input  wire        m_axi_axb_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB RREADY"  *) output wire        m_axi_axb_rready,
 
     // =========================================================================
-    // S_GTY_STATUS — Per-lane GTY lock/error (gty_clk domain, raw status)
-    // Connected to tb3d_gty_transceiver_codec lane_locked / lane_error outputs.
-    // Used for real-time CSR aggregation (csr_gty_lock, csr_gty_error).
+    // M_AXI_PMC — AXI4-Lite master → PMC boot intercept S_AXI_CTRL
     // =========================================================================
-    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS LOCKED" *)
-    input  wire [NUM_GTY_LANES-1:0]   gtc_lane_locked,    // Per-lane lock status
-    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS ERROR" *)
-    input  wire [NUM_GTY_LANES-1:0]   gtc_lane_error      // Per-lane error flag
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC AWADDR"  *) output wire [7:0]  m_axi_pmc_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC AWPROT"  *) output wire [2:0]  m_axi_pmc_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC AWVALID" *) output wire        m_axi_pmc_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC AWREADY" *) input  wire        m_axi_pmc_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC WDATA"   *) output wire [31:0] m_axi_pmc_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC WSTRB"   *) output wire [3:0]  m_axi_pmc_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC WVALID"  *) output wire        m_axi_pmc_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC WREADY"  *) input  wire        m_axi_pmc_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC BRESP"   *) input  wire [1:0]  m_axi_pmc_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC BVALID"  *) input  wire        m_axi_pmc_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC BREADY"  *) output wire        m_axi_pmc_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC ARADDR"  *) output wire [7:0]  m_axi_pmc_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC ARPROT"  *) output wire [2:0]  m_axi_pmc_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC ARVALID" *) output wire        m_axi_pmc_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC ARREADY" *) input  wire        m_axi_pmc_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC RDATA"   *) input  wire [31:0] m_axi_pmc_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC RRESP"   *) input  wire [1:0]  m_axi_pmc_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC RVALID"  *) input  wire        m_axi_pmc_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_PMC RREADY"  *) output wire        m_axi_pmc_rready,
+
+    // =========================================================================
+    // Raw GTY status (async, sampled into axi_clk domain via 2-FF sync)
+    // =========================================================================
+    input  wire [NUM_GTY-1:0]  gty_lane_locked,   // from GTY intercept
+    input  wire [NUM_GTY-1:0]  gty_lane_error      // from GTY intercept
 );
 
     // =========================================================================
-    // Internal Signals
+    // CSR Register Bank  (axi_clk domain)
     // =========================================================================
+    reg [31:0] csr_ctrl;        // 0x00
+    reg [31:0] csr_uart_ctrl;   // 0x08  [23:8]=baud_div
+    reg [31:0] csr_uart_txd;    // 0x0C  write triggers TX
+    reg [31:0] csr_uart_rxd;    // 0x10  last received byte
+    reg [31:0] csr_uart_stat;   // 0x14  [0]=rx_valid [1]=tx_busy
 
-    // CSR register bank (axi_clk domain)
-    reg  [31:0]  csr_control;        // [0]=global_en, [1]=codec_en, [2:4]=mode
-    reg  [31:0]  csr_status;         // [0]=ready, [1]=busy, [2:4]=error_code
-    wire [31:0]  csr_gty_lock;       // Aggregated GTY lock status (read-only)
-    wire [31:0]  csr_gty_error;      // Aggregated GTY error status (read-only)
-
-    // Decoded CSR address for read mux
-    wire [15:0] csr_addr_decoded = s_axi_awaddr[15:0];
-    wire        csr_is_gty_range = (s_axi_awaddr[31:20] == 12'h600);  // 0x6000_xxxx
-    wire        csr_is_mb_range  = (s_axi_awaddr[31:20] == 12'h500);  // 0x5000_xxxx
-    wire        csr_is_axi_range = (s_axi_awaddr[31:20] == 12'h400);  // 0x4000_xxxx
-
-    // =========================================================================
-    // CSR Register Decoding & Routing (axi_clk domain)
-    // =========================================================================
-
-    // Write path: decode CSR address and route to appropriate module
+    // 2-FF synchronisers for raw GTY status into axi_clk
+    reg [NUM_GTY-1:0] gty_lock_s1, gty_lock_s;
+    reg [NUM_GTY-1:0] gty_err_s1,  gty_err_s;
     always @(posedge axi_clk or negedge axi_rst_n) begin
         if (!axi_rst_n) begin
-            csr_control <= 32'h0000_0000;
-            csr_status  <= 32'h0000_0001;  // Ready by default
-        end else if (s_axi_wvalid && s_axi_awvalid) begin
-            case (s_axi_awaddr[7:0])
-                8'h00: csr_control <= s_axi_wdata;  // CONTROL register
-                8'h04: begin
-                    // STATUS register -- read-only, but write clears error bits on demand
-                    if (s_axi_wstrb[0]) csr_status[2:0] <= s_axi_wdata[2:0];
-                end
-                // Additional CSR addresses for GTY, MB, AXI bridges routed via CDC
-                default: begin
-                    // Route to appropriate module via async FIFO
-                    // (details in CDC instantiation below)
-                end
-            endcase
-        end
-    end
-
-    // Read path: multiplex CSR data based on address
-    wire [31:0] csr_read_data;
-    assign csr_read_data = (csr_addr_decoded[7:0] == 8'h00) ? csr_control  :
-                           (csr_addr_decoded[7:0] == 8'h04) ? csr_status   :
-                           (csr_addr_decoded[7:0] == 8'h08) ? csr_gty_lock  :
-                           (csr_addr_decoded[7:0] == 8'h0C) ? csr_gty_error :
-                           32'h0000_0000;  // Default: read as zero
-
-    // =========================================================================
-    // AXI4-Lite Slave Interface Implementation
-    // =========================================================================
-
-    // Write response (always OK for now; can be extended)
-    assign s_axi_bresp   = 2'b00;  // OKAY
-    assign s_axi_awready = 1'b1;   // Always ready (no queueing)
-    assign s_axi_wready  = 1'b1;   // Always ready
-    assign s_axi_bvalid  = s_axi_wvalid;  // Response valid when write valid
-
-    // Read response
-    assign s_axi_rresp   = 2'b00;  // OKAY
-    assign s_axi_rdata   = csr_read_data;
-    assign s_axi_rvalid  = s_axi_arvalid;  // Response valid when address valid
-    assign s_axi_arready = 1'b1;   // Always ready
-
-    // =========================================================================
-    // GTY Transceiver Codec Control
-    // =========================================================================
-
-    // Aggregate GTY lock / error status across all 8 lanes (fits in one 32-bit word)
-    assign csr_gty_lock  = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_locked};
-    assign csr_gty_error = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_error};
-
-    // =========================================================================
-    // M_AXI_GTY_CTRL — Write-only AXI4-Lite master driving GTY codec S_AXI_CTRL
-    //
-    // When csr_control[1] (codec_en) changes the orchestrator issues a single
-    // write to GTY codec CTRL register (addr 0x00) with the new enable value.
-    // A simple 3-state FSM handles the AW+W+B handshake.
-    // =========================================================================
-    localparam GTY_M_IDLE  = 2'd0;
-    localparam GTY_M_ADDR  = 2'd1;
-    localparam GTY_M_RESP  = 2'd2;
-
-    reg [1:0]  gty_m_state;
-    reg        gty_codec_en_prev;
-    reg        gty_m_awvalid_r;
-    reg        gty_m_wvalid_r;
-    reg [31:0] gty_m_wdata_r;
-
-    always @(posedge axi_clk or negedge axi_rst_n) begin
-        if (!axi_rst_n) begin
-            gty_m_state        <= GTY_M_IDLE;
-            gty_codec_en_prev  <= 1'b0;
-            gty_m_awvalid_r    <= 1'b0;
-            gty_m_wvalid_r     <= 1'b0;
-            gty_m_wdata_r      <= 32'h0;
+            gty_lock_s1 <= {NUM_GTY{1'b0}}; gty_lock_s <= {NUM_GTY{1'b0}};
+            gty_err_s1  <= {NUM_GTY{1'b0}}; gty_err_s  <= {NUM_GTY{1'b0}};
         end else begin
-            case (gty_m_state)
-                GTY_M_IDLE: begin
-                    gty_m_awvalid_r <= 1'b0;
-                    gty_m_wvalid_r  <= 1'b0;
-                    gty_codec_en_prev <= csr_control[1];
-                    if (csr_control[1] != gty_codec_en_prev) begin
-                        // codec_en changed — push new CTRL value to GTY codec
-                        gty_m_wdata_r   <= {31'h0, csr_control[1]};
-                        gty_m_awvalid_r <= 1'b1;
-                        gty_m_wvalid_r  <= 1'b1;
-                        gty_m_state     <= GTY_M_ADDR;
-                    end
-                end
-                GTY_M_ADDR: begin
-                    if (m_axi_gty_ctrl_awready) gty_m_awvalid_r <= 1'b0;
-                    if (m_axi_gty_ctrl_wready)  gty_m_wvalid_r  <= 1'b0;
-                    if (!gty_m_awvalid_r && !gty_m_wvalid_r)
-                        gty_m_state <= GTY_M_RESP;
-                end
-                GTY_M_RESP: begin
-                    if (m_axi_gty_ctrl_bvalid) gty_m_state <= GTY_M_IDLE;
-                end
-                default: gty_m_state <= GTY_M_IDLE;
-            endcase
+            gty_lock_s1 <= gty_lane_locked; gty_lock_s <= gty_lock_s1;
+            gty_err_s1  <= gty_lane_error;  gty_err_s  <= gty_err_s1;
         end
     end
 
-    assign m_axi_gty_ctrl_awaddr  = 5'h00;         // GTY CTRL register
-    assign m_axi_gty_ctrl_awprot  = 3'b000;
-    assign m_axi_gty_ctrl_awvalid = gty_m_awvalid_r;
-    assign m_axi_gty_ctrl_wdata   = gty_m_wdata_r;
-    assign m_axi_gty_ctrl_wstrb   = 4'hF;
-    assign m_axi_gty_ctrl_wvalid  = gty_m_wvalid_r;
-    assign m_axi_gty_ctrl_bready  = 1'b1;
-    // Read path: not used (status available via gtc_lane_locked/error raw ports)
-    assign m_axi_gty_ctrl_araddr  = 5'h0;
-    assign m_axi_gty_ctrl_arprot  = 3'b000;
-    assign m_axi_gty_ctrl_arvalid = 1'b0;
-    assign m_axi_gty_ctrl_rready  = 1'b0;
+    // =========================================================================
+    // S_AXI — AXI4-Lite slave implementation
+    // =========================================================================
+    reg        aw_active;
+    reg [7:0]  aw_addr_lat;
+    reg        w_active;
+    reg        b_pending;
+    reg        ar_active;
+    reg [7:0]  ar_addr_lat;
+    reg        r_pending;
+    reg [31:0] r_dat;
+    reg        uart_tx_trigger; // pulse: new byte loaded for TX
+
+    assign s_axi_awready = !aw_active && !b_pending;
+    assign s_axi_wready  = !w_active  && !b_pending;
+    assign s_axi_bresp   = 2'b00;
+    assign s_axi_bvalid  = b_pending;
+    assign s_axi_arready = !ar_active && !r_pending;
+    assign s_axi_rdata   = r_dat;
+    assign s_axi_rresp   = 2'b00;
+    assign s_axi_rvalid  = r_pending;
+
+    // --- Write path ---
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            aw_active <= 1'b0; w_active <= 1'b0; b_pending <= 1'b0;
+            aw_addr_lat <= 8'h0;
+            csr_ctrl      <= 32'h0;
+            csr_uart_ctrl <= {8'h0, 16'd1735, 8'h0}; // default 115200 baud
+            csr_uart_txd  <= 32'h0;
+            uart_tx_trigger <= 1'b0;
+        end else begin
+            uart_tx_trigger <= 1'b0;
+            // AW handshake
+            if (s_axi_awvalid && s_axi_awready) begin
+                aw_active   <= 1'b1;
+                aw_addr_lat <= s_axi_awaddr[7:0];
+            end
+            // W handshake
+            if (s_axi_wvalid && s_axi_wready) begin
+                w_active <= 1'b1;
+            end
+            // Commit write when both AW and W have been accepted
+            if (aw_active && w_active) begin
+                aw_active <= 1'b0; w_active <= 1'b0; b_pending <= 1'b1;
+                case (aw_addr_lat[5:2])
+                    4'h0: csr_ctrl      <= s_axi_wdata;
+                    4'h1: ;  // STATUS register is read-only; writes ignored
+                    4'h2: csr_uart_ctrl <= s_axi_wdata;
+                    4'h3: begin
+                        csr_uart_txd  <= s_axi_wdata;
+                        uart_tx_trigger <= 1'b1;
+                    end
+                    default: ;
+                endcase
+            end
+            if (b_pending && s_axi_bready) b_pending <= 1'b0;
+        end
+    end
+
+    // --- Read path ---
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            ar_active <= 1'b0; r_pending <= 1'b0;
+            ar_addr_lat <= 8'h0; r_dat <= 32'h0;
+        end else begin
+            if (s_axi_arvalid && s_axi_arready) begin
+                ar_active   <= 1'b1;
+                ar_addr_lat <= s_axi_araddr[7:0];
+            end
+            if (ar_active && !r_pending) begin
+                ar_active <= 1'b0; r_pending <= 1'b1;
+                case (ar_addr_lat[5:2])
+                    4'h0: r_dat <= csr_ctrl;
+                    4'h1: r_dat <= {{(32-2*NUM_GTY){1'b0}}, gty_err_s, gty_lock_s};
+                    4'h2: r_dat <= csr_uart_ctrl;
+                    4'h3: r_dat <= csr_uart_txd;
+                    4'h4: r_dat <= csr_uart_rxd;
+                    4'h5: r_dat <= csr_uart_stat;
+                    default: r_dat <= 32'hDEAD_BEEF;
+                endcase
+            end
+            if (r_pending && s_axi_rready) r_pending <= 1'b0;
+        end
+    end
 
     // =========================================================================
-    // M_AXI_MB_CTRL — Write-only AXI4-Lite master driving MB module S_AXI_CTRL
-    //
-    // When csr_control[0] (global_en) rises the orchestrator triggers a
-    // start_op by writing CTRL register (addr 0x00) of the MB module.
-    // Same 3-state FSM pattern as GTY master above.
+    // UART 8N1 transmitter  (axi_clk domain, baud_div from csr_uart_ctrl[23:8])
     // =========================================================================
-    localparam MB_M_IDLE  = 2'd0;
-    localparam MB_M_ADDR  = 2'd1;
-    localparam MB_M_RESP  = 2'd2;
+    wire [15:0] baud_div = csr_uart_ctrl[23:8];
 
-    reg [1:0]  mb_m_state;
-    reg        mb_global_en_prev;
-    reg        mb_m_awvalid_r;
-    reg        mb_m_wvalid_r;
-    reg [31:0] mb_m_wdata_r;
+    reg [15:0] tx_baud_cnt;
+    reg [9:0]  tx_shift;    // {stop, data[7:0], start}
+    reg [3:0]  tx_bit_cnt;
+    reg        tx_busy;
+    reg        tx_out;
+
+    assign uart_txd          = tx_out;
+    assign csr_uart_stat[1]  = tx_busy;
 
     always @(posedge axi_clk or negedge axi_rst_n) begin
         if (!axi_rst_n) begin
-            mb_m_state         <= MB_M_IDLE;
-            mb_global_en_prev  <= 1'b0;
-            mb_m_awvalid_r     <= 1'b0;
-            mb_m_wvalid_r      <= 1'b0;
-            mb_m_wdata_r       <= 32'h0;
+            tx_baud_cnt <= 16'h0; tx_shift <= 10'h3FF;
+            tx_bit_cnt  <= 4'h0;  tx_busy  <= 1'b0; tx_out <= 1'b1;
         end else begin
-            case (mb_m_state)
-                MB_M_IDLE: begin
-                    mb_m_awvalid_r <= 1'b0;
-                    mb_m_wvalid_r  <= 1'b0;
-                    mb_global_en_prev <= csr_control[0];
-                    if (csr_control[0] && !mb_global_en_prev) begin
-                        // global_en rising edge → trigger MB start_op pulse
-                        mb_m_wdata_r   <= 32'h0000_0001; // start_op = bit[0]
-                        mb_m_awvalid_r <= 1'b1;
-                        mb_m_wvalid_r  <= 1'b1;
-                        mb_m_state     <= MB_M_ADDR;
-                    end
+            if (!tx_busy && uart_tx_trigger) begin
+                // Load: start=0, data[7:0], stop=1
+                tx_shift    <= {1'b1, csr_uart_txd[7:0], 1'b0};
+                tx_bit_cnt  <= 4'd10;
+                tx_baud_cnt <= baud_div;
+                tx_busy     <= 1'b1;
+                tx_out      <= 1'b0; // start bit
+            end else if (tx_busy) begin
+                if (tx_baud_cnt == 16'h0) begin
+                    tx_baud_cnt <= baud_div;
+                    tx_out      <= tx_shift[0];
+                    tx_shift    <= {1'b1, tx_shift[9:1]};
+                    tx_bit_cnt  <= tx_bit_cnt - 4'd1;
+                    if (tx_bit_cnt == 4'd1) tx_busy <= 1'b0;
+                end else begin
+                    tx_baud_cnt <= tx_baud_cnt - 16'd1;
                 end
-                MB_M_ADDR: begin
-                    if (m_axi_mb_ctrl_awready) mb_m_awvalid_r <= 1'b0;
-                    if (m_axi_mb_ctrl_wready)  mb_m_wvalid_r  <= 1'b0;
-                    if (!mb_m_awvalid_r && !mb_m_wvalid_r)
-                        mb_m_state <= MB_M_RESP;
-                end
-                MB_M_RESP: begin
-                    if (m_axi_mb_ctrl_bvalid) mb_m_state <= MB_M_IDLE;
-                end
-                default: mb_m_state <= MB_M_IDLE;
-            endcase
+            end
         end
     end
 
-    assign m_axi_mb_ctrl_awaddr  = 5'h00;          // MB CTRL register
-    assign m_axi_mb_ctrl_awprot  = 3'b000;
-    assign m_axi_mb_ctrl_awvalid = mb_m_awvalid_r;
-    assign m_axi_mb_ctrl_wdata   = mb_m_wdata_r;
-    assign m_axi_mb_ctrl_wstrb   = 4'hF;
-    assign m_axi_mb_ctrl_wvalid  = mb_m_wvalid_r;
-    assign m_axi_mb_ctrl_bready  = 1'b1;
-    assign m_axi_mb_ctrl_araddr  = 5'h0;
-    assign m_axi_mb_ctrl_arprot  = 3'b000;
-    assign m_axi_mb_ctrl_arvalid = 1'b0;
-    assign m_axi_mb_ctrl_rready  = 1'b0;
+    // =========================================================================
+    // UART 8N1 receiver  (axi_clk domain)
+    // =========================================================================
+    reg        rx_s1, rx_s;          // 2-FF metastability filter
+    reg [15:0] rx_baud_cnt;
+    reg [9:0]  rx_shift;
+    reg [3:0]  rx_bit_cnt;
+    reg        rx_active;
+    reg        rx_valid;
+
+    assign csr_uart_stat[0]  = rx_valid;
+
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            rx_s1 <= 1'b1; rx_s <= 1'b1;
+            rx_baud_cnt <= 16'h0; rx_shift <= 10'h0;
+            rx_bit_cnt  <= 4'h0;  rx_active <= 1'b0; rx_valid <= 1'b0;
+            csr_uart_rxd <= 32'h0;
+        end else begin
+            // 2-FF sync
+            rx_s1 <= uart_rxd; rx_s <= rx_s1;
+            // clear rx_valid on CSR read (read address 0x10)
+            if (ar_active && ar_addr_lat[5:2] == 4'h4) rx_valid <= 1'b0;
+
+            if (!rx_active) begin
+                if (!rx_s) begin  // start bit detected
+                    rx_active   <= 1'b1;
+                    rx_baud_cnt <= {1'b0, baud_div[15:1]}; // half-bit to centre
+                    rx_bit_cnt  <= 4'd9;  // 8 data + 1 stop
+                    rx_shift    <= 10'h0;
+                end
+            end else begin
+                if (rx_baud_cnt == 16'h0) begin
+                    rx_baud_cnt <= baud_div;
+                    rx_shift    <= {rx_s, rx_shift[9:1]};
+                    rx_bit_cnt  <= rx_bit_cnt - 4'd1;
+                    if (rx_bit_cnt == 4'd1) begin
+                        rx_active       <= 1'b0;
+                        // rx_shift[8:1] = data bits after stop sampled
+                        csr_uart_rxd    <= {24'h0, rx_shift[8:1]};
+                        rx_valid        <= 1'b1;
+                    end
+                end else begin
+                    rx_baud_cnt <= rx_baud_cnt - 16'd1;
+                end
+            end
+        end
+    end
 
     // =========================================================================
-    // M_AXI_AXB_CTRL — AXI4-Lite master to AXI Bridge (axi_clk domain)
-    // Used to write status information into the bridge's CSR space so the
-    // system (via bridge S_AXI) can read GTY lock, MB status, etc.
-    // Tie off for now; status reads go through bridge S_AXI directly.
+    // Module enable outputs (from csr_ctrl bits → drive each master port)
+    // Each master pushes the global enable to the module's CTRL register.
+    // FSM: IDLE → AW_DATA → WAIT_B
     // =========================================================================
-    assign m_axi_axb_ctrl_awaddr  = 16'h0;
-    assign m_axi_axb_ctrl_awprot  = 3'b000;
-    assign m_axi_axb_ctrl_awvalid = 1'b0;
-    assign m_axi_axb_ctrl_wdata   = 32'h0;
-    assign m_axi_axb_ctrl_wstrb   = 4'h0;
-    assign m_axi_axb_ctrl_wvalid  = 1'b0;
-    assign m_axi_axb_ctrl_bready  = 1'b1;
-    assign m_axi_axb_ctrl_araddr  = 16'h0;
-    assign m_axi_axb_ctrl_arprot  = 3'b000;
-    assign m_axi_axb_ctrl_arvalid = 1'b0;
-    assign m_axi_axb_ctrl_rready  = 1'b0;
 
-    // =========================================================================
-    // M_AXI_DMA — Tie off (bulk DMA placeholder, driven by future engine)
-    // =========================================================================
-    assign m_axi_dma_araddr  = {AXI_ADDR_WIDTH{1'b0}};
-    assign m_axi_dma_arlen   = 8'h0;
-    assign m_axi_dma_arsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
-    assign m_axi_dma_arburst = 2'h1;
-    assign m_axi_dma_arvalid = 1'b0;
-    assign m_axi_dma_rready  = 1'b0;
+    // ---------- Generic AXI4-Lite write-only master macro ----------
+    // Instantiated four times below (one per intercept module).
+    //
+    // Signal naming convention:  <pfx>_*
+    //   Inputs  : <pfx>_trig (pulse), <pfx>_addr [7:0], <pfx>_wdata [31:0]
+    //   Outputs : tied directly to the M_AXI_* ports
+    //
+    // All four masters share the same FSM template; they differ only in which
+    // CSR bit triggers them and which M_AXI port they drive.
 
-    assign m_axi_dma_awaddr  = {AXI_ADDR_WIDTH{1'b0}};
-    assign m_axi_dma_awlen   = 8'h0;
-    assign m_axi_dma_awsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
-    assign m_axi_dma_awburst = 2'h1;
-    assign m_axi_dma_awvalid = 1'b0;
+    // --- GTY master ---
+    localparam M_IDLE=2'd0, M_AW=2'd1, M_W=2'd2, M_B=2'd3;
+    reg [1:0]  gty_m_st; reg gty_aw_vld, gty_w_vld; reg [31:0] gty_wdat; reg gty_prev_en;
+    reg [1:0]  mb_m_st;  reg mb_aw_vld,  mb_w_vld;  reg [31:0] mb_wdat;  reg mb_prev_en;
+    reg [1:0]  axb_m_st; reg axb_aw_vld, axb_w_vld; reg [31:0] axb_wdat; reg axb_prev_en;
+    reg [1:0]  pmc_m_st; reg pmc_aw_vld, pmc_w_vld; reg [31:0] pmc_wdat; reg pmc_prev_en;
 
-    assign m_axi_dma_wdata   = {AXI_DATA_WIDTH{1'b0}};
-    assign m_axi_dma_wstrb   = {(AXI_DATA_WIDTH/8){1'b0}};
-    assign m_axi_dma_wlast   = 1'b0;
-    assign m_axi_dma_wvalid  = 1'b0;
-    assign m_axi_dma_bready  = 1'b1;
+    // GTY master FSM
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            gty_m_st<=M_IDLE; gty_aw_vld<=0; gty_w_vld<=0; gty_wdat<=0; gty_prev_en<=0;
+        end else begin
+            gty_prev_en <= csr_ctrl[1];
+            case (gty_m_st)
+                M_IDLE: if (csr_ctrl[1] != gty_prev_en) begin
+                    gty_wdat <= {31'h0, csr_ctrl[1]};
+                    gty_aw_vld <= 1'b1; gty_w_vld <= 1'b1; gty_m_st <= M_AW;
+                end
+                M_AW: begin
+                    if (m_axi_gty_awready) gty_aw_vld <= 1'b0;
+                    if (m_axi_gty_wready)  gty_w_vld  <= 1'b0;
+                    if (!gty_aw_vld && !gty_w_vld) gty_m_st <= M_B;
+                end
+                M_B: if (m_axi_gty_bvalid) gty_m_st <= M_IDLE;
+                default: gty_m_st <= M_IDLE;
+            endcase
+        end
+    end
+    assign m_axi_gty_awaddr  = 8'h00;
+    assign m_axi_gty_awprot  = 3'b000;
+    assign m_axi_gty_awvalid = gty_aw_vld;
+    assign m_axi_gty_wdata   = gty_wdat;
+    assign m_axi_gty_wstrb   = 4'hF;
+    assign m_axi_gty_wvalid  = gty_w_vld;
+    assign m_axi_gty_bready  = 1'b1;
+    assign m_axi_gty_araddr  = 8'h00;
+    assign m_axi_gty_arprot  = 3'b000;
+    assign m_axi_gty_arvalid = 1'b0;
+    assign m_axi_gty_rready  = 1'b0;
 
-    // =========================================================================
-    // CDC FIFO placeholders (axi_clk ↔ mb_clk, axi_clk ↔ gty_clk)
-    // Actual IP instantiation: Xilinx FIFO Generator in async mode.
-    // Signals declared to preserve CDC intent for future implementation.
-    // =========================================================================
-    // cdc_mb_fifo_*  : axi_clk → mb_clk  (32-bit, CDC_FIFO_DEPTH deep)
-    // cdc_gty_fifo_* : axi_clk → gty_clk (32-bit, CDC_FIFO_DEPTH deep)
+    // MB master FSM
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            mb_m_st<=M_IDLE; mb_aw_vld<=0; mb_w_vld<=0; mb_wdat<=0; mb_prev_en<=0;
+        end else begin
+            mb_prev_en <= csr_ctrl[2];
+            case (mb_m_st)
+                M_IDLE: if (csr_ctrl[2] != mb_prev_en) begin
+                    mb_wdat <= {31'h0, csr_ctrl[2]};
+                    mb_aw_vld <= 1'b1; mb_w_vld <= 1'b1; mb_m_st <= M_AW;
+                end
+                M_AW: begin
+                    if (m_axi_mb_awready) mb_aw_vld <= 1'b0;
+                    if (m_axi_mb_wready)  mb_w_vld  <= 1'b0;
+                    if (!mb_aw_vld && !mb_w_vld) mb_m_st <= M_B;
+                end
+                M_B: if (m_axi_mb_bvalid) mb_m_st <= M_IDLE;
+                default: mb_m_st <= M_IDLE;
+            endcase
+        end
+    end
+    assign m_axi_mb_awaddr  = 8'h00;
+    assign m_axi_mb_awprot  = 3'b000;
+    assign m_axi_mb_awvalid = mb_aw_vld;
+    assign m_axi_mb_wdata   = mb_wdat;
+    assign m_axi_mb_wstrb   = 4'hF;
+    assign m_axi_mb_wvalid  = mb_w_vld;
+    assign m_axi_mb_bready  = 1'b1;
+    assign m_axi_mb_araddr  = 8'h00;
+    assign m_axi_mb_arprot  = 3'b000;
+    assign m_axi_mb_arvalid = 1'b0;
+    assign m_axi_mb_rready  = 1'b0;
+
+    // AXB master FSM
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            axb_m_st<=M_IDLE; axb_aw_vld<=0; axb_w_vld<=0; axb_wdat<=0; axb_prev_en<=0;
+        end else begin
+            axb_prev_en <= csr_ctrl[3];
+            case (axb_m_st)
+                M_IDLE: if (csr_ctrl[3] != axb_prev_en) begin
+                    axb_wdat <= {31'h0, csr_ctrl[3]};
+                    axb_aw_vld <= 1'b1; axb_w_vld <= 1'b1; axb_m_st <= M_AW;
+                end
+                M_AW: begin
+                    if (m_axi_axb_awready) axb_aw_vld <= 1'b0;
+                    if (m_axi_axb_wready)  axb_w_vld  <= 1'b0;
+                    if (!axb_aw_vld && !axb_w_vld) axb_m_st <= M_B;
+                end
+                M_B: if (m_axi_axb_bvalid) axb_m_st <= M_IDLE;
+                default: axb_m_st <= M_IDLE;
+            endcase
+        end
+    end
+    assign m_axi_axb_awaddr  = 8'h00;
+    assign m_axi_axb_awprot  = 3'b000;
+    assign m_axi_axb_awvalid = axb_aw_vld;
+    assign m_axi_axb_wdata   = axb_wdat;
+    assign m_axi_axb_wstrb   = 4'hF;
+    assign m_axi_axb_wvalid  = axb_w_vld;
+    assign m_axi_axb_bready  = 1'b1;
+    assign m_axi_axb_araddr  = 8'h00;
+    assign m_axi_axb_arprot  = 3'b000;
+    assign m_axi_axb_arvalid = 1'b0;
+    assign m_axi_axb_rready  = 1'b0;
+
+    // PMC master FSM
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            pmc_m_st<=M_IDLE; pmc_aw_vld<=0; pmc_w_vld<=0; pmc_wdat<=0; pmc_prev_en<=0;
+        end else begin
+            pmc_prev_en <= csr_ctrl[4];
+            case (pmc_m_st)
+                M_IDLE: if (csr_ctrl[4] != pmc_prev_en) begin
+                    pmc_wdat <= {31'h0, csr_ctrl[4]};
+                    pmc_aw_vld <= 1'b1; pmc_w_vld <= 1'b1; pmc_m_st <= M_AW;
+                end
+                M_AW: begin
+                    if (m_axi_pmc_awready) pmc_aw_vld <= 1'b0;
+                    if (m_axi_pmc_wready)  pmc_w_vld  <= 1'b0;
+                    if (!pmc_aw_vld && !pmc_w_vld) pmc_m_st <= M_B;
+                end
+                M_B: if (m_axi_pmc_bvalid) pmc_m_st <= M_IDLE;
+                default: pmc_m_st <= M_IDLE;
+            endcase
+        end
+    end
+    assign m_axi_pmc_awaddr  = 8'h00;
+    assign m_axi_pmc_awprot  = 3'b000;
+    assign m_axi_pmc_awvalid = pmc_aw_vld;
+    assign m_axi_pmc_wdata   = pmc_wdat;
+    assign m_axi_pmc_wstrb   = 4'hF;
+    assign m_axi_pmc_wvalid  = pmc_w_vld;
+    assign m_axi_pmc_bready  = 1'b1;
+    assign m_axi_pmc_araddr  = 8'h00;
+    assign m_axi_pmc_arprot  = 3'b000;
+    assign m_axi_pmc_arvalid = 1'b0;
+    assign m_axi_pmc_rready  = 1'b0;
 
 endmodule
