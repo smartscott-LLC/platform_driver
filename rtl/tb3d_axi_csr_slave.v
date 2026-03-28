@@ -54,7 +54,7 @@
 module tb3d_axi_csr_slave #(
     parameter AXI_ADDR_WIDTH        = 16,       // 64 KB address space
     parameter AXI_DATA_WIDTH        = 32,       // 32-bit CSR data width
-    parameter NUM_GTY_LANES         = 512,      // Total GTY lanes
+    parameter NUM_GTY_LANES         = 8,      // Total GTY lanes
     parameter NUM_GTY_STATUS_REGS   = (NUM_GTY_LANES + 31) / 32  // Regs needed
 ) (
     // =========================================================================
