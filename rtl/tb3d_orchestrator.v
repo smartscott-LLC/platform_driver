@@ -45,9 +45,7 @@ module tb3d_orchestrator #(
     // =========================================================================
     // Parameterization
     // =========================================================================
-    parameter NUM_GTY_LANES        = 512,       // Total GTYP lanes
-    parameter GTY_CODEC_GROUPS     = 16,        // 512 lanes / 32 = 16 groups
-    parameter GTY_LANES_PER_GROUP  = 32,        // Lanes per group (balance area/timing)
+    parameter NUM_GTY_LANES        = 8,         // 8 GTYP lanes (each 64-bit)
     parameter AXI_ADDR_WIDTH       = 32,
     parameter AXI_DATA_WIDTH       = 64,
     parameter MB_DATA_WIDTH        = 32,
@@ -56,19 +54,18 @@ module tb3d_orchestrator #(
     // =========================================================================
     // Clock & Reset (primary clock domain = AXI)
     // =========================================================================
-    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI, ASSOCIATED_RESET axi_rst_n" *)
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI:M_AXI_DMA:M_AXI_GTY_CTRL:M_AXI_MB_CTRL:M_AXI_AXB_CTRL, ASSOCIATED_RESET axi_rst_n" *)
     input  wire                     axi_clk,        // 200 MHz primary clock
-    input  wire                     axi_rst_n,      // Active-low reset (synchronous to axi_clk)
+    input  wire                     axi_rst_n,      // Active-low reset (axi_clk domain)
     input  wire                     mb_clk,         // Microblaze clock (variable freq)
     input  wire                     mb_rst_n,       // Microblaze reset
     input  wire                     gty_clk,        // GTY transceiver clock (250 MHz)
     input  wire                     gty_rst_n,      // GTY domain reset
 
     // =========================================================================
-    // AXI4-Lite CSR Interface (primary axis, axi_clk domain)
-    // Exposed to NoC / CIP / system for TB3-D configuration and status
+    // S_AXI — AXI4-Lite CSR Interface (axi_clk domain)
+    // System entry point: NoC / CIP writes TB3-D configuration here.
     // =========================================================================
-    // Write address channel
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_awaddr,
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWPROT" *)
@@ -78,7 +75,6 @@ module tb3d_orchestrator #(
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI AWREADY" *)
     output wire                       s_axi_awready,
 
-    // Write data channel
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WDATA" *)
     input  wire [AXI_DATA_WIDTH-1:0]  s_axi_wdata,
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WSTRB" *)
@@ -88,7 +84,6 @@ module tb3d_orchestrator #(
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI WREADY" *)
     output wire                       s_axi_wready,
 
-    // Write response channel
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BRESP" *)
     output wire [1:0]                 s_axi_bresp,
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BVALID" *)
@@ -96,7 +91,6 @@ module tb3d_orchestrator #(
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI BREADY" *)
     input  wire                       s_axi_bready,
 
-    // Read address channel
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARADDR" *)
     input  wire [AXI_ADDR_WIDTH-1:0]  s_axi_araddr,
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARPROT" *)
@@ -106,7 +100,6 @@ module tb3d_orchestrator #(
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI ARREADY" *)
     output wire                       s_axi_arready,
 
-    // Read data channel
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RDATA" *)
     output wire [AXI_DATA_WIDTH-1:0]  s_axi_rdata,
     (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 S_AXI RRESP" *)
@@ -117,84 +110,203 @@ module tb3d_orchestrator #(
     input  wire                       s_axi_rready,
 
     // =========================================================================
-    // AXI4 DMA Interface (axi_clk domain)
-    // Connects to system memory via Versal interconnect
+    // M_AXI_DMA — AXI4 Master for bulk DMA (axi_clk domain)
+    // Connects to system memory (DDR4) via Versal NoC / PL-to-PS interconnect.
     // =========================================================================
-    // AXI4 Read Address
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARADDR" *)
     output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARLEN" *)
     output wire [7:0]                 m_axi_dma_arlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARSIZE" *)
     output wire [2:0]                 m_axi_dma_arsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARBURST" *)
     output wire [1:0]                 m_axi_dma_arburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARVALID" *)
     output wire                       m_axi_dma_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARREADY" *)
     input  wire                       m_axi_dma_arready,
 
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RDATA" *)
     input  wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RRESP" *)
     input  wire [1:0]                 m_axi_dma_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RLAST" *)
     input  wire                       m_axi_dma_rlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RVALID" *)
     input  wire                       m_axi_dma_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RREADY" *)
     output wire                       m_axi_dma_rready,
 
-    // AXI4 Write Address
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWADDR" *)
     output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWLEN" *)
     output wire [7:0]                 m_axi_dma_awlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWSIZE" *)
     output wire [2:0]                 m_axi_dma_awsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWBURST" *)
     output wire [1:0]                 m_axi_dma_awburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWVALID" *)
     output wire                       m_axi_dma_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWREADY" *)
     input  wire                       m_axi_dma_awready,
 
-    // AXI4 Write Data
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WDATA" *)
     output wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WSTRB" *)
     output wire [(AXI_DATA_WIDTH/8)-1:0] m_axi_dma_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WLAST" *)
     output wire                       m_axi_dma_wlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WVALID" *)
     output wire                       m_axi_dma_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WREADY" *)
     input  wire                       m_axi_dma_wready,
 
-    // AXI4 Write Response
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BRESP" *)
     input  wire [1:0]                 m_axi_dma_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BVALID" *)
     input  wire                       m_axi_dma_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BREADY" *)
     output wire                       m_axi_dma_bready,
 
     // =========================================================================
-    // GTY Transceiver Pins (gty_clk domain)
-    // 512 GTYP lanes @ GTY clock
+    // M_AXI_GTY_CTRL — AXI4-Lite Master to GTY Codec S_AXI_CTRL (axi_clk)
+    // Orchestrator controls codec enable / lane enables via this interface.
     // =========================================================================
-    // For now, interface is stub (will be detailed in tb3d_gty_transceiver_codec)
-    // Future: add per-lane Tx/Rx serial I/O connections
-    input  wire [NUM_GTY_LANES-1:0]   gty_rx_serial,      // From transceivers
-    output wire [NUM_GTY_LANES-1:0]   gty_tx_serial,      // To transceivers
-    input  wire [NUM_GTY_LANES-1:0]   gty_rx_valid,       // Per-lane RX valid
-    output wire [NUM_GTY_LANES-1:0]   gty_tx_ready,       // Per-lane TX ready
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWADDR" *)
+    output wire [4:0]                 m_axi_gty_ctrl_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWPROT" *)
+    output wire [2:0]                 m_axi_gty_ctrl_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWVALID" *)
+    output wire                       m_axi_gty_ctrl_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL AWREADY" *)
+    input  wire                       m_axi_gty_ctrl_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WDATA" *)
+    output wire [31:0]                m_axi_gty_ctrl_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WSTRB" *)
+    output wire [3:0]                 m_axi_gty_ctrl_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WVALID" *)
+    output wire                       m_axi_gty_ctrl_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL WREADY" *)
+    input  wire                       m_axi_gty_ctrl_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BRESP" *)
+    input  wire [1:0]                 m_axi_gty_ctrl_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BVALID" *)
+    input  wire                       m_axi_gty_ctrl_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL BREADY" *)
+    output wire                       m_axi_gty_ctrl_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARADDR" *)
+    output wire [4:0]                 m_axi_gty_ctrl_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARPROT" *)
+    output wire [2:0]                 m_axi_gty_ctrl_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARVALID" *)
+    output wire                       m_axi_gty_ctrl_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL ARREADY" *)
+    input  wire                       m_axi_gty_ctrl_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RDATA" *)
+    input  wire [31:0]                m_axi_gty_ctrl_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RRESP" *)
+    input  wire [1:0]                 m_axi_gty_ctrl_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RVALID" *)
+    input  wire                       m_axi_gty_ctrl_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_GTY_CTRL RREADY" *)
+    output wire                       m_axi_gty_ctrl_rready,
 
     // =========================================================================
-    // Microblaze Signals (mb_clk domain)
+    // M_AXI_MB_CTRL — AXI4-Lite Master to Microblaze Module S_AXI_CTRL (mb_clk)
+    // Orchestrator triggers cache operations and reads performance stats via here.
     // =========================================================================
-    // Microblaze local DDR4 access (cache coherent)
-    output wire                       mb_ddr_access,      // Enable flag for cache path
-    output wire [63:0]                mb_ddr_addr,        // Address for cache-aware move
-    output wire [31:0]                mb_ddr_len,         // Burst length (cache-aligned)
-    input  wire                       mb_ddr_ack,         // Microblaze ready (L2 hit)
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWADDR" *)
+    output wire [4:0]                 m_axi_mb_ctrl_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWPROT" *)
+    output wire [2:0]                 m_axi_mb_ctrl_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWVALID" *)
+    output wire                       m_axi_mb_ctrl_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL AWREADY" *)
+    input  wire                       m_axi_mb_ctrl_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WDATA" *)
+    output wire [31:0]                m_axi_mb_ctrl_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WSTRB" *)
+    output wire [3:0]                 m_axi_mb_ctrl_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WVALID" *)
+    output wire                       m_axi_mb_ctrl_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL WREADY" *)
+    input  wire                       m_axi_mb_ctrl_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BRESP" *)
+    input  wire [1:0]                 m_axi_mb_ctrl_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BVALID" *)
+    input  wire                       m_axi_mb_ctrl_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL BREADY" *)
+    output wire                       m_axi_mb_ctrl_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARADDR" *)
+    output wire [4:0]                 m_axi_mb_ctrl_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARPROT" *)
+    output wire [2:0]                 m_axi_mb_ctrl_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARVALID" *)
+    output wire                       m_axi_mb_ctrl_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL ARREADY" *)
+    input  wire                       m_axi_mb_ctrl_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RDATA" *)
+    input  wire [31:0]                m_axi_mb_ctrl_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RRESP" *)
+    input  wire [1:0]                 m_axi_mb_ctrl_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RVALID" *)
+    input  wire                       m_axi_mb_ctrl_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_MB_CTRL RREADY" *)
+    output wire                       m_axi_mb_ctrl_rready,
 
     // =========================================================================
-    // Module Instantiation Interface
-    // Stub connections to the three sub-modules
+    // M_AXI_AXB_CTRL — AXI4-Lite Master to AXI Bridge (axi_clk domain)
+    // Orchestrator writes TB3D status into bridge CSR (readable by system via
+    // bridge S_AXI); reads codec enable and mode configuration from bridge.
     // =========================================================================
-    // These signals connect to actual module instances (created in block design)
-    // For now, we define the interface contract
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWADDR" *)
+    output wire [15:0]                m_axi_axb_ctrl_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWPROT" *)
+    output wire [2:0]                 m_axi_axb_ctrl_awprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWVALID" *)
+    output wire                       m_axi_axb_ctrl_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL AWREADY" *)
+    input  wire                       m_axi_axb_ctrl_awready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WDATA" *)
+    output wire [31:0]                m_axi_axb_ctrl_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WSTRB" *)
+    output wire [3:0]                 m_axi_axb_ctrl_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WVALID" *)
+    output wire                       m_axi_axb_ctrl_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL WREADY" *)
+    input  wire                       m_axi_axb_ctrl_wready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BRESP" *)
+    input  wire [1:0]                 m_axi_axb_ctrl_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BVALID" *)
+    input  wire                       m_axi_axb_ctrl_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL BREADY" *)
+    output wire                       m_axi_axb_ctrl_bready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARADDR" *)
+    output wire [15:0]                m_axi_axb_ctrl_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARPROT" *)
+    output wire [2:0]                 m_axi_axb_ctrl_arprot,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARVALID" *)
+    output wire                       m_axi_axb_ctrl_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL ARREADY" *)
+    input  wire                       m_axi_axb_ctrl_arready,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RDATA" *)
+    input  wire [31:0]                m_axi_axb_ctrl_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RRESP" *)
+    input  wire [1:0]                 m_axi_axb_ctrl_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RVALID" *)
+    input  wire                       m_axi_axb_ctrl_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_AXB_CTRL RREADY" *)
+    output wire                       m_axi_axb_ctrl_rready,
 
-    // GTY Codec Module Control (axi_clk domain control, gty_clk data)
-    output wire                       gtc_enable,         // Enable transceivers
-    output wire [NUM_GTY_LANES-1:0]   gtc_lane_en,        // Per-lane enable
+    // =========================================================================
+    // S_GTY_STATUS — Per-lane GTY lock/error (gty_clk domain, raw status)
+    // Connected to tb3d_gty_transceiver_codec lane_locked / lane_error outputs.
+    // Used for real-time CSR aggregation (csr_gty_lock, csr_gty_error).
+    // =========================================================================
+    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS LOCKED" *)
     input  wire [NUM_GTY_LANES-1:0]   gtc_lane_locked,    // Per-lane lock status
-    input  wire [NUM_GTY_LANES-1:0]   gtc_lane_error,     // Per-lane error flag
-
-    // Microblaze Module Control (mb_clk domain)
-    input  wire                       mb_module_ready,    // Microblaze subsystem ready
-    input  wire                       mb_cache_hit,       // L2 cache hit indicator
-
-    // AXI Bridge Module Control (axi_clk domain)
-    output wire                       axb_enable,         // Enable AXI bridge
-    output wire [7:0]                 axb_mode,           // Operating mode
-    input  wire                       axb_ready           // AXI bridge ready
+    (* X_INTERFACE_INFO = "xilinx.com:user:s_gty_status_rtl:1.0 S_GTY_STATUS ERROR" *)
+    input  wire [NUM_GTY_LANES-1:0]   gtc_lane_error      // Per-lane error flag
 );
 
     // =========================================================================
@@ -207,22 +319,7 @@ module tb3d_orchestrator #(
     wire [31:0]  csr_gty_lock;       // Aggregated GTY lock status (read-only)
     wire [31:0]  csr_gty_error;      // Aggregated GTY error status (read-only)
 
-    // CDC FIFO control signals (async FIFOs)
-    wire        cdc_mb_fifo_wr_en;
-    wire        cdc_mb_fifo_rd_en;
-    wire        cdc_mb_fifo_empty;
-    wire        cdc_mb_fifo_full;
-    wire [31:0] cdc_mb_fifo_din;
-    wire [31:0] cdc_mb_fifo_dout;
-
-    wire        cdc_gty_fifo_wr_en;
-    wire        cdc_gty_fifo_rd_en;
-    wire        cdc_gty_fifo_empty;
-    wire        cdc_gty_fifo_full;
-    wire [31:0] cdc_gty_fifo_din;
-    wire [31:0] cdc_gty_fifo_dout;
-
-    // Decoded CSR address for routing
+    // Decoded CSR address for read mux
     wire [15:0] csr_addr_decoded = s_axi_awaddr[15:0];
     wire        csr_is_gty_range = (s_axi_awaddr[31:20] == 12'h600);  // 0x6000_xxxx
     wire        csr_is_mb_range  = (s_axi_awaddr[31:20] == 12'h500);  // 0x5000_xxxx
@@ -281,102 +378,185 @@ module tb3d_orchestrator #(
     // GTY Transceiver Codec Control
     // =========================================================================
 
-    // Aggregate GTY lock status across all lanes
-    // (actual lane status comes from gtc_lane_locked via reduction)
-    assign csr_gty_lock = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_locked[NUM_GTY_LANES-1:0]};
-
-    // Aggregate GTY error status
-    assign csr_gty_error = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_error[NUM_GTY_LANES-1:0]};
-
-    // Global GTY enable from CSR [1]
-    assign gtc_enable = csr_control[1];
-    assign gtc_lane_en = csr_control[1] ? {NUM_GTY_LANES{1'b1}} : {NUM_GTY_LANES{1'b0}};
+    // Aggregate GTY lock / error status across all 8 lanes (fits in one 32-bit word)
+    assign csr_gty_lock  = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_locked};
+    assign csr_gty_error = {{(32-NUM_GTY_LANES){1'b0}}, gtc_lane_error};
 
     // =========================================================================
-    // Microblaze Module Control
-    // =========================================================================
-
-    // Simple handoff: Orchestrator can trigger MB operations via axi_clk domain,
-    // then monitor completion via mb_ddr_ack (CDC'd back via async FIFO if needed)
-    // For now, direct connection; can be enhanced with async FIFO if timing requires
-
-    // =========================================================================
-    // AXI Bridge Module Control
-    // =========================================================================
-
-    assign axb_enable = csr_control[0];  // Global enable
-    assign axb_mode   = csr_control[7:0];
-
-    // =========================================================================
-    // CDC FIFO Instantiation (Microblaze)
-    // Async FIFO crossing axi_clk → mb_clk domain
-    // =========================================================================
-
-    // Placeholder: actual CDC FIFO IP (Xilinx or generic async FIFO)
-    // FUNCTION: Bridge MB clock domain control signals safely across clock domains
+    // M_AXI_GTY_CTRL — Write-only AXI4-Lite master driving GTY codec S_AXI_CTRL
     //
-    // For now, instantiate as comment; actual implementation uses:
-    //   - Xilinx synchronous FIFO IP in asynchronous mode (if available)
-    //   - Or hand-crafted async FIFO with dual-port BRAM + Gray code pointers
+    // When csr_control[1] (codec_en) changes the orchestrator issues a single
+    // write to GTY codec CTRL register (addr 0x00) with the new enable value.
+    // A simple 3-state FSM handles the AW+W+B handshake.
+    // =========================================================================
+    localparam GTY_M_IDLE  = 2'd0;
+    localparam GTY_M_ADDR  = 2'd1;
+    localparam GTY_M_RESP  = 2'd2;
+
+    reg [1:0]  gty_m_state;
+    reg        gty_codec_en_prev;
+    reg        gty_m_awvalid_r;
+    reg        gty_m_wvalid_r;
+    reg [31:0] gty_m_wdata_r;
+
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            gty_m_state        <= GTY_M_IDLE;
+            gty_codec_en_prev  <= 1'b0;
+            gty_m_awvalid_r    <= 1'b0;
+            gty_m_wvalid_r     <= 1'b0;
+            gty_m_wdata_r      <= 32'h0;
+        end else begin
+            case (gty_m_state)
+                GTY_M_IDLE: begin
+                    gty_m_awvalid_r <= 1'b0;
+                    gty_m_wvalid_r  <= 1'b0;
+                    gty_codec_en_prev <= csr_control[1];
+                    if (csr_control[1] != gty_codec_en_prev) begin
+                        // codec_en changed — push new CTRL value to GTY codec
+                        gty_m_wdata_r   <= {31'h0, csr_control[1]};
+                        gty_m_awvalid_r <= 1'b1;
+                        gty_m_wvalid_r  <= 1'b1;
+                        gty_m_state     <= GTY_M_ADDR;
+                    end
+                end
+                GTY_M_ADDR: begin
+                    if (m_axi_gty_ctrl_awready) gty_m_awvalid_r <= 1'b0;
+                    if (m_axi_gty_ctrl_wready)  gty_m_wvalid_r  <= 1'b0;
+                    if (!gty_m_awvalid_r && !gty_m_wvalid_r)
+                        gty_m_state <= GTY_M_RESP;
+                end
+                GTY_M_RESP: begin
+                    if (m_axi_gty_ctrl_bvalid) gty_m_state <= GTY_M_IDLE;
+                end
+                default: gty_m_state <= GTY_M_IDLE;
+            endcase
+        end
+    end
+
+    assign m_axi_gty_ctrl_awaddr  = 5'h00;         // GTY CTRL register
+    assign m_axi_gty_ctrl_awprot  = 3'b000;
+    assign m_axi_gty_ctrl_awvalid = gty_m_awvalid_r;
+    assign m_axi_gty_ctrl_wdata   = gty_m_wdata_r;
+    assign m_axi_gty_ctrl_wstrb   = 4'hF;
+    assign m_axi_gty_ctrl_wvalid  = gty_m_wvalid_r;
+    assign m_axi_gty_ctrl_bready  = 1'b1;
+    // Read path: not used (status available via gtc_lane_locked/error raw ports)
+    assign m_axi_gty_ctrl_araddr  = 5'h0;
+    assign m_axi_gty_ctrl_arprot  = 3'b000;
+    assign m_axi_gty_ctrl_arvalid = 1'b0;
+    assign m_axi_gty_ctrl_rready  = 1'b0;
+
+    // =========================================================================
+    // M_AXI_MB_CTRL — Write-only AXI4-Lite master driving MB module S_AXI_CTRL
     //
-    // Example instantiation (when ready):
-    //
-    // fifo_generator_v13_2_8_ASYNC_FIFO #(
-    //     .C_COMMON_CLOCK(0),
-    //     .C_DATA_COUNT_WIDTH(4),  // log2(CDC_FIFO_DEPTH)
-    //     .C_DIN_WIDTH(32),
-    //     .C_DOUT_WIDTH(32),
-    //     .C_FIFO_DEPTH(CDC_FIFO_DEPTH)
-    // ) cdc_mb_fifo (
-    //     .clk(axi_clk),           // Write domain clock
-    //     .rst(~axi_rst_n),        // Asynchronous reset
-    //     .din(cdc_mb_fifo_din),
-    //     .wr_en(cdc_mb_fifo_wr_en),
-    //     .full(cdc_mb_fifo_full),
-    //     .rd_clk(mb_clk),         // Read domain clock
-    //     .dout(cdc_mb_fifo_dout),
-    //     .rd_en(cdc_mb_fifo_rd_en),
-    //     .empty(cdc_mb_fifo_empty)
-    // );
+    // When csr_control[0] (global_en) rises the orchestrator triggers a
+    // start_op by writing CTRL register (addr 0x00) of the MB module.
+    // Same 3-state FSM pattern as GTY master above.
+    // =========================================================================
+    localparam MB_M_IDLE  = 2'd0;
+    localparam MB_M_ADDR  = 2'd1;
+    localparam MB_M_RESP  = 2'd2;
+
+    reg [1:0]  mb_m_state;
+    reg        mb_global_en_prev;
+    reg        mb_m_awvalid_r;
+    reg        mb_m_wvalid_r;
+    reg [31:0] mb_m_wdata_r;
+
+    always @(posedge axi_clk or negedge axi_rst_n) begin
+        if (!axi_rst_n) begin
+            mb_m_state         <= MB_M_IDLE;
+            mb_global_en_prev  <= 1'b0;
+            mb_m_awvalid_r     <= 1'b0;
+            mb_m_wvalid_r      <= 1'b0;
+            mb_m_wdata_r       <= 32'h0;
+        end else begin
+            case (mb_m_state)
+                MB_M_IDLE: begin
+                    mb_m_awvalid_r <= 1'b0;
+                    mb_m_wvalid_r  <= 1'b0;
+                    mb_global_en_prev <= csr_control[0];
+                    if (csr_control[0] && !mb_global_en_prev) begin
+                        // global_en rising edge → trigger MB start_op pulse
+                        mb_m_wdata_r   <= 32'h0000_0001; // start_op = bit[0]
+                        mb_m_awvalid_r <= 1'b1;
+                        mb_m_wvalid_r  <= 1'b1;
+                        mb_m_state     <= MB_M_ADDR;
+                    end
+                end
+                MB_M_ADDR: begin
+                    if (m_axi_mb_ctrl_awready) mb_m_awvalid_r <= 1'b0;
+                    if (m_axi_mb_ctrl_wready)  mb_m_wvalid_r  <= 1'b0;
+                    if (!mb_m_awvalid_r && !mb_m_wvalid_r)
+                        mb_m_state <= MB_M_RESP;
+                end
+                MB_M_RESP: begin
+                    if (m_axi_mb_ctrl_bvalid) mb_m_state <= MB_M_IDLE;
+                end
+                default: mb_m_state <= MB_M_IDLE;
+            endcase
+        end
+    end
+
+    assign m_axi_mb_ctrl_awaddr  = 5'h00;          // MB CTRL register
+    assign m_axi_mb_ctrl_awprot  = 3'b000;
+    assign m_axi_mb_ctrl_awvalid = mb_m_awvalid_r;
+    assign m_axi_mb_ctrl_wdata   = mb_m_wdata_r;
+    assign m_axi_mb_ctrl_wstrb   = 4'hF;
+    assign m_axi_mb_ctrl_wvalid  = mb_m_wvalid_r;
+    assign m_axi_mb_ctrl_bready  = 1'b1;
+    assign m_axi_mb_ctrl_araddr  = 5'h0;
+    assign m_axi_mb_ctrl_arprot  = 3'b000;
+    assign m_axi_mb_ctrl_arvalid = 1'b0;
+    assign m_axi_mb_ctrl_rready  = 1'b0;
 
     // =========================================================================
-    // CDC FIFO Instantiation (GTY)
-    // Async FIFO crossing axi_clk → gty_clk domain
+    // M_AXI_AXB_CTRL — AXI4-Lite master to AXI Bridge (axi_clk domain)
+    // Used to write status information into the bridge's CSR space so the
+    // system (via bridge S_AXI) can read GTY lock, MB status, etc.
+    // Tie off for now; status reads go through bridge S_AXI directly.
     // =========================================================================
-
-    // Similar structure to MB FIFO; see comment above for actual IP instantiation
+    assign m_axi_axb_ctrl_awaddr  = 16'h0;
+    assign m_axi_axb_ctrl_awprot  = 3'b000;
+    assign m_axi_axb_ctrl_awvalid = 1'b0;
+    assign m_axi_axb_ctrl_wdata   = 32'h0;
+    assign m_axi_axb_ctrl_wstrb   = 4'h0;
+    assign m_axi_axb_ctrl_wvalid  = 1'b0;
+    assign m_axi_axb_ctrl_bready  = 1'b1;
+    assign m_axi_axb_ctrl_araddr  = 16'h0;
+    assign m_axi_axb_ctrl_arprot  = 3'b000;
+    assign m_axi_axb_ctrl_arvalid = 1'b0;
+    assign m_axi_axb_ctrl_rready  = 1'b0;
 
     // =========================================================================
-    // Tie off unused ports for now (will be connected as modules are designed)
+    // M_AXI_DMA — Tie off (bulk DMA placeholder, driven by future engine)
     // =========================================================================
+    assign m_axi_dma_araddr  = {AXI_ADDR_WIDTH{1'b0}};
+    assign m_axi_dma_arlen   = 8'h0;
+    assign m_axi_dma_arsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
+    assign m_axi_dma_arburst = 2'h1;
+    assign m_axi_dma_arvalid = 1'b0;
+    assign m_axi_dma_rready  = 1'b0;
 
-    // AXI DMA master: for now, pass through (orchestrator can arbitrate)
-    assign m_axi_dma_araddr   = 32'h0;
-    assign m_axi_dma_arlen    = 8'h0;
-    assign m_axi_dma_arsize   = 3'h0;
-    assign m_axi_dma_arburst  = 2'h0;
-    assign m_axi_dma_arvalid  = 1'b0;
-    assign m_axi_dma_rready   = 1'b0;
+    assign m_axi_dma_awaddr  = {AXI_ADDR_WIDTH{1'b0}};
+    assign m_axi_dma_awlen   = 8'h0;
+    assign m_axi_dma_awsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
+    assign m_axi_dma_awburst = 2'h1;
+    assign m_axi_dma_awvalid = 1'b0;
 
-    assign m_axi_dma_awaddr   = 32'h0;
-    assign m_axi_dma_awlen    = 8'h0;
-    assign m_axi_dma_awsize   = 3'h0;
-    assign m_axi_dma_awburst  = 2'h0;
-    assign m_axi_dma_awvalid  = 1'b0;
+    assign m_axi_dma_wdata   = {AXI_DATA_WIDTH{1'b0}};
+    assign m_axi_dma_wstrb   = {(AXI_DATA_WIDTH/8){1'b0}};
+    assign m_axi_dma_wlast   = 1'b0;
+    assign m_axi_dma_wvalid  = 1'b0;
+    assign m_axi_dma_bready  = 1'b1;
 
-    assign m_axi_dma_wdata    = 64'h0;
-    assign m_axi_dma_wstrb    = 8'h0;
-    assign m_axi_dma_wlast    = 1'b0;
-    assign m_axi_dma_wvalid   = 1'b0;
-    assign m_axi_dma_bready   = 1'b0;
-
-    // GTY transceivers: for now, pass through
-    assign gty_tx_serial = {NUM_GTY_LANES{1'b0}};
-    assign gty_tx_ready  = {NUM_GTY_LANES{1'b1}};
-
-    // Microblaze: tie off cache control for now
-    assign mb_ddr_access = 1'b0;
-    assign mb_ddr_addr   = 64'h0;
-    assign mb_ddr_len    = 32'h0;
+    // =========================================================================
+    // CDC FIFO placeholders (axi_clk ↔ mb_clk, axi_clk ↔ gty_clk)
+    // Actual IP instantiation: Xilinx FIFO Generator in async mode.
+    // Signals declared to preserve CDC intent for future implementation.
+    // =========================================================================
+    // cdc_mb_fifo_*  : axi_clk → mb_clk  (32-bit, CDC_FIFO_DEPTH deep)
+    // cdc_gty_fifo_* : axi_clk → gty_clk (32-bit, CDC_FIFO_DEPTH deep)
 
 endmodule

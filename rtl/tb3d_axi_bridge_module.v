@@ -28,12 +28,12 @@ module tb3d_axi_bridge_module #(
     parameter AXI_ADDR_WIDTH        = 32,
     parameter AXI_DATA_WIDTH        = 64,
     parameter AXI_ID_WIDTH          = 4,
-    parameter NUM_GTY_LANES         = 512
+    parameter NUM_GTY_LANES         = 8
 ) (
     // =========================================================================
     // Clock & Reset
     // =========================================================================
-    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI, ASSOCIATED_RESET axi_rst_n" *)
+    (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF S_AXI:M_AXI_DMA, ASSOCIATED_RESET axi_rst_n" *)
     input  wire                     axi_clk,
     input  wire                     axi_rst_n,
 
@@ -111,24 +111,98 @@ module tb3d_axi_bridge_module #(
     input  wire                       s_axi_rready,
 
     // =========================================================================
-    // Control/Status Signals to Orchestrator (comb. paths, axi_clk)
+    // Control/Status Interface to Orchestrator (M_ORCH_CTRL, axi_clk domain)
+    // These signals carry TB3D codec configuration from the CSR register bank
+    // to the orchestrator, and status back.  Grouped as the M_ORCH_CTRL bundle.
     // =========================================================================
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL CONTROL" *)
     output wire [31:0]                csr_control,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL GLOBAL_EN" *)
     output wire                       csr_global_en,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL GTY_CODEC_EN" *)
     output wire                       csr_gty_codec_en,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL INTR_EN" *)
     output wire                       csr_intr_en,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL CACHE_EN" *)
     output wire                       csr_cache_en,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL MODE" *)
     output wire [3:0]                 csr_mode,
 
     // =========================================================================
-    // Status Signals from Orchestrator (axi_clk domain)
+    // Status Signals from Orchestrator (M_ORCH_CTRL bundle, axi_clk domain)
     // =========================================================================
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL STATUS_FLAGS" *)
     input  wire [31:0]                status_flags,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL GTY_LANE_LOCKED" *)
     input  wire [NUM_GTY_LANES-1:0]   gty_lane_locked,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL GTY_LANE_ERROR" *)
     input  wire [NUM_GTY_LANES-1:0]   gty_lane_error,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL MB_STATUS" *)
     input  wire [31:0]                mb_status,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL CACHE_STATS" *)
     input  wire [31:0]                cache_stats,
+    (* X_INTERFACE_INFO = "xilinx.com:user:m_orch_ctrl_rtl:1.0 M_ORCH_CTRL DMA_DEBUG" *)
     input  wire [31:0]                dma_debug,
+
+    // =========================================================================
+    // M_AXI_DMA — AXI4 Master for DMA (axi_clk domain)
+    // DMA read/write to system memory (DDR4 via Versal PL-to-PS interconnect).
+    // =========================================================================
+    // Write address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWADDR" *)
+    output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_awaddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWLEN" *)
+    output wire [7:0]                 m_axi_dma_awlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWSIZE" *)
+    output wire [2:0]                 m_axi_dma_awsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWBURST" *)
+    output wire [1:0]                 m_axi_dma_awburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWVALID" *)
+    output wire                       m_axi_dma_awvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA AWREADY" *)
+    input  wire                       m_axi_dma_awready,
+    // Write data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WDATA" *)
+    output wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_wdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WSTRB" *)
+    output wire [(AXI_DATA_WIDTH/8)-1:0] m_axi_dma_wstrb,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WLAST" *)
+    output wire                       m_axi_dma_wlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WVALID" *)
+    output wire                       m_axi_dma_wvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA WREADY" *)
+    input  wire                       m_axi_dma_wready,
+    // Write response channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BRESP" *)
+    input  wire [1:0]                 m_axi_dma_bresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BVALID" *)
+    input  wire                       m_axi_dma_bvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA BREADY" *)
+    output wire                       m_axi_dma_bready,
+    // Read address channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARADDR" *)
+    output wire [AXI_ADDR_WIDTH-1:0]  m_axi_dma_araddr,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARLEN" *)
+    output wire [7:0]                 m_axi_dma_arlen,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARSIZE" *)
+    output wire [2:0]                 m_axi_dma_arsize,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARBURST" *)
+    output wire [1:0]                 m_axi_dma_arburst,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARVALID" *)
+    output wire                       m_axi_dma_arvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA ARREADY" *)
+    input  wire                       m_axi_dma_arready,
+    // Read data channel
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RDATA" *)
+    input  wire [AXI_DATA_WIDTH-1:0]  m_axi_dma_rdata,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RRESP" *)
+    input  wire [1:0]                 m_axi_dma_rresp,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RLAST" *)
+    input  wire                       m_axi_dma_rlast,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RVALID" *)
+    input  wire                       m_axi_dma_rvalid,
+    (* X_INTERFACE_INFO = "xilinx.com:interface:aximm_rtl:1.0 M_AXI_DMA RREADY" *)
+    output wire                       m_axi_dma_rready,
 
     // =========================================================================
     // Interrupt Output
@@ -273,17 +347,28 @@ module tb3d_axi_bridge_module #(
     assign intr_o = intr_enable;
 
     // =========================================================================
-    // DMA Descriptor Queue (Placeholder)
-    // Future enhancement: implement DMA command queueing for bulk transfers
-    //
-    // For now, DMA is orchestrated via Microblaze cache path and orchestrator
-    // direct AXI4 master operations.
+    // M_AXI_DMA — Tie-off (DMA descriptor queue placeholder)
+    // Full DMA command queueing will be implemented in a future phase.
+    // For now the master port is declared and tied to idle so Vivado BD
+    // can route and address-assign the interface correctly.
     // =========================================================================
+    assign m_axi_dma_awaddr  = {AXI_ADDR_WIDTH{1'b0}};
+    assign m_axi_dma_awlen   = 8'h0;
+    assign m_axi_dma_awsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
+    assign m_axi_dma_awburst = 2'h1;   // INCR
+    assign m_axi_dma_awvalid = 1'b0;
 
-    // Placeholder: DMA queue would go here
-    // - Accept DMA descriptors (source, dest, length, mode)
-    // - Queue them in internal FIFO
-    // - Feed to orchestrator DMA master interface
-    // - Track completion status
+    assign m_axi_dma_wdata   = {AXI_DATA_WIDTH{1'b0}};
+    assign m_axi_dma_wstrb   = {(AXI_DATA_WIDTH/8){1'b0}};
+    assign m_axi_dma_wlast   = 1'b0;
+    assign m_axi_dma_wvalid  = 1'b0;
+    assign m_axi_dma_bready  = 1'b1;
+
+    assign m_axi_dma_araddr  = {AXI_ADDR_WIDTH{1'b0}};
+    assign m_axi_dma_arlen   = 8'h0;
+    assign m_axi_dma_arsize  = $clog2(AXI_DATA_WIDTH/8);  // bytes/beat from data width
+    assign m_axi_dma_arburst = 2'h1;
+    assign m_axi_dma_arvalid = 1'b0;
+    assign m_axi_dma_rready  = 1'b0;
 
 endmodule
